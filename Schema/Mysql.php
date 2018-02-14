@@ -4,7 +4,14 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 2;
+const VERSION = 3;
+
+// add edition column
+function version_3(PDO $pdo)
+{
+    $pdo->exec("ALTER TABLE wikipage ADD `editions` int default 0;");
+    $pdo->exec("ALTER TABLE wikipage ADD `date_modified` VARCHAR(10);");
+}
 
 // dummy data
 function version_2(PDO $pdo)
