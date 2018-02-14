@@ -21,7 +21,8 @@ class MyHelper extends Base
      */
     public function getWikipages($project_id)
     {
-        return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
+        return $this->wiki->getDailyWikiBreakdown($project_id);
+        // return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
     }
 
     // public function doSomething()
