@@ -3,11 +3,15 @@
 </div>
 
 <style>
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-}
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    .column {
+        float: left;
+        padding: 15px;
+    }
     .list {
     width: 25%;
 }
@@ -17,7 +21,7 @@
 
 </style>
 <div class="clearfix">
-<div class="sidebar list">
+<div class="sidebar column list">
     <ul>
         <?php if (!empty($wikipages)): ?>
         <?php foreach ($wikipages as $wikipage): ?>
@@ -40,7 +44,7 @@
 <?php if (!empty($daily_wiki)): ?>
 
 <!-- <hr/> -->
-    <div class="content">
+    <div class="column content">
         <table class="table-fixed table-stripped">
             <tr>
                 <th><?=t('Date')?></th>
