@@ -1,14 +1,28 @@
 <div class="page-header">
     <h2><?= t('Wiki overview') ?></h2>
 </div>
+<div class="sidebar">
+    <ul>
+        <?php if (! empty($wikipages)): ?>
+        <?php foreach ($wikipages as $wikipage): ?>
+        
+        <li >
+            <?= $wikipage['title'] ?>
+        </li>
+
+       
+        <?php endforeach ?>
+        <?php else: ?>
+        <li class="alert alert-info">
+         <?= t('There are no wikipages.') ?>
+        </li>
+        <?php endif ?>
+
+    </ul>
+</div>
 
 <?php if (! empty($daily_wiki)): ?>
-<div id="wiki-chart">
-    <div id="chart"
-         data-date-format="<?= e('%%Y-%%m-%%d') ?>"
-         data-metrics='<?= json_encode($daily_wiki, JSON_HEX_APOS) ?>'
-         data-labels='<?= json_encode(array('in' => t('Wiki line'), 'out' => t('Expenses'), 'left' => t('Remaining'), 'value' => t('Amount'), 'date' => t('Date'), 'type' => t('Type')), JSON_HEX_APOS) ?>'></div>
-</div>
+
 <hr/>
 <table class="table-fixed table-stripped">
     <tr>
