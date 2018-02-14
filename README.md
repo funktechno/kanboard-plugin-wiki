@@ -1,8 +1,9 @@
 Wiki Plugin for Kanboard
-==========================
+==============================
+
+Wiki to document projects
 
 [![Build Status](https://travis-ci.org/kanboard/plugin-wiki.svg?branch=master)](https://travis-ci.org/kanboard/plugin-wiki)
-
 
 - Create wiki lines
 - See expenses based on sub-task time tracking
@@ -11,7 +12,7 @@ Wiki Plugin for Kanboard
 Author
 ------
 
-- Frederic Guillot
+- lastlink
 - License MIT
 
 Requirements
