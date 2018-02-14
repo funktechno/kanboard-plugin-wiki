@@ -4,7 +4,23 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 3;
+const VERSION = 4;
+
+function version_4(PDO $pdo)
+{
+    // future feature, track old editions, won't ever be modified, but could be viewed or restored
+    $pdo->exec("CREATE TABLE wikipage_editions (
+        `edition` INT NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `content` TEXT,
+        `creator_id` int(11) DEFAULT 0,
+        `date_creation` bigint(20) DEFAULT NULL,
+        wikipage_id INT,
+        PRIMARY KEY (`edition`,`wikipage_id`),
+        FOREIGN KEY(wikipage_id) REFERENCES wikipage(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB CHARSET=utf8"
+    );
+}
 
 // add edition column
 function version_3(PDO $pdo)
