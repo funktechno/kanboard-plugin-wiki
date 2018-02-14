@@ -6,7 +6,7 @@
         <li <?= $this->app->checkMenuSelection('WikiLineController', 'show') ?>>
             <?= $this->url->link(t('Wiki lines'), 'WikiLineController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
         </li>
-        <?php $wikipages = $this->wiki->getWikipages($project['id']) ?>
+        <?php $wikipages = $this->wikiHelper->getWikipages($project['id']) ?>
 
         <?php if (! empty($wikipages)): ?>
         <?php foreach ($wikipages as $wikipage): ?>
