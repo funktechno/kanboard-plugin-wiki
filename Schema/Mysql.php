@@ -14,7 +14,7 @@ INSERT INTO `funktech_kanb738`.`wikipage` (`project_id`, `title`, `content`, `is
 INSERT INTO `funktech_kanb738`.`wikipage` (`project_id`, `title`, `content`, `is_active`, `creator_id`, `order`) VALUES ('1', 'Front end', 'asdf', '1', '2', '3');
 ");
 
-    $pdo->exec("ALTER TABLE wikipage DROP COLUMN category_id;");
+    // $pdo->exec("ALTER TABLE wikipage DROP COLUMN category_id;");
 
 }
 
