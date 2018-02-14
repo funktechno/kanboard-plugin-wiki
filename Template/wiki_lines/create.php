@@ -1,8 +1,8 @@
 <div class="page-header">
-    <h2><?= t('New budget line') ?></h2>
+    <h2><?= t('New wiki line') ?></h2>
 </div>
 
-<form method="post" action="<?= $this->url->href('BudgetLineController', 'save', array('plugin' => 'budget', 'project_id' => $project['id'])) ?>" autocomplete="off">
+<form method="post" action="<?= $this->url->href('WikiLineController', 'save', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>" autocomplete="off">
     <?= $this->form->csrf() ?>
 
     <?= $this->form->hidden('id', $values) ?>

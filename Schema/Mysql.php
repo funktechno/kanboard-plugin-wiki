@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\Budget\Schema;
+namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
@@ -8,7 +8,7 @@ const VERSION = 1;
 
 function version_1(PDO $pdo)
 {
-    $pdo->exec('CREATE TABLE IF NOT EXISTS budget_lines (
+    $pdo->exec('CREATE TABLE IF NOT EXISTS wiki_lines (
         `id` INT NOT NULL AUTO_INCREMENT,
         `project_id` INT NOT NULL,
         `amount` FLOAT NOT NULL,

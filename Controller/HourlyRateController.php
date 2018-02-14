@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\Budget\Controller;
+namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Controller\BaseController;
 
@@ -16,7 +16,7 @@ class HourlyRateController extends BaseController
     {
         $user = $this->getUser();
 
-        $this->response->html($this->helper->layout->user('budget:hourlyrate/show', array(
+        $this->response->html($this->helper->layout->user('wiki:hourlyrate/show', array(
             'rates' => $this->hourlyRate->getAllByUser($user['id']),
             'currencies_list' => $this->currencyModel->getCurrencies(),
             'user' => $user,
@@ -27,7 +27,7 @@ class HourlyRateController extends BaseController
     {
         $user = $this->getUser();
 
-        $this->response->html($this->helper->layout->user('budget:hourlyrate/create', array(
+        $this->response->html($this->helper->layout->user('wiki:hourlyrate/create', array(
             'rates' => $this->hourlyRate->getAllByUser($user['id']),
             'currencies_list' => $this->currencyModel->getCurrencies(),
             'values' => $values + array('user_id' => $user['id']),
@@ -44,7 +44,7 @@ class HourlyRateController extends BaseController
         if ($valid) {
             if ($this->hourlyRate->create($values['user_id'], $values['rate'], $values['currency'], $values['date_effective'])) {
                 $this->flash->success(t('Hourly rate created successfully.'));
-                $this->response->redirect($this->helper->url->to('HourlyRateController', 'show', array('plugin' => 'budget', 'user_id' => $values['user_id'])), true);
+                $this->response->redirect($this->helper->url->to('HourlyRateController', 'show', array('plugin' => 'wiki', 'user_id' => $values['user_id'])), true);
                 return;
             } else {
                 $this->flash->failure(t('Unable to save the hourly rate.'));
@@ -58,7 +58,7 @@ class HourlyRateController extends BaseController
     {
         $user = $this->getUser();
 
-        $this->response->html($this->template->render('budget:hourlyrate/remove', array(
+        $this->response->html($this->template->render('wiki:hourlyrate/remove', array(
             'rate_id' => $this->request->getIntegerParam('rate_id'),
             'user' => $user,
         )));
@@ -75,6 +75,6 @@ class HourlyRateController extends BaseController
             $this->flash->success(t('Unable to remove this rate.'));
         }
 
-        $this->response->redirect($this->helper->url->to('HourlyRateController', 'show', array('plugin' => 'budget', 'user_id' => $user['id'])), true);
+        $this->response->redirect($this->helper->url->to('HourlyRateController', 'show', array('plugin' => 'wiki', 'user_id' => $user['id'])), true);
     }
 }

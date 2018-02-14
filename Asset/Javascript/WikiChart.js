@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-    if (document.getElementById("budget-chart")) {
+    if (document.getElementById("wiki-chart")) {
         var categories = [];
         var metrics = $("#chart").data("metrics");
         var labels = $("#chart").data("labels");

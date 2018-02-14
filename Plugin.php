@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\Budget;
+namespace Kanboard\Plugin\Wiki;
 
 use Kanboard\Core\Translator;
 use Kanboard\Core\Plugin\Base;
@@ -11,14 +11,14 @@ class Plugin extends Base
     public function initialize()
     {
         $this->applicationAccessMap->add('HourlyRateController', '*', Role::APP_ADMIN);
-        $this->projectAccessMap->add('BudgetController', '*', Role::PROJECT_MANAGER);
+        $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MANAGER);
 
-        $this->route->addRoute('/budget/project/:project_id', 'BudgetController', 'show', 'budget');
-        $this->route->addRoute('/budget/project/:project_id/lines', 'BudgetLineController', 'show', 'budget');
-        $this->route->addRoute('/budget/project/:project_id/breakdown', 'BudgetController', 'breakdown', 'budget');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/lines', 'WikiLineController', 'show', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
 
-        $this->template->hook->attach('template:project:dropdown', 'budget:project/dropdown');
-        $this->template->hook->attach('template:user:sidebar:actions', 'budget:user/sidebar');
+        $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
+        $this->template->hook->attach('template:user:sidebar:actions', 'wiki:user/sidebar');
     }
 
     public function onStartup()
@@ -29,9 +29,9 @@ class Plugin extends Base
     public function getClasses()
     {
         return array(
-            'Plugin\Budget\Model' => array(
+            'Plugin\Wiki\Model' => array(
                 'HourlyRate',
-                'Budget',
+                'Wiki',
             )
         );
     }
@@ -53,7 +53,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.0.1';
+        return '0.0.4';
     }
 
     public function getPluginHomepage()

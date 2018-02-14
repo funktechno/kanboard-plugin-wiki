@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\Budget\Model;
+namespace Kanboard\Plugin\Wiki\Model;
 
 use DateInterval;
 use DateTime;
@@ -13,22 +13,22 @@ use Kanboard\Model\UserModel;
 use Kanboard\Model\SubtaskModel;
 
 /**
- * Budget
+ * Wiki
  *
  * @package  model
  * @author   Frederic Guillot
  */
-class Budget extends Base
+class Wiki extends Base
 {
     /**
      * SQL table name
      *
      * @var string
      */
-    const TABLE = 'budget_lines';
+    const TABLE = 'wiki_lines';
 
     /**
-     * Get all budget lines for a project
+     * Get all wiki lines for a project
      *
      * @access public
      * @param  integer   $project_id
@@ -40,7 +40,7 @@ class Budget extends Base
     }
 
     /**
-     * Get the current total of the budget
+     * Get the current total of the wiki
      *
      * @access public
      * @param  integer   $project_id
@@ -84,13 +84,13 @@ class Budget extends Base
     }
 
     /**
-     * Gather necessary information to display the budget graph
+     * Gather necessary information to display the wiki graph
      *
      * @access public
      * @param  integer  $project_id
      * @return array
      */
-    public function getDailyBudgetBreakdown($project_id)
+    public function getDailyWikiBreakdown($project_id)
     {
         $out = array();
         $in = $this->db->hashtable(self::TABLE)->eq('project_id', $project_id)->gt('amount', 0)->asc('date')->getAll('date', 'amount');
@@ -163,7 +163,7 @@ class Budget extends Base
     }
 
     /**
-     * Add a new budget line in the database
+     * Add a new wiki line in the database
      *
      * @access public
      * @param  integer   $project_id
@@ -185,15 +185,15 @@ class Budget extends Base
     }
 
     /**
-     * Remove a specific budget line
+     * Remove a specific wiki line
      *
      * @access public
-     * @param  integer    $budget_id
+     * @param  integer    $wiki_id
      * @return boolean
      */
-    public function remove($budget_id)
+    public function remove($wiki_id)
     {
-        return $this->db->table(self::TABLE)->eq('id', $budget_id)->remove();
+        return $this->db->table(self::TABLE)->eq('id', $wiki_id)->remove();
     }
 
     /**

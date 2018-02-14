@@ -2,7 +2,7 @@
     <h2><?= t('Add new rate') ?></h2>
 </div>
 
-<form method="post" action="<?= $this->url->href('HourlyRateController', 'save', array('plugin' => 'budget', 'user_id' => $user['id'])) ?>" autocomplete="off">
+<form method="post" action="<?= $this->url->href('HourlyRateController', 'save', array('plugin' => 'wiki', 'user_id' => $user['id'])) ?>" autocomplete="off">
     <?= $this->form->csrf() ?>
     <?= $this->form->hidden('user_id', $values) ?>
 

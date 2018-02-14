@@ -1,5 +1,5 @@
-<?php if ($this->user->hasProjectAccess('BudgetController', 'index', $project['id'])): ?>
+<?php if ($this->user->hasProjectAccess('WikiController', 'index', $project['id'])): ?>
     <li>
-        <?= $this->url->icon('pie-chart', t('Budget'), 'BudgetController', 'show', array('plugin' => 'budget', 'project_id' => $project['id'])) ?>
+        <?= $this->url->icon('pie-chart', t('Wiki'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
     </li>
 <?php endif ?>
