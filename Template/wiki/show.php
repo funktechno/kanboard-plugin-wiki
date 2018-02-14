@@ -10,7 +10,7 @@
     }
     .column {
         float: left;
-        padding: 15px;
+        min-width: 0;
     }
     .list {
     width: 25%;
