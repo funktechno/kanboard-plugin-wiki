@@ -7,7 +7,12 @@
             <?= $this->url->link(t('Wiki lines'), 'WikiLineController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
         </li>
         <?php 
-        $wikipages = $this->wikiHelper->getWikipages($project['id']) 
+            $wikipages = array(
+                 "title"=>"candy"
+             ,
+                 "title"=>"bob"  
+            );
+                // $this->wikiHelper->getWikipages($project['id']) 
         ?>
 
         <?php if (! empty($wikipages)): ?>
