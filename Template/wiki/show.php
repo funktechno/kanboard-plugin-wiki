@@ -27,7 +27,7 @@
         <?php foreach ($wikipages as $wikipage): ?>
 
         <li >
-            <?=$wikipage['title']?> <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $line['id'])) ?>
+            <?=$wikipage['title']?> <?= $this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $line['id'])) ?>
 
         </li>
 
