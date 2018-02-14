@@ -3,7 +3,7 @@
 namespace Kanboard\Helper;
 
 use Kanboard\Core\Base;
-// use Kanboard\Model\Wiki;
+use Kanboard\Model\Wiki;
 
 
 class WikiHelper extends Base
@@ -23,8 +23,8 @@ class WikiHelper extends Base
      */
     public function getWikipages($project_id)
     {
-        // return wiki::getWikipages($project['id'])
-        return $this->wiki->getWikipages($project['id']);
+        return wiki::getWikipages($project['id']);
+        // return $this->wiki->getWikipages($project['id']);
         // return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
     }
 
