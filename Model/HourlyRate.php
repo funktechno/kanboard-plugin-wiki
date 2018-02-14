@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\Budget\Model;
+namespace Kanboard\Plugin\Wiki\Model;
 
 use Kanboard\Core\Base;
 use SimpleValidator\Validator;

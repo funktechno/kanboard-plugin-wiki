@@ -4,5 +4,5 @@
 
 <div class="confirm">
     <p class="alert alert-info"><?= t('Do you really want to remove this hourly rate?') ?></p>
-    <?= $this->modal->confirmButtons('HourlyRateController', 'remove', array('plugin' => 'budget', 'user_id' => $user['id'], 'rate_id' => $rate_id)) ?>
+    <?= $this->modal->confirmButtons('HourlyRateController', 'remove', array('plugin' => 'wiki', 'user_id' => $user['id'], 'rate_id' => $rate_id)) ?>
 </div>
