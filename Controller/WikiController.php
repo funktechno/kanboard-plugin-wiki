@@ -21,7 +21,9 @@ class WikiController extends BaseController
             'project' => $project,
             'title' => t('Wiki'),
             'wikipages' => $this->wiki->getWikipages($project['id'])
-        ), 'wiki:wiki/sidebar'));
+        ), 'wiki:wiki/sidebar',array(
+            'wikipages' => $this->wiki->getWikipages($project['id'])
+        )));
     }
 
     public function breakdown()
