@@ -3,8 +3,10 @@
 namespace Kanboard\Helper;
 
 use Kanboard\Core\Base;
+// use Kanboard\Model\Wiki;
 
-class MyHelper extends Base
+
+class WikiHelper extends Base
 {
     /**
      * SQL table name
@@ -21,6 +23,7 @@ class MyHelper extends Base
      */
     public function getWikipages($project_id)
     {
+        // return wiki::getWikipages($project['id'])
         return $this->wiki->getWikipages($project['id']);
         // return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
     }
