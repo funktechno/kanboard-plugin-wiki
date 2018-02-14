@@ -68,9 +68,9 @@ Modified -->
             <tr>
                 <td><?=t($wikipage['title'])?></td>
                 <td><?=t($wikipage['content'])?></td>
-                <td><?=n($wikipage['id'])?></td>
-                <td><?=n($wikipage['order'])?></td>
-                <td><?=n($wikipage['editions'])?></td>
+                <td><?=$wikipage['id']?></td>
+                <td><?=$wikipage['order']?></td>
+                <td><?=$wikipage['editions']?></td>
                 <td><?=n($wikipage['creator_id'])?></td>
                 <td><?=$this->dt->date($wikipage['date_creation'])?></td>
                 <td><?=n($wikipage['modifier_id'])?></td>
