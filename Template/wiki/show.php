@@ -25,6 +25,20 @@
         <td><?= n($line['left']) ?></td>
     </tr>
     <?php endforeach ?>
+    <?php if (! empty($wikipages)): ?>
+    <?php foreach ($wikipages as $wikipage): ?>
+    <tr>
+        <td><?= n($wikipage['title']) ?></td>
+        <td><?= n($wikipage['content']) ?></td>
+        <td><?= n($wikipage['id']) ?></td>
+        <td><?= n($wikipage['order']) ?></td>
+    </tr>
+    <?php endforeach ?>
+    <?php else: ?>
+    <tr>
+        <span class="alert"><?= t('There are no wikipages.') ?></span>
+    </tr>
+    <?php endif ?>
 </table>
 <?php else: ?>
     <p class="alert"><?= t('There is not enough data to show something.') ?></p>
