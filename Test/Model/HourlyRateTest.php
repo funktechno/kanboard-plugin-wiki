@@ -3,7 +3,7 @@
 require_once 'tests/units/Base.php';
 
 use Kanboard\Core\Plugin\Loader;
-use Kanboard\Plugin\Budget\Model\HourlyRate;
+use Kanboard\Plugin\Wiki\Model\HourlyRate;
 
 class HourlyRateTest extends Base
 {
