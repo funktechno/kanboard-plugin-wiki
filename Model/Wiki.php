@@ -203,6 +203,18 @@ class Wiki extends Base
     }
 
     /**
+     * Remove a specific wiki page
+     *
+     * @access public
+     * @param  integer    $wiki_id
+     * @return boolean
+     */
+    public function removepage($wiki_id)
+    {
+        return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
+    }
+
+    /**
      * Remove a specific wiki line
      *
      * @access public
