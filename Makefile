@@ -1,5 +1,5 @@
 plugin=Wiki
-version=0.0.7
+version=0.0.8
 
 all:
 	@ echo "Build archive for plugin ${plugin} version=${version}"
