@@ -28,8 +28,8 @@
     <?php if (! empty($wikipages)): ?>
     <?php foreach ($wikipages as $wikipage): ?>
     <tr>
-        <td><?= n($wikipage['title']) ?></td>
-        <td><?= n($wikipage['content']) ?></td>
+        <td><?= t($wikipage['title']) ?></td>
+        <td><?= t($wikipage['content']) ?></td>
         <td><?= n($wikipage['id']) ?></td>
         <td><?= n($wikipage['order']) ?></td>
     </tr>
