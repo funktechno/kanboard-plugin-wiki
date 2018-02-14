@@ -19,8 +19,13 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->project('wiki:wiki/show', array(
             'daily_wiki' => $this->wiki->getDailyWikiBreakdown($project['id']),
             'project' => $project,
-            'title' => t('Wiki')
+            'title' => t('Wiki'),
+            'wikipages' => $this->wiki->getWikipages($project['id'])
         ), 'wiki:wiki/sidebar'));
+
+        // ,array(
+        //     'wikipages' => $this->wiki->getWikipages($project['id'])
+        // )
     }
 
     public function breakdown()
@@ -41,4 +46,17 @@ class WikiController extends BaseController
             'title' => t('Wiki')
         ), 'wiki:wiki/sidebar'));
     }
+
+    // public function sidebar(){
+    //     $project = $this->getProject();
+    //     $this->response->html($this->helper->layout->project('wiki:wiki/show', array(
+    //         'daily_wiki' => $this->wiki->getDailyWikiBreakdown($project['id']),
+    //         'project' => $project,
+    //         'title' => t('Wiki'),
+    //         'wikipages' => $this->wiki->getWikipages($project['id'])
+    //     ), 'wiki:wiki/sidebar',array(
+    //         'wikipages' => $this->wiki->getWikipages($project['id'])
+    //     )));
+
+    // }
 }

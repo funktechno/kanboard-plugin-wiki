@@ -19,6 +19,9 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
         $this->template->hook->attach('template:user:sidebar:actions', 'wiki:user/sidebar');
+
+        $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+
     }
 
     public function onStartup()
@@ -53,7 +56,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.0.7';
+        return '0.0.9';
     }
 
     public function getPluginHomepage()
