@@ -31,6 +31,27 @@ class WikiController extends BaseController
         // )
     }
 
+    public function edit(array $values = array(), array $errors = array())
+    {
+
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
+        
+        $editwiki = $this->wiki->getWikipage($wiki_id);
+
+        // if (empty($values)) {
+        //     $values['date_creation'] = date('Y-m-d');
+        //     $values['date_modification'] = date('Y-m-d');
+        // }
+
+        // $values['wikipage']
+        $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
+            'wiki_id' => $wiki_id,
+            'values' => $editwiki,
+            'errors' => $errors,
+            'title' => t('Edit Wikipage'),
+        ), 'wiki:wiki/sidebar'));
+    }
+
 
     /**
      * details for single wiki page
@@ -125,7 +146,7 @@ class WikiController extends BaseController
                 $this->wiki->createEdition($values, $wiki_id, 1, $newDate);
                 // don't really care if edition was successful
 
-                $this->flash->success(t('The wikipage have been created successfully.'));
+                $this->flash->success(t('The wikipage has been created successfully.'));
                 $this->response->redirect($this->helper->url->to('WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id'])), true);
                 return;
             } else {
@@ -134,6 +155,48 @@ class WikiController extends BaseController
         }
 
         $this->create($values, $errors);
+    }
+    /**
+     * switch the orders between two wikipages
+     * @access public
+     */
+    public function switchOrder(){
+
+    }
+
+     /**
+     * Validate and update a wikipage
+     *
+     * @access public
+     */
+    public function update()
+    {
+        // $project = $this->getProject();
+
+        $values = $this->request->getValues();
+        list($valid, $errors) = $this->wiki->validatePageUpdate($values);
+
+        if ($valid) {
+
+            $newDate = date('Y-m-d');
+            $editions = $values['editions']+1;
+
+            $wiki_id = $this->wiki->updatepage($values, $editions, $newDate);
+            if ($wiki_id > 0) {
+
+                // check config if admin wants editions saved
+                $this->wiki->createEdition($values, $wiki_id, $editions, $newDate);
+                // don't really care if editions was successful, begin transaction not really needed
+
+                $this->flash->success(t('The wikipage has been updated successfully.'));
+                $this->response->redirect($this->helper->url->to('WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $values['id'])), true);
+                return;
+            } else {
+                $this->flash->failure(t('Unable to update the wikipage.'));
+            }
+        }
+
+        $this->edit($values, $errors);
     }
 
     public function create(array $values = array(), array $errors = array())
