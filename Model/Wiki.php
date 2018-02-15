@@ -288,7 +288,7 @@ class Wiki extends Base
         }
 
         // 'id' => $paramvalues['id'],
-        $this->$db->table(WIKITABLE)->eq('id', $paramvalues['id'])->update(['column1' => 'hey']);
+        $this->$db->table(WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
 
         return (int) $paramvalues['id'];
 
