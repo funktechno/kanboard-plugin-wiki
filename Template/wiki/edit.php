@@ -8,6 +8,9 @@
     <?=$this->form->hidden('id', $values)?>
     <?=$this->form->hidden('editions', $values)?>
     <?=$this->form->hidden('order', $values)?>
+    <?=$values['id']?>
+    <?=$values['editions']?>
+    <?=$values['order']?>
 
     <?=$this->form->label(t('Title'), 'title')?>
     <?=$this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus', 'tabindex="1"'))?>
