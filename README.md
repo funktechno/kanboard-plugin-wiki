@@ -38,6 +38,9 @@ Note: Plugin folder is case-sensitive.
     * drop down to switch
     * drag to move, require css magic
 * inspired by taiga wikis
+* fix wiki sidebar
+    * use html template render properly to list wiki pages
+* get rid of additional old budget plugin code
 
 ### Roadmap
 * style updates
