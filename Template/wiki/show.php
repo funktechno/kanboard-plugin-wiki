@@ -21,35 +21,8 @@
 
 </style>
 <div class="clearfix">
-<div class="sidebar column list">
-    <h2 style="background-color: white;">Title</h2>
-    <ul>
-        <?php if (!empty($wikipages)): ?>
-        <?php foreach ($wikipages as $wikipage): ?>
 
-        <li >
-            <?=$wikipage['title']?> 
-            <?= $this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' =>$wikipage['id'])) ?>
-
-            <?= $this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id'])) ?>
-
-        </li>
-
-
-        <?php endforeach?>
-        <?php else: ?>
-        <li class="alert alert-info">
-            <?=t('There are no wikipages.')?>
-        </li>
-        <?php endif?>
-        <li>
-            <?= $this->modal->medium('plus', t('New wikipage'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
-        </li>
-
-    </ul>
-</div>
-
-<div class="column content">
+<div class="column ">
 <?php if (!empty($wikipages)): ?>
 
 <!-- <hr/> -->
@@ -59,9 +32,10 @@ Creator
 Created
 Last modifier
 Modified -->
-   
+
         <table class="table-fixed table-stripped">
             <tr>
+                <th><?=t('Title')?></th>
                 <th><?=t('Id')?></th>
                 <th><?=t('Editions')?></th>
                 <th><?=t('Current Edition')?></th>
@@ -72,6 +46,11 @@ Modified -->
             </tr>
             <?php foreach ($wikipages as $wikipage): ?>
             <tr>
+                <td>
+                <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+
+                <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+                </td>
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['editions']?></td>
                 <td><?=$wikipage['current_edition']?></td>
