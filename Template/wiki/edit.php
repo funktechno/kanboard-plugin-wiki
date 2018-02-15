@@ -4,11 +4,6 @@
 
 <form method="post" action="<?=$this->url->href('WikiController', 'update', array('plugin' => 'wiki','wiki_id'=>$wiki_id))?>" autocomplete="off">
     <?=$this->form->csrf()?>
-    <?php
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-    ?>
     
     <?=$this->form->hidden('id', $values)?>
     <?=$this->form->hidden('editions', $values)?>
