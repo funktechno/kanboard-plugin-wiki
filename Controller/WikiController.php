@@ -35,12 +35,14 @@ class WikiController extends BaseController
     {
         $project = $this->getProject();
 
+
+
         if (empty($values)) {
             $values['date_creation'] = date('Y-m-d');
             $values['date_modification'] = date('Y-m-d');
         }
 
-        $this->response->html($this->helper->layout->project('wiki:wiki/create', array(
+        $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
             'values' => $values + array('project_id' => $project['id']),
             'errors' => $errors,
             'project' => $project,
