@@ -171,10 +171,10 @@ class WikiController extends BaseController
      */
     public function update()
     {
-        $project = $this->getProject();
+        // $project = $this->getProject();
 
         $values = $this->request->getValues();
-        list($valid, $errors) = $this->wiki->validatePageCreation($values);
+        list($valid, $errors) = $this->wiki->validatePageUpdate($values);
 
         if ($valid) {
 
