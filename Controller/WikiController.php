@@ -39,10 +39,11 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         // use a wiki helper for better side bar TODO:
-        $this->response->html($this->helper->layout->project('wiki:wiki/show', array(
+        $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
             'project' => $project,
             'title' => t('Wikipage'),
             'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'wikipages' => $this->wiki->getWikipages($project['id'])
         ), 'wiki:wiki/sidebar'));
 
         // ,array(
