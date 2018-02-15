@@ -10,7 +10,7 @@
     <?=$values['id']?>
     
     
-    <?=$this->form->number_format('id', $values)?>
+    <?=$this->form->number('id', $values)?>
     <?=$this->form->hidden('editions', $values)?>
     <?=$this->form->hidden('order', $values)?>
 
