@@ -288,9 +288,9 @@ class Wiki extends Base
         }
 
         // 'id' => $paramvalues['id'],
-        // $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
+        $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
 
-        $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update(['title' => $paramvalues['title']]);
+        // $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update(['title' => $paramvalues['title']]);
 
 
         // $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update(['column1' => 'hey']);
