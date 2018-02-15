@@ -35,6 +35,7 @@ class WikiController extends BaseController
     {
         // $project = $this->getProject();
         // wikipage
+        $wikipage = $this->wiki->getWikipage($value['wiki_id']);
 
 
         if (empty($values)) {
@@ -42,8 +43,9 @@ class WikiController extends BaseController
             $values['date_modification'] = date('Y-m-d');
         }
 
+        // $values['wikipage']
         $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
-            'values' => $values['wikipage'],
+            'values' => $wikipage,
             'errors' => $errors,
             // 'project' => $project,
             'title' => t('Edit Wikipage'),
