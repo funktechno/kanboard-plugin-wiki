@@ -48,7 +48,7 @@
 
 <div class="column content">
 <div class="page-header">
-    <h2><?=t($wiki_id)?>   <?=t($wikipage['title'])?></h2>
+    <h2><?=t($wikipage['title'])?></h2>
 </div>
 <ul class="panel">
     <?php if ($wikipage['creator_id'] > 0): ?>
@@ -58,6 +58,9 @@
         <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
     <?php endif?>
     <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
+    <li>
+        <?= $this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', $wikipage) ?>
+    </li>
     <li>
         <?=$this->url->link(t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
     </li>
