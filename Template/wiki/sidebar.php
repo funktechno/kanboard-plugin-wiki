@@ -7,7 +7,7 @@
             <?= $this->url->link(t('Wiki lines'), 'WikiLineController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
         </li>
         <li>
-            <?= $this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $task['id'], 'project_id' => $task['project_id'])) ?>
+            <?= $this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
         </li>
 
         <?php if (! empty($wikipages)): ?>
