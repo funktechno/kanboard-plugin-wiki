@@ -109,7 +109,7 @@ class Wiki extends Base
                 // 'mod.name as modifier_name',
                 // 'mod.username as modifier_username',
                 // UserModel::TABLE . '.username as modifier_username',
-                self::WIKITABLE . '.id as wiki_id',
+                self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
