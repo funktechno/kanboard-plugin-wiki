@@ -79,6 +79,26 @@
 <ul>
     <?= $this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
 </ul>
+<!-- TODO: new feature -->
+<?php if (!empty($files) || !empty($images)): ?>
+    <?=$this->hook->render('template:wiki:show:before-attachments', array('wiki' => $wiki, 'project' => $project))?>
+    <?=$this->render('wiki_file/show', array(
+    'wiki' => $wiki,
+    'files' => $files,
+    'images' => $images,
+))?>
+<?php endif?>
+
+<!-- pending decision/need -->
+<?php if (!empty($comments)): ?>
+    <?=$this->hook->render('template:wiki:show:before-comments', array('wiki' => $wiki, 'project' => $project))?>
+    <?=$this->render('wiki_comments/show', array(
+    'wiki' => $wiki,
+    'comments' => $comments,
+    'project' => $project,
+    'editable' => $this->user->hasProjectAccess('CommentController', 'edit', $project['id']),
+))?>
+<?php endif?>
 
 
 </div>
