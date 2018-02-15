@@ -202,7 +202,7 @@ class Wiki extends Base
             'order' => $order ?: time()
         );
 
-        return $this->db->table(self::TABLE)->persist($values);
+        return $this->db->table(self::WIKITABLE)->persist($values);
     }
 
     public function validatePageCreation(array $values)
