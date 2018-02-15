@@ -31,6 +31,23 @@ class WikiController extends BaseController
         // )
     }
 
+    public function edit(array $values = array(), array $errors = array())
+    {
+        $project = $this->getProject();
+
+        if (empty($values)) {
+            $values['date_creation'] = date('Y-m-d');
+            $values['date_modification'] = date('Y-m-d');
+        }
+
+        $this->response->html($this->helper->layout->project('wiki:wiki/create', array(
+            'values' => $values + array('project_id' => $project['id']),
+            'errors' => $errors,
+            'project' => $project,
+            'title' => t('Edit Wikipage'),
+        ), 'wiki:wiki/sidebar'));
+    }
+
 
     /**
      * details for single wiki page
