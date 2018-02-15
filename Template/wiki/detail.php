@@ -59,7 +59,7 @@
     <?php endif?>
     <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
     <li>
-        <?= $this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', $wikipage)) ?>
+        <?= $this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'wikipage' => $wikipage)) ?>
 
     </li>
     <li>

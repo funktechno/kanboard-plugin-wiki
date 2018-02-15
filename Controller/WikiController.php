@@ -34,7 +34,7 @@ class WikiController extends BaseController
     public function edit(array $values = array(), array $errors = array())
     {
         // $project = $this->getProject();
-
+        // wikipage
 
 
         if (empty($values)) {
@@ -43,7 +43,7 @@ class WikiController extends BaseController
         }
 
         $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
-            'values' => $values,
+            'values' => $values['wikipage'],
             'errors' => $errors,
             // 'project' => $project,
             'title' => t('Edit Wikipage'),
