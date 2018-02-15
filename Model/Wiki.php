@@ -57,10 +57,13 @@ class Wiki extends Base
         return $this->db->
             table(self::WIKITABLE)
             ->columns(
-                'c.name as creator_name',
-                'c.username as creator_username',
-                'mod.name as modifier_name',
-                'mod.username as modifier_username',
+                // 'c.name as creator_name',
+                // 'c.username as creator_username',
+                UserModel::TABLE . '.name as creator_name',
+                UserModel::TABLE . '.username as creator_username',
+                // 'mod.name as modifier_name',
+                // 'mod.username as modifier_username',
+                UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
                 self::WIKITABLE . '.project_id',
@@ -72,8 +75,9 @@ class Wiki extends Base
                 self::WIKITABLE . '.current_edition',
                 self::WIKITABLE . '.modifier_id'
             )
-            ->join(UserModel::TABLE, 'id', 'creator_id', self::WIKITABLE, "c")
-            ->join(UserModel::TABLE, 'id', 'modifier_id', self::WIKITABLE, "mod")
+            ->join(UserModel::TABLE, 'id', 'creator_id')
+        // ->join(UserModel::TABLE, 'id', 'creator_id', self::WIKITABLE, "c")
+        // ->join(UserModel::TABLE, 'id', 'modifier_id', self::WIKITABLE, "mod")
             ->eq('project_id', $project_id)
             ->desc('order')->findAll();
 
@@ -268,7 +272,7 @@ class Wiki extends Base
         if (empty($values['date_creation'])) {
             $values['date_creation'] = time();
         }
-        
+
         if (empty($values['date_modification'])) {
             $values['date_modification'] = $values['date_creation'];
         }
