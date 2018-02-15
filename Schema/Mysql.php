@@ -4,13 +4,35 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 3;
+const VERSION = 5;
+
+function version_5(PDO $pdo){
+    $pdo->exec("ALTER TABLE wikipage ADD `modifier_id` int(11) DEFAULT 0;");
+}
+
+function version_4(PDO $pdo)
+{
+    // future feature, track old editions, won't ever be modified, but could be viewed or restored
+    $pdo->exec("CREATE TABLE wikipage_editions (
+        `edition` INT NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `content` TEXT,
+        `creator_id` int(11) DEFAULT 0,
+        `date_creation` VARCHAR(10) DEFAULT NULL,
+        wikipage_id INT,
+        PRIMARY KEY (`edition`,`wikipage_id`),
+        FOREIGN KEY(wikipage_id) REFERENCES wikipage(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB CHARSET=utf8"
+    );
+
+    $pdo->exec("ALTER TABLE wikipage ADD `current_edition` int default 1;");
+}
 
 // add edition column
 function version_3(PDO $pdo)
 {
-    $pdo->exec("ALTER TABLE wikipage ADD `editions` int default 0;");
-    $pdo->exec("ALTER TABLE wikipage ADD `date_modified` VARCHAR(10);");
+    $pdo->exec("ALTER TABLE wikipage ADD `editions` int default 1;");
+    $pdo->exec("ALTER TABLE wikipage ADD `date_modification` VARCHAR(10) DEFAULT NULL;");
 }
 
 // dummy data
@@ -36,7 +58,7 @@ function version_1(PDO $pdo)
         `content` TEXT,
         `is_active` tinyint(4) DEFAULT 1,
         `creator_id` int(11) DEFAULT 0,
-        `date_creation` bigint(20) DEFAULT NULL,
+        `date_creation` VARCHAR(10) DEFAULT NULL,
         `order` int(11) DEFAULT 1,
         PRIMARY KEY (`id`),
         FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE

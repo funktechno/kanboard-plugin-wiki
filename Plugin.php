@@ -14,6 +14,7 @@ class Plugin extends Base
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MANAGER);
 
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
+        // $this->route->addRoute('/wiki/project/:project_id&:wikipage_id', 'WikiController', 'detail', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/lines', 'WikiLineController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
 
@@ -56,7 +57,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.1.0';
+        return '0.1.3';
     }
 
     public function getPluginHomepage()
