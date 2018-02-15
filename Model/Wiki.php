@@ -103,8 +103,8 @@ class Wiki extends Base
             ->columns(
                 // 'c.name as creator_name',
                 // 'c.username as creator_username',
-                // UserModel::TABLE . '.name as creator_name',
-                // UserModel::TABLE . '.username as creator_username',
+                UserModel::TABLE . '.name as creator_name',
+                UserModel::TABLE . '.username as creator_username',
                 // 'mod.name as modifier_name',
                 // 'mod.username as modifier_username',
                 // UserModel::TABLE . '.username as modifier_username',
@@ -119,10 +119,10 @@ class Wiki extends Base
                 self::WIKITABLE . '.current_edition',
                 self::WIKITABLE . '.modifier_id'
             )
-            // ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             // ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             // ->eq('wiki_id', $wiki_id)->findOne();
-            ->eq('id', $wiki_id)->findOne();
+            ->eq('id', $wiki_id)->findOne(); // this may possibly not support joints
             // ->desc('order')->findAll();
 
         // return $this->db->table(self::TABLE)
