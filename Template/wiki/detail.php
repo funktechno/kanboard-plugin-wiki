@@ -59,7 +59,8 @@
     <?php endif?>
     <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
     <li>
-        <?= $this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', $wikipage) ?>
+        <?= $this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', $wikipage)) ?>
+
     </li>
     <li>
         <?=$this->url->link(t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
