@@ -6,7 +6,7 @@
     <?=$this->form->csrf()?>
 
     <?=$wiki_id?>
-    <?=$value['id']?>
+    <?=$values['id']?>
     
     <?=$this->form->hidden('id', $values)?>
     <?=$this->form->hidden('editions', $values)?>
