@@ -35,6 +35,8 @@ class WikiController extends BaseController
     {
         // $project = $this->getProject();
         // wikipage
+
+        // TODO: work on getting details for edit page not pulling properly
         $editwiki = $this->wiki->getWikipage($values['wiki_id']);
 
 
