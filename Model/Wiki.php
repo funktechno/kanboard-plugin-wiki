@@ -108,7 +108,7 @@ class Wiki extends Base
                 'mod.name as modifier_name',
                 'mod.username as modifier_username',
                 // UserModel::TABLE . '.username as modifier_username',
-                self::WIKITABLE . '.id',
+                self::WIKITABLE . '.id as wiki_id',
                 self::WIKITABLE . '.title',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
@@ -123,7 +123,7 @@ class Wiki extends Base
             // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
-            ->eq(self::WIKITABLE .'id', $wiki_id)->findOne();
+            ->eq('wiki_id', $wiki_id)->findOne();
             // ->desc('order')->findAll();
 
         // return $this->db->table(self::TABLE)
