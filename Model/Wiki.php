@@ -270,6 +270,48 @@ class Wiki extends Base
      * @return boolean|integer
      */
     // , $date = ''
+    // $values, $editions, $newDate
+    public function updatepage($paramvalues, $editions, $date = '')
+    {
+        // $this->prepare($values);
+        $values = array(
+            'title' => $paramvalues['title'],
+            'editions' => $editions,
+            'content' => $paramvalues['content'],
+            'current_edition' => $editions,
+            'date_modification' => $date ?: date('Y-m-d'),
+        );
+        // $this->prepare($values);
+
+        if ($this->userSession->isLogged()) {
+            $values['modifier_id'] = $this->userSession->getId();
+        }
+
+        // 'id' => $paramvalues['id'],
+        $this->$db->table(WIKITABLE)->eq('id', $paramvalues['id'])->update(['column1' => 'hey']);
+
+        return (int) $paramvalues['id'];
+
+        // $values['creator_id'] = $this->userSession->getId();
+        //     $values['modifier_id'] = $this->userSession->getId();
+        // date_modification
+
+        // return $this->db->table(self::WIKITABLE)->persist($values);
+
+        // need to also save to editions
+    }
+
+    /**
+     * Add a new wikipage into the database
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @param  float     $amount
+     * @param  string    $comment
+     * @param  string    $date
+     * @return boolean|integer
+     */
+    // , $date = ''
     public function createpage($project_id, $title, $content, $date = '', $order = null)
     {
         // $this->prepare($values);
