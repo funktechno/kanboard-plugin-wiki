@@ -83,45 +83,6 @@ Modified -->
 <?php else: ?>
     <p class="alert"><?=t('There is not enough data to show something.')?></p>
 <?php endif?>
-<?php if (!empty($daily_wiki)): ?>
-
-<!-- <hr/> -->
-   
-        <table class="table-fixed table-stripped">
-            <tr>
-                <th><?=t('Date')?></th>
-                <th><?=t('Wiki line')?></th>
-                <th><?=t('Expenses')?></th>
-                <th><?=t('Remaining')?></th>
-            </tr>
-            <?php foreach ($daily_wiki as $line): ?>
-            <tr>
-                <td><?=$this->dt->date($line['date'])?></td>
-                <td><?=n($line['in'])?></td>
-                <td><?=n($line['out'])?></td>
-                <td><?=n($line['left'])?></td>
-            </tr>
-            <?php endforeach?>
-            <?php if (!empty($wikipages)): ?>
-            <?php foreach ($wikipages as $wikipage): ?>
-            <tr>
-                <td><?=t($wikipage['title'])?></td>
-                <td><?=t($wikipage['content'])?></td>
-                <td><?=n($wikipage['id'])?></td>
-                <td><?=n($wikipage['order'])?></td>
-            </tr>
-            <?php endforeach?>
-            <?php else: ?>
-            <tr>
-                <span class="alert"><?=t('There are no wikipages.')?></span>
-            </tr>
-            <?php endif?>
-        </table>
-    </div>
-
-<?php else: ?>
-    <p class="alert"><?=t('There is not enough data to show something.')?></p>
-<?php endif?>
 </div>
 
 <?=$this->asset->js('plugins/Wiki/Asset/Javascript/WikiChart.js')?>
