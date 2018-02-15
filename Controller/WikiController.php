@@ -33,7 +33,7 @@ class WikiController extends BaseController
 
     public function edit(array $values = array(), array $errors = array())
     {
-        $project = $this->getProject();
+        // $project = $this->getProject();
 
 
 
@@ -45,7 +45,7 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
             'values' => $values + array('project_id' => $project['id']),
             'errors' => $errors,
-            'project' => $project,
+            // 'project' => $project,
             'title' => t('Edit Wikipage'),
         ), 'wiki:wiki/sidebar'));
     }
