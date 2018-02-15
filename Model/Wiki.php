@@ -223,14 +223,14 @@ class Wiki extends Base
      * @return boolean|integer
      */
     // , $date = ''
-    public function createpage($project_id, $title, $content, $order = null)
+    public function createpage($project_id, $title, $content, $date = '', $order = null)
     {
         // $this->prepare($values);
         $values = array(
             'project_id' => $project_id,
             'title' => $title,
             'content' => $content,
-            'date_creation' => date('Y-m-d'),
+            'date_creation' => $date ?: date('Y-m-d'),
             'order' => $order ?: time(),
         );
         $this->prepare($values);
@@ -240,7 +240,45 @@ class Wiki extends Base
         // date_modification
 
         return $this->db->table(self::WIKITABLE)->persist($values);
+
+        // need to also save to editions
     }
+
+    const EDITIONTABLE = 'wikipage_editions';
+
+    /**
+     * save an edition of a wiki page on every save or creation
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @param  float     $amount
+     * @param  string    $comment
+     * @param  string    $date
+     * @return boolean|integer
+     */
+    // , $date = ''
+    public function createEdition($values, $wiki_id, $edition, $date)
+    {
+
+        $editionvalues = array(
+            'title' => $values['title'],
+            'edition' => $edition,
+            'content' => $values['content'],
+            'date_creation' => $date, // should alway be the last date
+            'creator_id' => $this->userSession->getId(),
+            'wikipage_id' => $wiki_id
+        );
+
+        // $values['creator_id'] = $this->userSession->getId();
+        //     $values['modifier_id'] = $this->userSession->getId();
+        // date_modification
+
+        return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
+
+        // need to also save to editions
+    }
+
+    
 
     /**
      * Prepare data
