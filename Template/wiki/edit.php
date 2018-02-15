@@ -47,38 +47,7 @@
 </div>
 
 <div class="column content">
-<div class="page-header">
-    <h2><?=t($wikipage['title'])?></h2>
-</div>
-<ul class="panel">
-    <?php if ($wikipage['creator_id'] > 0): ?>
-        <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
-    <?php endif?>
-    <?php if ($wikipage['modifier_id'] > 0): ?>
-        <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
-    <?php endif?>
-    <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
-    <li>
-        <?=$this->url->link(t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-    </li>
-</ul>
 
-<?php if (!empty($wikipage['content'])): ?>
-    <div class="page-header">
-        <h2><?=t('Content')?></h2>
-    </div>
-
-    <article class="markdown">
-        <?=$this->text->markdown($wikipage['content'])?>
-    </article>
-<?php endif?>
-
-<div class="page-header">
-        <h2><?=t('Attachments')?></h2>
-</div>
-<ul>
-    <?= $this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
-</ul>
 <!-- TODO: new feature -->
 <?php if (!empty($files) || !empty($images)): ?>
     <?=$this->hook->render('template:wiki:show:before-attachments', array('wiki' => $wiki, 'project' => $project))?>
