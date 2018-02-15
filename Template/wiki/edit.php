@@ -7,6 +7,7 @@
 
     <?=$wiki_id?>
     <?=$values->id?>
+    <?=$values['id']?>
     
     <?=$this->form->hidden('id', $values)?>
     <?=$this->form->hidden('editions', $values)?>
