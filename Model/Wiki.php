@@ -240,7 +240,66 @@ class Wiki extends Base
         // date_modification
 
         return $this->db->table(self::WIKITABLE)->persist($values);
+
+        // need to also save to editions
     }
+
+    const EDITIONTABLE = 'wikipage_editions';
+
+    /**
+     * save an edition of a wiki page on every save or creation
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @param  float     $amount
+     * @param  string    $comment
+     * @param  string    $date
+     * @return boolean|integer
+     */
+    // , $date = ''
+    public function createEdition($values, $wiki_id, $edition)
+    {
+        // $values, $wiki_id, 1
+        // $this->prepare($values);
+        // $values = array(
+        //     'project_id' => $project_id,
+        //     'title' => $title,
+        //     'content' => $content,
+        //     'date_creation' => date('Y-m-d'),
+        //     'order' => $order ?: time(),
+        // );
+        // $this->prepare($values);
+        // $pdo->exec("CREATE TABLE wikipage_editions (
+        //     `edition` INT NOT NULL,
+        //     `title` varchar(255) NOT NULL,
+        //     `content` TEXT,
+        //     `creator_id` int(11) DEFAULT 0,
+        //     `date_creation` VARCHAR(10) DEFAULT NULL,
+        //     wikipage_id INT,
+        //     PRIMARY KEY (`edition`,`wikipage_id`),
+        //     FOREIGN KEY(wikipage_id) REFERENCES wikipage(id) ON DELETE CASCADE
+        // ) ENGINE=InnoDB CHARSET=utf8"
+        // );
+
+        $editionvalues = array(
+            'title' => $values['title'],
+            'edition' => $edition,
+            'content' => $values['content'],
+            'date_creation' => $values['date_modification'], // should alway be the last date
+            'creator_id' => $this->userSession->getId(),
+            'wikipage_id' => $wiki_id
+        );
+
+        // $values['creator_id'] = $this->userSession->getId();
+        //     $values['modifier_id'] = $this->userSession->getId();
+        // date_modification
+
+        return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
+
+        // need to also save to editions
+    }
+
+    
 
     /**
      * Prepare data
