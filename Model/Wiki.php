@@ -225,7 +225,7 @@ class Wiki extends Base
     // , $date = ''
     public function createpage($project_id, $title, $content, $order = null)
     {
-        $this->prepare($values);
+        // $this->prepare($values);
         $values = array(
             'project_id' => $project_id,
             'title' => $title,
@@ -233,7 +233,7 @@ class Wiki extends Base
             'date_creation' => date('Y-m-d'),
             'order' => $order ?: time(),
         );
-        // $this->prepare($values);
+        $this->prepare($values);
 
         // $values['creator_id'] = $this->userSession->getId();
         //     $values['modifier_id'] = $this->userSession->getId();
