@@ -59,7 +59,6 @@ Modified -->
         <table class="table-fixed table-stripped">
             <tr>
                 <th><?=t('Id')?></th>
-                <th><?=t('Order')?></th>
                 <th><?=t('Editions')?></th>
                 <th><?=t('Current Edition')?></th>
                 <th><?=t('Creator')?></th>
@@ -70,7 +69,6 @@ Modified -->
             <?php foreach ($wikipages as $wikipage): ?>
             <tr>
                 <td><?=$wikipage['id']?></td>
-                <td><?=$wikipage['order']?></td>
                 <td><?=$wikipage['editions']?></td>
                 <td><?=$wikipage['current_edition']?></td>
                 <td><?=t($wikipage['creator_name'])?></td>
