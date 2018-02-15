@@ -28,7 +28,11 @@
         <?php foreach ($wikipages as $wikipage): ?>
 
         <li >
-            <?=$wikipage['title']?> <?= $this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id'])) ?>
+            <?=$wikipage['title']?> 
+            <?= $this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' =>$wikipage['id'])) ?>
+
+            <?= $this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id'])) ?>
+
         </li>
 
 

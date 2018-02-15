@@ -96,7 +96,12 @@ class WikiController extends BaseController
         list($valid, $errors) = $this->wiki->validatePageCreation($values);
 
         if ($valid) {
-            if ($this->wiki->createpage($values['project_id'], $values['title'], $values['content'])) {
+            $wiki_id =$this->wiki->createpage($values['project_id'], $values['title'], $values['content']);
+            if ($wiki_id>0) {
+
+                $this->wiki->createEdition($values, $wiki_id, 1);
+                // don't really care if edition was successful
+
                 $this->flash->success(t('The wikipage have been created successfully.'));
                 $this->response->redirect($this->helper->url->to('WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id'])), true);
                 return;
