@@ -84,7 +84,50 @@ class WikiController extends BaseController
     }
 
     /**
-     * Remove a wiki
+     * Validate and save a new wikipage
+     *
+     * @access public
+     */
+    public function save()
+    {
+        $project = $this->getProject();
+
+        $values = $this->request->getValues();
+        list($valid, $errors) = $this->wiki->validateCreation($values);
+
+        if ($valid) {
+
+            if ($this->wiki->createpage($values['project_id'], $values['title'], $values['content'])) {
+                $this->flash->success(t('The wikipage have been created successfully.'));
+                $this->response->redirect($this->helper->url->to('WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id'])), true);
+                return;
+            } else {
+                $this->flash->failure(t('Unable to create the wikipage.'));
+            }
+        }
+
+        $this->create($values, $errors);
+    }
+
+    public function create(array $values = array(), array $errors = array())
+    {
+        $project = $this->getProject();
+
+        if (empty($values)) {
+            $values['date_creation'] = date('Y-m-d');
+            $values['date_modification'] = date('Y-m-d');
+        }
+
+        $this->response->html($this->helper->layout->project('wiki:wiki/create', array(
+            'values' => $values + array('project_id' => $project['id']),
+            'errors' => $errors,
+            'project' => $project,
+            'title' => t('Wikipage')
+        ), 'wiki:wiki/sidebar'));
+    }
+
+    /**
+     * Remove a wikipage
      *
      * @access public
      */

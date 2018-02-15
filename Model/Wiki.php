@@ -179,6 +179,31 @@ class Wiki extends Base
 
         return $records;
     }
+    
+    /**
+     * Add a new wikipage into the database
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @param  float     $amount
+     * @param  string    $comment
+     * @param  string    $date
+     * @return boolean|integer
+     */
+    // , $date = ''
+    public function createpage($project_id, $title, $comment, $content, $order = null)
+    {
+        $values = array(
+            'project_id' => $project_id,
+            'title' => $title,
+            'content' => $content,
+            'date_creation' => date('Y-m-d'),
+            'date_modification' => date('Y-m-d'),
+            'order' => $order ?: time()
+        );
+
+        return $this->db->table(self::TABLE)->persist($values);
+    }
 
     /**
      * Add a new wiki line in the database
