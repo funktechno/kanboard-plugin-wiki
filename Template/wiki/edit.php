@@ -5,7 +5,6 @@
 <form method="post" action="<?= $this->url->href('WikiController', 'update', array('plugin' => 'wiki')) ?>" autocomplete="off">
     <?= $this->form->csrf() ?>
 
-    <!-- <?= $this->form->hidden('id', $values) ?> -->
     <?= $this->form->hidden('id', $values) ?>
     <?= $this->form->hidden('editions', $values) ?>
     <?= $this->form->hidden('order', $values) ?>

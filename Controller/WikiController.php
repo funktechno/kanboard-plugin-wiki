@@ -188,7 +188,7 @@ class WikiController extends BaseController
                 // don't really care if editions was successful, begin transaction not really needed
 
                 $this->flash->success(t('The wikipage has been updated successfully.'));
-                $this->response->redirect($this->helper->url->to('WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $valuees['id'])), true);
+                $this->response->redirect($this->helper->url->to('WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $values['id'])), true);
                 return;
             } else {
                 $this->flash->failure(t('Unable to update the wikipage.'));
