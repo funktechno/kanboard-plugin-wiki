@@ -17,7 +17,7 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'edit', 'wiki');
-        $this->template->hook->attach('template:config:sidebar', 'Calendar:config/sidebar');
+        $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
 
 
 
