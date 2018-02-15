@@ -31,6 +31,18 @@ You have the choice between 3 methods:
 
 Note: Plugin folder is case-sensitive.
 
+### TODO
+* editions listing and restore
+* finish edit
+* ordering
+    * drop down to switch
+    * drag to move, require css magic
+* inspired by taiga wikis
+
+### Roadmap
+* style updates
+* issues/bugs
+
 Documentation
 -------------
 
