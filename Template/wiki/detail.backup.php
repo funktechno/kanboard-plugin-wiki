@@ -24,12 +24,12 @@
 <div class="sidebar column list">
     <ul>
         <?php if (!empty($wikipages)): ?>
-        <?php foreach ($wikipages as $page): ?>
+        <?php foreach ($wikipages as $wikipage): ?>
 
         <li >
-            <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
+            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
 
-            <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
+            <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
         </li>
 
 
@@ -48,7 +48,7 @@
 
 <div class="column content">
 <div class="page-header">
-    <h2><?=t($wiki_id)?>   <?=t($wikipage['title'])?></h2>
+    <h2><?=t($wikipage['title'])?></h2>
 </div>
 <ul class="panel">
     <?php if ($wikipage['creator_id'] > 0): ?>
@@ -79,6 +79,26 @@
 <ul>
     <?= $this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
 </ul>
+<!-- TODO: new feature -->
+<?php if (!empty($files) || !empty($images)): ?>
+    <?=$this->hook->render('template:wiki:show:before-attachments', array('wiki' => $wiki, 'project' => $project))?>
+    <?=$this->render('wiki_file/show', array(
+    'wiki' => $wiki,
+    'files' => $files,
+    'images' => $images,
+))?>
+<?php endif?>
+
+<!-- pending decision/need -->
+<?php if (!empty($comments)): ?>
+    <?=$this->hook->render('template:wiki:show:before-comments', array('wiki' => $wiki, 'project' => $project))?>
+    <?=$this->render('wiki_comments/show', array(
+    'wiki' => $wiki,
+    'comments' => $comments,
+    'project' => $project,
+    'editable' => $this->user->hasProjectAccess('CommentController', 'edit', $project['id']),
+))?>
+<?php endif?>
 
 
 </div>

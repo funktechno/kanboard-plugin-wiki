@@ -11,9 +11,16 @@ class Plugin extends Base
     public function initialize()
     {
         $this->applicationAccessMap->add('HourlyRateController', '*', Role::APP_ADMIN);
-        $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MANAGER);
+        $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
 
+        
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'edit', 'wiki');
+        $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
+
+
+
         // $this->route->addRoute('/wiki/project/:project_id&:wikipage_id', 'WikiController', 'detail', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/lines', 'WikiLineController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
@@ -57,7 +64,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.1.3';
+        return '0.1.4';
     }
 
     public function getPluginHomepage()

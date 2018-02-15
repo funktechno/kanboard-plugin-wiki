@@ -30,18 +30,38 @@ class WikiController extends BaseController
         //     'wikipages' => $this->wiki->getWikipages($project['id'])
         // )
     }
+
+
     /**
      * details for single wiki page
      */
     public function detail()
     {
         $project = $this->getProject();
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        $this->response->html($this->helper->layout->project('wiki:wiki/show', array(
-            'daily_wiki' => $this->wiki->getDailyWikiBreakdown($project['id']),
+        $wikipages = $this->wiki->getWikipages($project['id']);
+
+        foreach ($wikipages as $page){
+            if (t($wiki_id) == t($page['id'])) {
+                $wikipage = $page;
+                break;
+            }
+        }
+
+        // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
+
+        // $wikipage= $wikipages->eq('id', $wiki_id);
+
+
+        // use a wiki helper for better side bar TODO:
+        $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
             'project' => $project,
-            'title' => t('Wiki'),
-            'wikipages' => $this->wiki->getWikipages($project['id']),
+            'title' => t('Wikipage'),
+            'wiki_id' => $wiki_id,
+            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'wikipage' => $wikipage,
+            'wikipages' => $wikipages
         ), 'wiki:wiki/sidebar'));
 
         // ,array(

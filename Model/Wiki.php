@@ -66,6 +66,7 @@ class Wiki extends Base
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
                 self::WIKITABLE . '.creator_id',
@@ -88,6 +89,51 @@ class Wiki extends Base
         // ->join(UserModel::TABLE, 'id', 'owner_id')
         // ->findOne();
     }
+
+     /**
+     * Get a single Wiki Page
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @return array
+     */
+    public function getWikipage($wiki_id)
+    {
+        return $this->db->
+            table(self::WIKITABLE)
+            ->columns(
+                // 'c.name as creator_name',
+                // 'c.username as creator_username',
+                // UserModel::TABLE . '.name as creator_name',
+                // UserModel::TABLE . '.username as creator_username',
+                // 'mod.name as modifier_name',
+                // 'mod.username as modifier_username',
+                // UserModel::TABLE . '.username as modifier_username',
+                self::WIKITABLE . '.id as wiki_id',
+                self::WIKITABLE . '.title',
+                self::WIKITABLE . '.project_id',
+                self::WIKITABLE . '.is_active',
+                self::WIKITABLE . '.creator_id',
+                self::WIKITABLE . '.date_creation',
+                self::WIKITABLE . '.date_modification',
+                self::WIKITABLE . '.editions',
+                self::WIKITABLE . '.current_edition',
+                self::WIKITABLE . '.modifier_id'
+            )
+            // ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            // ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+            // ->eq('wiki_id', $wiki_id)->findOne();
+            ->eq('id', $wiki_id)->findOne(); // this may possibly not support joins
+            // ->desc('order')->findAll();
+
+        // return $this->db->table(self::TABLE)
+        // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
+        // ->eq(self::TABLE.'.id', $project_id)
+        // ->join(UserModel::TABLE, 'id', 'owner_id')
+        // ->findOne();
+    }
+
+    
 
     /**
      * Get the current total of the wiki
