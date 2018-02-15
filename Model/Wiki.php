@@ -274,13 +274,13 @@ class Wiki extends Base
     public function updatepage($paramvalues, $editions, $date = '')
     {
         // $this->prepare($values);
-        $values = array(
+        $values = [
             'title' => $paramvalues['title'],
             'editions' => $editions,
             'content' => $paramvalues['content'],
             'current_edition' => $editions,
             'date_modification' => $date ?: date('Y-m-d'),
-        );
+        ];
         // $this->prepare($values);
 
         if ($this->userSession->isLogged()) {
@@ -289,6 +289,9 @@ class Wiki extends Base
 
         // 'id' => $paramvalues['id'],
         $this->$db->table(WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
+
+
+        // $this->$db->table(WIKITABLE)->eq('id', $paramvalues['id'])->update(['column1' => 'hey']);
 
         return (int) $paramvalues['id'];
 
