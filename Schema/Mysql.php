@@ -4,7 +4,11 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 4;
+const VERSION = 5;
+
+function version_5(PDO $pdo){
+    $pdo->exec("ALTER TABLE wikipage ADD `modifier_id` int(11) DEFAULT 0;");
+}
 
 function version_4(PDO $pdo)
 {

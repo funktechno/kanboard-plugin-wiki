@@ -58,9 +58,9 @@ Modified -->
         <table class="table-fixed table-stripped">
             <tr>
                 <th><?=t('Title')?></th>
-                <th><?=t('Content')?></th>
                 <th><?=t('Id')?></th>
                 <th><?=t('Order')?></th>
+                <th><?=t('Editions')?></th>
                 <th><?=t('Editions')?></th>
                 <th><?=t('Creator')?></th>
                 <th><?=t('Created')?></th>
@@ -70,14 +70,13 @@ Modified -->
             <?php foreach ($wikipages as $wikipage): ?>
             <tr>
                 <td><?=t($wikipage['title'])?></td>
-                <td><?=t($wikipage['content'])?></td>
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['order']?></td>
                 <td><?=$wikipage['editions']?></td>
-                <td><?=n($wikipage['creator_id'])?></td>
+                <td><?=t($wikipage['creator_name'])?></td>
                 <td><?=$this->dt->date($wikipage['date_creation'])?></td>
-                <td><?=n($wikipage['modifier_id'])?></td>
-                <td><?=$this->dt->date($wikipage['date_modified'])?></td>
+                <td><?=t($wikipage['modifier_name'])?></td>
+                <td><?=$this->dt->date($wikipage['date_modification'])?></td>
             </tr>
             <?php endforeach?>
         </table>
