@@ -35,7 +35,7 @@ class WikiController extends BaseController
     {
         // $project = $this->getProject();
         // wikipage
-        $editwiki = $this->wiki->getWikipage($value['wiki_id']);
+        $editwiki = $this->wiki->getWikipage($values['wiki_id']);
 
 
         // if (empty($values)) {
