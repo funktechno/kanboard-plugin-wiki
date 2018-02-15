@@ -23,7 +23,7 @@ class WikiController extends BaseController
             'daily_wiki' => $this->wiki->getDailyWikiBreakdown($project['id']),
             'project' => $project,
             'title' => t('Wiki'),
-            'wikipages' => $this->wiki->getWikipages($project['id'])
+            'wikipages' => $this->wiki->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
 
         // ,array(
@@ -41,7 +41,7 @@ class WikiController extends BaseController
             'daily_wiki' => $this->wiki->getDailyWikiBreakdown($project['id']),
             'project' => $project,
             'title' => t('Wiki'),
-            'wikipages' => $this->wiki->getWikipages($project['id'])
+            'wikipages' => $this->wiki->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
 
         // ,array(
@@ -64,7 +64,7 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->project('wiki:wiki/breakdown', array(
             'paginator' => $paginator,
             'project' => $project,
-            'title' => t('Wiki')
+            'title' => t('Wiki'),
         ), 'wiki:wiki/sidebar'));
     }
 
@@ -96,7 +96,15 @@ class WikiController extends BaseController
         list($valid, $errors) = $this->wiki->validatePageCreation($values);
 
         if ($valid) {
-            if ($this->wiki->createpage($values['project_id'], $values['title'], $values['content'])) {
+
+            $newDate = date('Y-m-d');
+
+            $wiki_id = $this->wiki->createpage($values['project_id'], $values['title'], $values['content'], $newDate);
+            if ($wiki_id > 0) {
+
+                $this->wiki->createEdition($values, $wiki_id, 1, $newDate);
+                // don't really care if edition was successful
+
                 $this->flash->success(t('The wikipage have been created successfully.'));
                 $this->response->redirect($this->helper->url->to('WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id'])), true);
                 return;
@@ -121,7 +129,7 @@ class WikiController extends BaseController
             'values' => $values + array('project_id' => $project['id']),
             'errors' => $errors,
             'project' => $project,
-            'title' => t('Wikipage')
+            'title' => t('Wikipage'),
         ), 'wiki:wiki/sidebar'));
     }
 
