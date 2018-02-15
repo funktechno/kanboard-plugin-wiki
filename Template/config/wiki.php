@@ -1,7 +1,7 @@
 <div class="page-header">
     <h2><?= t('Wiki settings') ?></h2>
 </div>
-<form method="post" action="<?= $this->url->href('ConfigController', 'save', array('plugin' => 'Calendar')) ?>" autocomplete="off">
+<form method="post" action="<?= $this->url->href('ConfigController', 'save', array('plugin' => 'Wiki')) ?>" autocomplete="off">
 
     <?= $this->form->csrf() ?>
 
