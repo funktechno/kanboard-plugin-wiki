@@ -85,4 +85,4 @@ Modified -->
 <?php endif?>
 </div>
 
-<?=$this->asset->js('plugins/Wiki/Asset/Javascript/WikiChart.js')?>
+<!-- $this->asset->js('plugins/Wiki/Asset/Javascript/WikiChart.js') -->
