@@ -22,6 +22,7 @@
 </style>
 <div class="clearfix">
 <div class="sidebar column list">
+    <h2>Title</h2>
     <ul>
         <?php if (!empty($wikipages)): ?>
         <?php foreach ($wikipages as $wikipage): ?>
@@ -57,7 +58,6 @@ Modified -->
    
         <table class="table-fixed table-stripped">
             <tr>
-                <th><?=t('Title')?></th>
                 <th><?=t('Id')?></th>
                 <th><?=t('Order')?></th>
                 <th><?=t('Editions')?></th>
@@ -69,7 +69,6 @@ Modified -->
             </tr>
             <?php foreach ($wikipages as $wikipage): ?>
             <tr>
-                <td><?=t($wikipage['title'])?></td>
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['order']?></td>
                 <td><?=$wikipage['editions']?></td>
