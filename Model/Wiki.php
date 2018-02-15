@@ -111,6 +111,7 @@ class Wiki extends Base
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id as wiki_id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
                 self::WIKITABLE . '.creator_id',
