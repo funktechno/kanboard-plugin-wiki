@@ -32,7 +32,7 @@ function version_4(PDO $pdo)
 function version_3(PDO $pdo)
 {
     $pdo->exec("ALTER TABLE wikipage ADD `editions` int default 1;");
-    $pdo->exec("ALTER TABLE wikipage ADD `date_modification` VARCHAR(10);");
+    $pdo->exec("ALTER TABLE wikipage ADD `date_modification` VARCHAR(10) DEFAULT NULL;");
 }
 
 // dummy data
