@@ -42,7 +42,8 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
             'project' => $project,
             'title' => t('Wikipage'),
-            'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'wiki_id' => $wiki_id,
+            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
             'wikipages' => $this->wiki->getWikipages($project['id'])
         ), 'wiki:wiki/sidebar'));
 
