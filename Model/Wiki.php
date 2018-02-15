@@ -275,9 +275,6 @@ class Wiki extends Base
     // $values, $editions, $newDate
     public function updatepage($paramvalues, $editions, $date = '')
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
 
         // $this->prepare($values);
         $values = [
@@ -287,28 +284,13 @@ class Wiki extends Base
             'current_edition' => $editions,
             'date_modification' => $date ?: date('Y-m-d'),
         ];
-        // $this->prepare($values);
 
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();
         }
-        // return $this->db->table(self::WIKITABLE)->persist($values);
-
-        // 'id' => $paramvalues['id'],
         $this->db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
 
-        // $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update(['title' => $paramvalues['title']]);
-
-
-        // $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update(['column1' => 'hey']);
-
         return (int) $paramvalues['id'];
-
-        // $values['creator_id'] = $this->userSession->getId();
-        //     $values['modifier_id'] = $this->userSession->getId();
-        // date_modification
-
-        // return $this->db->table(self::WIKITABLE)->persist($values);
 
         // need to also save to editions
     }
