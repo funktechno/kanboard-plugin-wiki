@@ -43,7 +43,7 @@ class WikiController extends BaseController
             'project' => $project,
             'title' => t('Wikipage'),
             'wiki_id' => $wiki_id,
-            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'wikipage' => $this->wiki->getWikipage($wiki_id),
             'wikipages' => $this->wiki->getWikipages($project['id'])
         ), 'wiki:wiki/sidebar'));
 
