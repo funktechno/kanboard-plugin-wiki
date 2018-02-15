@@ -31,6 +31,21 @@ You have the choice between 3 methods:
 
 Note: Plugin folder is case-sensitive.
 
+### TODO
+* editions listing and restore
+* finish edit
+* ordering
+    * drop down to switch
+    * drag to move, require css magic
+* inspired by taiga wikis
+* fix wiki sidebar
+    * use html template render properly to list wiki pages
+* get rid of additional old budget plugin code
+
+### Roadmap
+* style updates
+* issues/bugs
+
 Documentation
 -------------
 

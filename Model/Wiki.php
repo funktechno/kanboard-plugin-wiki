@@ -69,6 +69,7 @@ class Wiki extends Base
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
+                self::WIKITABLE . '.order',
                 self::WIKITABLE . '.creator_id',
                 self::WIKITABLE . '.date_creation',
                 self::WIKITABLE . '.date_modification',
@@ -109,9 +110,11 @@ class Wiki extends Base
                 // 'mod.name as modifier_name',
                 // 'mod.username as modifier_username',
                 // UserModel::TABLE . '.username as modifier_username',
-                self::WIKITABLE . '.id as wiki_id',
+                self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
+                self::WIKITABLE . '.order',
                 self::WIKITABLE . '.is_active',
                 self::WIKITABLE . '.creator_id',
                 self::WIKITABLE . '.date_creation',
@@ -269,6 +272,40 @@ class Wiki extends Base
      * @return boolean|integer
      */
     // , $date = ''
+    // $values, $editions, $newDate
+    public function updatepage($paramvalues, $editions, $date = '')
+    {
+
+        // $this->prepare($values);
+        $values = [
+            'title' => $paramvalues['title'],
+            'editions' => $editions,
+            'content' => $paramvalues['content'],
+            'current_edition' => $editions,
+            'date_modification' => $date ?: date('Y-m-d'),
+        ];
+
+        if ($this->userSession->isLogged()) {
+            $values['modifier_id'] = $this->userSession->getId();
+        }
+        $this->db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
+
+        return (int) $paramvalues['id'];
+
+        // need to also save to editions
+    }
+
+    /**
+     * Add a new wikipage into the database
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @param  float     $amount
+     * @param  string    $comment
+     * @param  string    $date
+     * @return boolean|integer
+     */
+    // , $date = ''
     public function createpage($project_id, $title, $content, $date = '', $order = null)
     {
         // $this->prepare($values);
@@ -376,6 +413,18 @@ class Wiki extends Base
     {
         $v = new Validator($values, array(
             new Validators\Required('project_id', t('Field required')),
+            new Validators\Required('title', t('Field required')),
+        ));
+
+        return array(
+            $v->execute(),
+            $v->getErrors(),
+        );
+    }
+
+    public function validatePageUpdate(array $values)
+    {
+        $v = new Validator($values, array(
             new Validators\Required('title', t('Field required')),
         ));
 
