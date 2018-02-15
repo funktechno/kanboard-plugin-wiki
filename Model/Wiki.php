@@ -191,7 +191,7 @@ class Wiki extends Base
      * @return boolean|integer
      */
     // , $date = ''
-    public function createpage($project_id, $title, $comment, $content, $order = null)
+    public function createpage($project_id, $title, $content, $order = null)
     {
         $values = array(
             'project_id' => $project_id,
@@ -203,6 +203,19 @@ class Wiki extends Base
         );
 
         return $this->db->table(self::TABLE)->persist($values);
+    }
+
+    public function validatePageCreation(array $values)
+    {
+        $v = new Validator($values, array(
+            new Validators\Required('project_id', t('Field required')),
+            new Validators\Required('title', t('Field required')),
+        ));
+
+        return array(
+            $v->execute(),
+            $v->getErrors()
+        );
     }
 
     /**
