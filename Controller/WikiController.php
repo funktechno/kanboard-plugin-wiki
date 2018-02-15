@@ -43,7 +43,7 @@ class WikiController extends BaseController
         $wikipages = $this->wiki->getWikipages($project['id']);
 
         foreach ($wikipages as $page){
-            if ($wiki_id == $page['id']) {
+            if (t($wiki_id) == t($page['id'])) {
                 $wikipage = $obj;
                 break;
             }
