@@ -32,15 +32,16 @@ You have the choice between 3 methods:
 Note: Plugin folder is case-sensitive.
 
 ### TODO
-* editions listing and restore
-* finish edit
-* ordering
-    * drop down to switch
-    * drag to move, require css magic
+* [] editions listing and restore
+* [x] finish edit
+* [] ordering
+    * [] drop down to switch
+    * [] drag to move, require css magic
 * inspired by taiga wikis
-* fix wiki sidebar
+* [] fix wiki sidebar
     * use html template render properly to list wiki pages
-* get rid of additional old budget plugin code
+* [] get rid of additional old budget plugin code
+* [] kanboard rest api support
 
 ### Roadmap
 * style updates
