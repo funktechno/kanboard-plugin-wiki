@@ -292,9 +292,10 @@ class Wiki extends Base
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();
         }
+        // return $this->db->table(self::WIKITABLE)->persist($values);
 
         // 'id' => $paramvalues['id'],
-        $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
+        $this->db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
 
         // $this->$db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update(['title' => $paramvalues['title']]);
 
