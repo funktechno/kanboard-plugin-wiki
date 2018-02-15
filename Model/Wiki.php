@@ -233,7 +233,11 @@ class Wiki extends Base
             'date_creation' => date('Y-m-d'),
             'order' => $order ?: time(),
         );
-        $this->prepare($values);
+        // $this->prepare($values);
+
+        // $values['creator_id'] = $this->userSession->getId();
+        //     $values['modifier_id'] = $this->userSession->getId();
+        // date_modification
 
         return $this->db->table(self::WIKITABLE)->persist($values);
     }
