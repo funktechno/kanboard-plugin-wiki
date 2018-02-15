@@ -48,7 +48,7 @@
 
 <div class="column content">
 <div class="page-header">
-    <h2><?=t($wikipage['title'])?></h2>
+    <h2><?=t($wiki_id)?>   <?=t($wikipage['title'])?></h2>
 </div>
 <ul class="panel">
     <?php if ($wikipage['creator_id'] > 0): ?>

@@ -123,7 +123,7 @@ class Wiki extends Base
             // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
-            ->eq('id', $wiki_id)->findOne();
+            ->eq(self::WIKITABLE .'id', $wiki_id)->findOne();
             // ->desc('order')->findAll();
 
         // return $this->db->table(self::TABLE)
