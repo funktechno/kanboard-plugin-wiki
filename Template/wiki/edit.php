@@ -2,7 +2,7 @@
     <h2><?=t('Edit wikipage')?></h2>
 </div>
 
-<form method="post" action="<?=$this->url->href('WikiController', 'update', array('plugin' => 'wiki'))?>" autocomplete="off">
+<form method="post" action="<?=$this->url->href('WikiController', 'update', array('plugin' => 'wiki','wiki_id'=>$wiki_id))?>" autocomplete="off">
     <?=$this->form->csrf()?>
     <?php
         ini_set('display_errors', 1);
@@ -10,9 +10,6 @@
         error_reporting(E_ALL);
     ?>
     
-    <?=$this->form->hidden('id', $values)?>
-    <?=$this->form->hidden('editions', $values)?>
-    <?=$this->form->hidden('order', $values)?>
 
     <?=$this->form->label(t('Title'), 'title')?>
     <?=$this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus', 'tabindex="1"'))?>
