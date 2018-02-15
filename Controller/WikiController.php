@@ -44,7 +44,7 @@ class WikiController extends BaseController
 
         foreach ($wikipages as $page){
             if (t($wiki_id) == t($page['id'])) {
-                $wikipage = $obj;
+                $wikipage = $page;
                 break;
             }
         }
