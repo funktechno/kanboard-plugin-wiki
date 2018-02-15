@@ -35,17 +35,17 @@ class WikiController extends BaseController
     {
         // $project = $this->getProject();
         // wikipage
-        $wikipage = $this->wiki->getWikipage($value['wiki_id']);
+        $editwiki = $this->wiki->getWikipage($value['wiki_id']);
 
 
-        if (empty($values)) {
-            $values['date_creation'] = date('Y-m-d');
-            $values['date_modification'] = date('Y-m-d');
-        }
+        // if (empty($values)) {
+        //     $values['date_creation'] = date('Y-m-d');
+        //     $values['date_modification'] = date('Y-m-d');
+        // }
 
         // $values['wikipage']
         $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
-            'values' => $wikipage,
+            'values' => $editwiki,
             'errors' => $errors,
             // 'project' => $project,
             'title' => t('Edit Wikipage'),
