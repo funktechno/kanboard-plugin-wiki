@@ -61,7 +61,7 @@ Modified -->
                 <th><?=t('Id')?></th>
                 <th><?=t('Order')?></th>
                 <th><?=t('Editions')?></th>
-                <th><?=t('Editions')?></th>
+                <th><?=t('Current Edition')?></th>
                 <th><?=t('Creator')?></th>
                 <th><?=t('Created')?></th>
                 <th><?=t('Last modifier')?></th>
@@ -73,6 +73,7 @@ Modified -->
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['order']?></td>
                 <td><?=$wikipage['editions']?></td>
+                <td><?=$wikipage['current_edition']?></td>
                 <td><?=t($wikipage['creator_name'])?></td>
                 <td><?=$this->dt->date($wikipage['date_creation'])?></td>
                 <td><?=t($wikipage['modifier_name'])?></td>
