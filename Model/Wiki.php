@@ -4,13 +4,13 @@ namespace Kanboard\Plugin\Wiki\Model;
 
 use DateInterval;
 use DateTime;
-use SimpleValidator\Validator;
-use SimpleValidator\Validators;
 use Kanboard\Core\Base;
+use Kanboard\Model\SubtaskModel;
 use Kanboard\Model\SubtaskTimeTrackingModel;
 use Kanboard\Model\TaskModel;
 use Kanboard\Model\UserModel;
-use Kanboard\Model\SubtaskModel;
+use SimpleValidator\Validator;
+use SimpleValidator\Validators;
 
 /**
  * Wiki
@@ -54,7 +54,39 @@ class Wiki extends Base
      */
     public function getWikipages($project_id)
     {
-        return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
+        return $this->db->
+            table(self::WIKITABLE)
+            ->columns(
+                'c.name as creator_name',
+                'c.username as creator_username',
+                // UserModel::TABLE . '.name as creator_name',
+                // UserModel::TABLE . '.username as creator_username',
+                'mod.name as modifier_name',
+                'mod.username as modifier_username',
+                // UserModel::TABLE . '.username as modifier_username',
+                self::WIKITABLE . '.id',
+                self::WIKITABLE . '.title',
+                self::WIKITABLE . '.project_id',
+                self::WIKITABLE . '.is_active',
+                self::WIKITABLE . '.creator_id',
+                self::WIKITABLE . '.date_creation',
+                self::WIKITABLE . '.date_modification',
+                self::WIKITABLE . '.editions',
+                self::WIKITABLE . '.current_edition',
+                self::WIKITABLE . '.modifier_id'
+            )
+            // ->join(UserModel::TABLE, 'id', 'creator_id')
+            // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+            ->eq('project_id', $project_id)
+            ->desc('order')->findAll();
+
+        // return $this->db->table(self::TABLE)
+        // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
+        // ->eq(self::TABLE.'.id', $project_id)
+        // ->join(UserModel::TABLE, 'id', 'owner_id')
+        // ->findOne();
     }
 
     /**
@@ -80,25 +112,25 @@ class Wiki extends Base
     public function getSubtaskBreakdown($project_id)
     {
         return $this->db
-                    ->table(SubtaskTimeTrackingModel::TABLE)
-                    ->columns(
-                        SubtaskTimeTrackingModel::TABLE.'.id',
-                        SubtaskTimeTrackingModel::TABLE.'.user_id',
-                        SubtaskTimeTrackingModel::TABLE.'.subtask_id',
-                        SubtaskTimeTrackingModel::TABLE.'.start',
-                        SubtaskTimeTrackingModel::TABLE.'.time_spent',
-                        SubtaskModel::TABLE.'.task_id',
-                        SubtaskModel::TABLE.'.title AS subtask_title',
-                        TaskModel::TABLE.'.title AS task_title',
-                        TaskModel::TABLE.'.project_id',
-                        UserModel::TABLE.'.username',
-                        UserModel::TABLE.'.name'
-                    )
-                    ->join(SubtaskModel::TABLE, 'id', 'subtask_id')
-                    ->join(TaskModel::TABLE, 'id', 'task_id', SubtaskModel::TABLE)
-                    ->join(UserModel::TABLE, 'id', 'user_id')
-                    ->eq(TaskModel::TABLE.'.project_id', $project_id)
-                    ->callback(array($this, 'applyUserRate'));
+            ->table(SubtaskTimeTrackingModel::TABLE)
+            ->columns(
+                SubtaskTimeTrackingModel::TABLE . '.id',
+                SubtaskTimeTrackingModel::TABLE . '.user_id',
+                SubtaskTimeTrackingModel::TABLE . '.subtask_id',
+                SubtaskTimeTrackingModel::TABLE . '.start',
+                SubtaskTimeTrackingModel::TABLE . '.time_spent',
+                SubtaskModel::TABLE . '.task_id',
+                SubtaskModel::TABLE . '.title AS subtask_title',
+                TaskModel::TABLE . '.title AS task_title',
+                TaskModel::TABLE . '.project_id',
+                UserModel::TABLE . '.username',
+                UserModel::TABLE . '.name'
+            )
+            ->join(SubtaskModel::TABLE, 'id', 'subtask_id')
+            ->join(TaskModel::TABLE, 'id', 'task_id', SubtaskModel::TABLE)
+            ->join(UserModel::TABLE, 'id', 'user_id')
+            ->eq(TaskModel::TABLE . '.project_id', $project_id)
+            ->callback(array($this, 'applyUserRate'));
     }
 
     /**
@@ -117,7 +149,7 @@ class Wiki extends Base
         foreach ($time_slots as $slot) {
             $date = date('Y-m-d', $slot['start']);
 
-            if (! isset($out[$date])) {
+            if (!isset($out[$date])) {
                 $out[$date] = 0;
             }
 
@@ -178,6 +210,95 @@ class Wiki extends Base
         }
 
         return $records;
+    }
+
+    /**
+     * Add a new wikipage into the database
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @param  float     $amount
+     * @param  string    $comment
+     * @param  string    $date
+     * @return boolean|integer
+     */
+    // , $date = ''
+    public function createpage($project_id, $title, $content, $order = null)
+    {
+        // $this->prepare($values);
+        $values = array(
+            'project_id' => $project_id,
+            'title' => $title,
+            'content' => $content,
+            'date_creation' => date('Y-m-d'),
+            'order' => $order ?: time(),
+        );
+        $this->prepare($values);
+
+        // $values['creator_id'] = $this->userSession->getId();
+        //     $values['modifier_id'] = $this->userSession->getId();
+        // date_modification
+
+        return $this->db->table(self::WIKITABLE)->persist($values);
+    }
+
+    /**
+     * Prepare data
+     *
+     * @access protected
+     * @param  array    $values    Form values
+     */
+    protected function prepare(array &$values)
+    {
+        // $values = $this->dateParser->convert($values, array('date_due'), true);
+        // $values = $this->dateParser->convert($values, array('date_started'), true);
+
+        // $this->helper->model->removeFields($values, array('another_task', 'duplicate_multiple_projects'));
+        // $this->helper->model->resetFields($values, array('creator_id', 'owner_id', 'date_due', 'date_started', 'score', 'category_id', 'time_estimated', 'time_spent'));
+
+        // if (empty($values['column_id'])) {
+        //     $values['column_id'] = $this->columnModel->getFirstColumnId($values['project_id']);
+        // }
+
+        // if (empty($values['color_id'])) {
+        //     $values['color_id'] = $this->colorModel->getDefaultColor();
+        // }
+
+        if (empty($values['title'])) {
+            $values['title'] = t('Untitled');
+        }
+
+        if ($this->userSession->isLogged()) {
+            $values['creator_id'] = $this->userSession->getId();
+            $values['modifier_id'] = $this->userSession->getId();
+        }
+
+        // $values['swimlane_id'] = empty($values['swimlane_id']) ? $this->swimlaneModel->getFirstActiveSwimlaneId($values['project_id']) : $values['swimlane_id'];
+        if (empty($values['date_creation'])) {
+            $values['date_creation'] = time();
+        }
+
+        if (empty($values['date_modification'])) {
+            $values['date_modification'] = $values['date_creation'];
+        }
+        // $values['order'] = $this->taskFinderModel->countByColumnAndSwimlaneId($values['project_id'], $values['column_id'], $values['swimlane_id']) + 1;
+
+        $this->hook->reference('model:wikipage:creation:prepare', $values);
+    }
+
+    // $this->prepare($values);
+
+    public function validatePageCreation(array $values)
+    {
+        $v = new Validator($values, array(
+            new Validators\Required('project_id', t('Field required')),
+            new Validators\Required('title', t('Field required')),
+        ));
+
+        return array(
+            $v->execute(),
+            $v->getErrors(),
+        );
     }
 
     /**
@@ -242,7 +363,7 @@ class Wiki extends Base
 
         return array(
             $v->execute(),
-            $v->getErrors()
+            $v->getErrors(),
         );
     }
 }
