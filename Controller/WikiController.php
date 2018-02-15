@@ -38,13 +38,18 @@ class WikiController extends BaseController
         $project = $this->getProject();
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
+        $wikipages = $this->wiki->getWikipages($project['id']);
+
+        $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
+
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
             'project' => $project,
             'title' => t('Wikipage'),
             'wiki_id' => $wiki_id,
-            'wikipage' => $this->wiki->getWikipage($wiki_id),
-            'wikipages' => $this->wiki->getWikipages($project['id'])
+            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'wikipage' => $wikipage,
+            'wikipages' => $wikipages
         ), 'wiki:wiki/sidebar'));
 
         // ,array(
