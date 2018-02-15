@@ -45,6 +45,7 @@ class WikiController extends BaseController
 
         // $values['wikipage']
         $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
+            'wiki_id' => $wiki_id,
             'values' => $editwiki,
             'errors' => $errors,
             'title' => t('Edit Wikipage'),
