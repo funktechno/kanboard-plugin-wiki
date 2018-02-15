@@ -34,9 +34,12 @@
         <?php endforeach?>
         <?php else: ?>
         <li class="alert alert-info">
-         <?=t('There are no wikipages.')?>
+            <?=t('There are no wikipages.')?>
         </li>
         <?php endif?>
+        <li>
+            <?= $this->modal->medium('plus', t('New wikipage'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
+        </li>
 
     </ul>
 </div>
