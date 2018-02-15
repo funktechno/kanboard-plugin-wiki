@@ -76,8 +76,9 @@ class Wiki extends Base
                 self::WIKITABLE . '.modifier_id'
             )
             // ->join(UserModel::TABLE, 'id', 'creator_id')
-            ->left(UserModel::TABLE, 'c', 'id', 'creator_id', self::WIKITABLE)
-            ->left(UserModel::TABLE, 'mod', 'id', 'modifier_id', self::WIKITABLE)
+            // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
             ->desc('order')->findAll();
 
