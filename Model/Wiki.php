@@ -438,7 +438,6 @@ class Wiki extends Base
     public function validatePageUpdate(array $values)
     {
         $v = new Validator($values, array(
-            new Validators\Required('id', t('Field required')),
             new Validators\Required('title', t('Field required')),
         ));
 
