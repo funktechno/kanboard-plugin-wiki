@@ -101,12 +101,12 @@ class Wiki extends Base
         return $this->db->
             table(self::WIKITABLE)
             ->columns(
-                'c.name as creator_name',
-                'c.username as creator_username',
+                // 'c.name as creator_name',
+                // 'c.username as creator_username',
                 // UserModel::TABLE . '.name as creator_name',
                 // UserModel::TABLE . '.username as creator_username',
-                'mod.name as modifier_name',
-                'mod.username as modifier_username',
+                // 'mod.name as modifier_name',
+                // 'mod.username as modifier_username',
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id as wiki_id',
                 self::WIKITABLE . '.title',
@@ -119,11 +119,10 @@ class Wiki extends Base
                 self::WIKITABLE . '.current_edition',
                 self::WIKITABLE . '.modifier_id'
             )
-            // ->join(UserModel::TABLE, 'id', 'creator_id')
-            // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
-            ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
-            ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
-            ->eq('wiki_id', $wiki_id)->findOne();
+            // ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            // ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+            // ->eq('wiki_id', $wiki_id)->findOne();
+            ->eq('id', $wiki_id)->findOne();
             // ->desc('order')->findAll();
 
         // return $this->db->table(self::TABLE)
