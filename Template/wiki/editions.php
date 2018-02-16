@@ -27,8 +27,12 @@
 
 <?php foreach ($editions as $edition): ?>
 <div class="page-header">
-    <h2>    <?=$this->modal->confirm('undo', t(''), 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'edition' => $edition['edition']))?>
-<?=t('Title: ') . t($edition['title'])?> <br> <?=t('Edition: ') . t($edition['edition'])?></h2>
+    <h2>
+        <?=t('Title: ') . t($edition['title'])?>
+        <?=$this->modal->confirm('undo', t(''), 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'edition' => $edition['edition']))?>
+        <br>
+        <?=t('Edition: ') . t($edition['edition'])?>
+    </h2>
 
 </div>
 <div>
