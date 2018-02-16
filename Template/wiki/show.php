@@ -1,5 +1,7 @@
 <div class="page-header">
     <h2><?=t('Wiki overview')?></h2>
+    <?=$this->modal->medium('plus', t('New wikipage'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
+
 </div>
 
 <style>
