@@ -46,11 +46,13 @@ This section is available from project settings page: **Project > Wiki**. There 
 
 #### Wikipage detail
 
-![Wikipage detail](https://cloud.githubusercontent.com/assets/323546/20451620/965a4a2e-adc9-11e6-9131-3088ce6d8d78.png)
+![Wikipage detail](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/wikipage.png)
 
 Very similar to task screen. You can edit via a modal. Copies are stored as editions. Should support uploading COMING SOON. Desired look will be to be able to reorder wikipages via dragging on left column.
 
 ### Editions Listing
+
+![Editions Listing](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/editionslisting.png)
 
 ![Editions Listing](https://cloud.githubusercontent.com/assets/323546/20451620/965a4a2e-adc9-11e6-9131-3088ce6d8d78.png)
 
