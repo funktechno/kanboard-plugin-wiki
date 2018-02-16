@@ -31,6 +31,10 @@ class WikiFileController extends BaseController
         )));
     }
 
+
+        
+ 
+
     /**
      * File upload form
      *
@@ -38,6 +42,9 @@ class WikiFileController extends BaseController
      */
     public function create()
     {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
         $wiki = $this->getWiki();
 
         $this->response->html($this->template->render('wiki_file/create', array(

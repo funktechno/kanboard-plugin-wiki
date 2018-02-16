@@ -80,6 +80,11 @@
         <h2><?=t('Attachments')?></h2>
 </div>
 <ul>
+    <?php
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+    ?>
     <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
 </ul>
 
