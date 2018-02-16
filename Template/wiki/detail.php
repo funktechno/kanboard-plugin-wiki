@@ -22,7 +22,7 @@
 </style>
 <div class="clearfix">
 <div class="sidebar column list">
-    <ul>
+    <ul id="columns">
         <?php if (!empty($wikipages)): ?>
         <?php foreach ($wikipages as $page): ?>
 
