@@ -4,7 +4,7 @@
 
 <?= $this->app->component('file-upload', array(
     'maxSize'           => $max_size,
-    'url'               => $this->url->to('WikiFileController', 'save', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])),
+    'url'               => $this->url->to('WikiFileController', 'save', array('plugin' => 'wiki', 'wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])),
     'labelDropzone'     => t('Drag and drop your files here'),
     'labelOr'           => t('or'),
     'labelChooseFiles'  => t('choose files'),

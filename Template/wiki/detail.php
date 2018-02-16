@@ -80,7 +80,7 @@
         <h2><?=t('Attachments')?></h2>
 </div>
 <ul>
-    <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
+    <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
 </ul>
 
 <?php if (!empty($files) || !empty($images)): ?>

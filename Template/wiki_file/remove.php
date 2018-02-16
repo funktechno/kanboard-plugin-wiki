@@ -10,6 +10,6 @@
     <?= $this->modal->confirmButtons(
         'WikiFileController',
         'remove',
-        array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])
+        array('plugin' => 'wiki', 'wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])
     ) ?>
 </div>
