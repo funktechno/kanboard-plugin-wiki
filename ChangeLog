@@ -1,4 +1,14 @@
 Version 0.2.0-alpha
+
+New features:
+
+* Setup model tests
+
+Improvements:
+
+* initialize postgress & sql_light migrations
+
+Version 0.2.0-alpha
 ---------------------------------
 
 New features:

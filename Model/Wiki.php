@@ -228,7 +228,7 @@ class Wiki extends Base
      * @return boolean|integer
      */
     // , $date = ''
-    public function createEdition($values, $wiki_id, $edition, $date)
+    public function createEdition($values, $wiki_id, $edition, $date='')
     {
 
         $persistEditions = $this->configModel->get('persistEditions');
@@ -239,10 +239,14 @@ class Wiki extends Base
                 'title' => $values['title'],
                 'edition' => $edition,
                 'content' => $values['content'],
-                'date_creation' => $date, // should alway be the last date
-                'creator_id' => $this->userSession->getId(),
+                'date_creation' => $date ?: date('Y-m-d'), // should alway be the last date
+                // 'creator_id' => $this->userSession->getId(),
                 'wikipage_id' => $wiki_id,
             );
+
+            if ($this->userSession->isLogged()) {
+                $editionvalues['creator_id'] = $this->userSession->getId();
+            }
 
             // $values['creator_id'] = $this->userSession->getId();
             //     $values['modifier_id'] = $this->userSession->getId();
