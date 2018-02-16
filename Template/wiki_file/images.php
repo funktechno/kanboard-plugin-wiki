@@ -23,7 +23,7 @@
                                 </li>
                                 <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                     <li>
-                                        <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiFileController', 'confirm', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                        <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiFileController', 'confirm', array('plugin' => 'wiki', 'wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
                                     </li>
                                 <?php endif ?>
                             </ul>
