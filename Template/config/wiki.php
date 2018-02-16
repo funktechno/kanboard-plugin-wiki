@@ -7,7 +7,10 @@
 
     <fieldset>
         <legend><?= t('Editions\' settings') ?></legend>
-        <?= $this->form->checkbox('persistEditions','Save Editions', 1, true) ?>
+
+         <!-- $this->form->checkbox('persistEditions','Save Editions', 1, true)  -->
+
+        <?= $this->form->checkbox('persistEditions','Save Editions', $values, $errors) ?>
         
     </fieldset>
 
