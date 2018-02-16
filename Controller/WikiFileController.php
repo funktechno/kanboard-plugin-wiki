@@ -1,6 +1,8 @@
 <?php
 
-namespace Kanboard\Controller;
+namespace Kanboard\Plugin\Wiki\Controller;
+
+use Kanboard\Controller\BaseController;
 
 /**
  * Wiki File Controller

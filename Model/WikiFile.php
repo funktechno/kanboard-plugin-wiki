@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Model;
+namespace Kanboard\Plugin\Wiki\Model;
 
 /**
  * Wiki File Model
