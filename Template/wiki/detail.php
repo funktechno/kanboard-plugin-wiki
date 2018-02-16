@@ -22,11 +22,11 @@
 </style>
 <div class="clearfix">
 <div class="sidebar column list">
-    <ul>
+    <ul id="columns">
         <?php if (!empty($wikipages)): ?>
         <?php foreach ($wikipages as $page): ?>
 
-        <li >
+        <li class="wikipage" draggable="true">
             <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
 
             <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
