@@ -44,6 +44,6 @@ function version_1(PDO $pdo)
     FOREIGN KEY(wikipage_id) REFERENCES wikipage(id) ON DELETE CASCADE
     )');
 
-    $pdo->exec('INSERT INTO settings (option, value) VALUES ('persistEditions', '1');');
+    $pdo->exec("INSERT INTO settings (option, value) VALUES ('persistEditions', '1');");
 
 }
