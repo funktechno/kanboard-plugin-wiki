@@ -3,7 +3,8 @@ Wiki Plugin for Kanboard
 
 Wiki to document projects
 
-[![Build Status](https://travis-ci.org/funktechno/kanboard-plugin-wiki.svg?branch=master)](https://travis-ci.org/funktechno/kanboard-plugin-wiki)
+[![Build Status](https://api.travis-ci.org/funktechno/kanboard-plugin-wiki.svg?branch=master)](https://travis-ci.org/funktechno/kanboard-plugin-wiki)
+
 - Create and manage wikipages per project
 - Store different editions of wikipages
 
