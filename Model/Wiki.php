@@ -53,7 +53,8 @@ class Wiki extends Base
      * @param  integer   $project_id
      * @return array
      */
-    public function getEditions($wiki_id){
+    public function getEditions($wiki_id)
+    {
         return $this->db->table(self::WIKI_EDITION_TABLE)->eq('wikipage_id', $wiki_id)->desc('edition')->findAll();
     }
 
@@ -95,8 +96,8 @@ class Wiki extends Base
                 self::WIKITABLE . '.current_edition',
                 self::WIKITABLE . '.modifier_id'
             )
-            // ->join(UserModel::TABLE, 'id', 'creator_id')
-            // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
+        // ->join(UserModel::TABLE, 'id', 'creator_id')
+        // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
@@ -109,7 +110,7 @@ class Wiki extends Base
         // ->findOne();
     }
 
-     /**
+    /**
      * Get a single Wiki Page
      *
      * @access public
@@ -141,11 +142,11 @@ class Wiki extends Base
                 self::WIKITABLE . '.current_edition',
                 self::WIKITABLE . '.modifier_id'
             )
-            // ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
-            // ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
-            // ->eq('wiki_id', $wiki_id)->findOne();
+        // ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+        // ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+        // ->eq('wiki_id', $wiki_id)->findOne();
             ->eq('id', $wiki_id)->findOne(); // this may possibly not support joins
-            // ->desc('order')->findAll();
+        // ->desc('order')->findAll();
 
         // return $this->db->table(self::TABLE)
         // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
@@ -153,8 +154,6 @@ class Wiki extends Base
         // ->join(UserModel::TABLE, 'id', 'owner_id')
         // ->findOne();
     }
-
-    
 
     /**
      * Get the current total of the wiki
@@ -367,7 +366,7 @@ class Wiki extends Base
             'content' => $values['content'],
             'date_creation' => $date, // should alway be the last date
             'creator_id' => $this->userSession->getId(),
-            'wikipage_id' => $wiki_id
+            'wikipage_id' => $wiki_id,
         );
 
         // $values['creator_id'] = $this->userSession->getId();
@@ -378,8 +377,6 @@ class Wiki extends Base
 
         // need to also save to editions
     }
-
-    
 
     /**
      * Prepare data
@@ -485,27 +482,30 @@ class Wiki extends Base
     {
         return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
     }
-    /** 
-    * restore a specific edition
-    *
-    * @access public
-    * @param  integer    $wiki_id
-    * @param  integer    $edition
-    * @return boolean
-    */
-    public function restoreEdition($wiki_id,$edition){
+    /**
+     * restore a specific edition
+     *
+     * @access public
+     * @param  integer    $wiki_id
+     * @param  integer    $edition
+     * @return boolean
+     */
+    public function restoreEdition($wiki_id, $edition)
+    {
 
-        $date=date('Y-m-d');
-        $editionvalues= $this->db->
+        $date = date('Y-m-d');
+        $editionvalues = $this->db->
             table(self::WIKI_EDITION_TABLE)
-            ->eq('edition', $edition)->findOne(); // this may possibly not support joins
+            ->eq('edition', $edition)
+            ->eq('wikipage_id', $wiki_id)
+            ->findOne(); // this may possibly not support joins
 
-        $values= array(
+        $values = array(
             'title' => $editionvalues['title'],
             'current_edition' => $edition,
             'content' => $editionvalues['title'],
             'date_modification' => $date ?: date('Y-m-d'),
-            'modifier_id' => $this->userSession->getId()
+            'modifier_id' => $this->userSession->getId(),
         );
 
         if ($this->userSession->isLogged()) {
