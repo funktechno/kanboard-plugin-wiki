@@ -256,11 +256,11 @@ class Wiki extends Base
         $wikipage = $this->getWikipage($this->request->getIntegerParam('wiki_id'));
         // $wikipage = $this->wikiFinderModel->getDetails($this->request->getIntegerParam('wiki_id'));
 
-        if (empty($wiki)) {
+        if (empty($wikipage)) {
             throw new PageNotFoundException();
         }
 
-        if ($project_id !== 0 && $project_id != $wiki['project_id']) {
+        if ($project_id !== 0 && $project_id != $wikipage['project_id']) {
             throw new AccessForbiddenException();
         }
 
