@@ -11,7 +11,10 @@
 
          <!-- $this->form->checkbox('persistEditions','Save Editions', 1, true)  -->
 
-        <?= $this->form->checkbox('persistEditions','Save Editions', $values, $values) ?>
+        <?= $this->form->checkbox('persistEditions','Save Editions', 1, $values['persistEditions']) ?>
+
+         <!-- $this->form->checkbox('password_reset', t('Enable "Forget Password"'), 1, $values['password_reset'] == 1) -->
+
         
     </fieldset>
 
