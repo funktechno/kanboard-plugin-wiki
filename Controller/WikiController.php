@@ -155,11 +155,18 @@ class WikiController extends BaseController
 
         if ($this->wiki->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
             $this->flash->success(t('Edition was restored successfully.'));
+            $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+
         } else {
             $this->flash->failure(t('Unable to restore this wiki edition.'));
-        }
+            $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
 
-        $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+        }
+        // redirect to detail
+        // $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+
+
+        // $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
     }
 
     /**
