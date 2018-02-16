@@ -3,9 +3,9 @@
 require_once 'tests/units/Base.php';
 
 use Kanboard\Core\Plugin\Loader;
-use Kanboard\Plugin\Wiki\Model\HourlyRate;
+use Kanboard\Plugin\Wiki\Model\Wiki;
 
-class HourlyRateTest extends Base
+class WikiPageTest extends Base
 {
     public function setUp()
     {
@@ -17,7 +17,7 @@ class HourlyRateTest extends Base
 
     public function testCreation()
     {
-        $hr = new HourlyRate($this->container);
+        $wikipage = new Wiki($this->container);
         $this->assertEquals(1, $hr->create(1, 32.4, 'EUR', '2015-01-01'));
         $this->assertEquals(2, $hr->create(1, 42, 'CAD', '2015-02-01'));
 
