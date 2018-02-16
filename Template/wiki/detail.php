@@ -90,7 +90,7 @@
 
 <?php if (!empty($files) || !empty($images)): ?>
     <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki, 'project' => $project)) ?>
-    <?= $this->render('wiki_file/show', array(
+    <?= $this->render('wiki:wiki_file/show', array(
         'wiki' => $wiki,
         'files' => $files,
         'images' => $images
