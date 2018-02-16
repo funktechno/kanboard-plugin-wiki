@@ -31,6 +31,23 @@ class WikiController extends BaseController
         // )
     }
 
+    public function editions()
+    {
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
+        // $project = $this->getProject();
+        //
+        // for list use window-restore
+
+        // restore button use undo
+
+
+        $this->response->html($this->helper->layout->project('wiki:wiki/editions', array(
+            'title' => t('Wiki Editions'),
+            'editions' => $this->wiki->getEditions($wiki_id),
+        ), 'wiki:wiki/sidebar'));
+
+    }
+
     public function edit(array $values = array(), array $errors = array())
     {
 
