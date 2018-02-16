@@ -83,6 +83,14 @@
     <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
 </ul>
 
+<?php if (!empty($files) || !empty($images)): ?>
+    <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki, 'project' => $project)) ?>
+    <?= $this->render('wiki_file/show', array(
+        'wiki' => $wiki,
+        'files' => $files,
+        'images' => $images
+    )) ?>
+<?php endif ?>
 
 </div>
 

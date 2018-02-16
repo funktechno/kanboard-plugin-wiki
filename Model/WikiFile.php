@@ -15,7 +15,7 @@ class WikiFileModel extends FileModel
      *
      * @var string
      */
-    const TABLE = 'wiki_has_files';
+    const TABLE = 'wikipage_has_files';
 
     /**
      * Events
@@ -45,7 +45,7 @@ class WikiFileModel extends FileModel
      */
     protected function getForeignKey()
     {
-        return 'wiki_id';
+        return 'wikipage_id';
     }
 
     /**
@@ -57,7 +57,7 @@ class WikiFileModel extends FileModel
      */
     protected function getPathPrefix()
     {
-        return 'wikis';
+        return 'wikipages';
     }
 
     /**

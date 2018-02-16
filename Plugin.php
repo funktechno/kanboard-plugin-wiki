@@ -2,9 +2,9 @@
 
 namespace Kanboard\Plugin\Wiki;
 
-use Kanboard\Core\Translator;
 use Kanboard\Core\Plugin\Base;
 use Kanboard\Core\Security\Role;
+use Kanboard\Core\Translator;
 
 class Plugin extends Base
 {
@@ -13,15 +13,15 @@ class Plugin extends Base
         $this->applicationAccessMap->add('HourlyRateController', '*', Role::APP_ADMIN);
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
 
-        
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'editions', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'edit', 'wiki');
-        
+
+        // show images as list
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'show', 'wiki_file');
+
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
-
-
 
         // $this->route->addRoute('/wiki/project/:project_id&:wikipage_id', 'WikiController', 'detail', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/lines', 'WikiLineController', 'show', 'wiki');
@@ -36,7 +36,7 @@ class Plugin extends Base
 
     public function onStartup()
     {
-        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__.'/Locale');
+        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__ . '/Locale');
     }
 
     public function getClasses()
@@ -45,7 +45,7 @@ class Plugin extends Base
             'Plugin\Wiki\Model' => array(
                 'HourlyRate',
                 'Wiki',
-            )
+            ),
         );
     }
 
