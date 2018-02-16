@@ -12,6 +12,7 @@ class Plugin extends Base
     {
         $this->applicationAccessMap->add('HourlyRateController', '*', Role::APP_ADMIN);
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
+        $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
 
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
