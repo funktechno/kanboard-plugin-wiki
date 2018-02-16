@@ -12,9 +12,9 @@
 
 
          <!-- $this->form->checkbox('persistEditions','Save Editions', 1, true)  -->
-
+        <h2>Saving Editions: <?=$values['persistEditions'] == 1 ? "true" : "false" ?></h2>
         
-         <?=$this->form->checkbox('persistEditions', 'Save Editions', $values['persistEditions'] == 1 ? 0 : 1, $values['persistEditions'] == 1)?>
+         <?=$this->form->checkbox('persistEditions', 'Switch Edition Saving', $values['persistEditions'] == 1 ? 0 : 1, true)?>
         
         <!-- <input type="checkbox" name="persistEditions" class="" value="1" checked="checked"> -->
         <!-- `<input name="persistEditions" type="checkbox" disabled="disabled"  value=` . ($values['persistEditions'] == 1 ? "0" : "1") . ($values['persistEditions'] == 1 ? " checked>" : ">") -->
