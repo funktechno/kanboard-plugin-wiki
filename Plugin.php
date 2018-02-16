@@ -10,7 +10,6 @@ class Plugin extends Base
 {
     public function initialize()
     {
-        $this->applicationAccessMap->add('HourlyRateController', '*', Role::APP_ADMIN);
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
 
@@ -31,7 +30,6 @@ class Plugin extends Base
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
 
         // $this->route->addRoute('/wiki/project/:project_id&:wikipage_id', 'WikiController', 'detail', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/lines', 'WikiLineController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
 
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
@@ -50,7 +48,6 @@ class Plugin extends Base
     {
         return array(
             'Plugin\Wiki\Model' => array(
-                'HourlyRate',
                 'Wiki',
                 'WikiFile'
             ),
