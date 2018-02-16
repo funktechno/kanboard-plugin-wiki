@@ -44,6 +44,24 @@ class Wiki extends Base
      *
      * @var string
      */
+    const WIKI_EDITION_TABLE = 'wikipage_editions';
+
+    /**
+     * Get all of a Wikipages'edition by edition
+     *
+     * @access public
+     * @param  integer   $project_id
+     * @return array
+     */
+    public function getEditions($wiki_id){
+        return $this->db->table(self::WIKI_EDITION_TABLE)->eq('wikipage_id', $wiki_id)->desc('edition')->findAll();
+    }
+
+    /**
+     * SQL table name
+     *
+     * @var string
+     */
     const WIKITABLE = 'wikipage';
     /**
      * Get all Wiki Pages by order for a project
