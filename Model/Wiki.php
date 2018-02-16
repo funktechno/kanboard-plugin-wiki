@@ -2,11 +2,7 @@
 
 namespace Kanboard\Plugin\Wiki\Model;
 
-use DateInterval;
-use DateTime;
 use Kanboard\Core\Base;
-use Kanboard\Model\SubwikiModel;
-use Kanboard\Model\SubwikiTimeTrackingModel;
 // use Kanboard\Model\WikiModel;
 use Kanboard\Model\UserModel;
 use SimpleValidator\Validator;
@@ -235,20 +231,27 @@ class Wiki extends Base
     public function createEdition($values, $wiki_id, $edition, $date)
     {
 
-        $editionvalues = array(
-            'title' => $values['title'],
-            'edition' => $edition,
-            'content' => $values['content'],
-            'date_creation' => $date, // should alway be the last date
-            'creator_id' => $this->userSession->getId(),
-            'wikipage_id' => $wiki_id,
-        );
+        $persistEditions = $this->configModel->get('persistEditions');
 
-        // $values['creator_id'] = $this->userSession->getId();
-        //     $values['modifier_id'] = $this->userSession->getId();
-        // date_modification
+        if ($persistEditions == 1) {
 
-        return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
+            $editionvalues = array(
+                'title' => $values['title'],
+                'edition' => $edition,
+                'content' => $values['content'],
+                'date_creation' => $date, // should alway be the last date
+                'creator_id' => $this->userSession->getId(),
+                'wikipage_id' => $wiki_id,
+            );
+
+            // $values['creator_id'] = $this->userSession->getId();
+            //     $values['modifier_id'] = $this->userSession->getId();
+            // date_modification
+
+            return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
+        } else {
+            return null;
+        }
 
         // need to also save to editions
     }
