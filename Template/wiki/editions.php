@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h2><?=t('Wiki overview')?></h2>
+    <h2><?=t('Wikipage Editions:')?></h2>
 </div>
 
 <style>
@@ -23,7 +23,32 @@
 <div class="clearfix">
 
 <div class="column ">
-<?php if (!empty($wikipages)): ?>
+<?php if (!empty($editions)): ?>
+
+<?php foreach ($editions as $edition): ?>
+<div class="page-header">
+    <h2><?=t('Title: ') . t($edition['title'])?> - <?=t('Edition: ') . t($edition['edition'])?></h2>
+    <?=$this->modal->confirm('undo', t(''), 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'edition' => $edition['edition']))?>
+
+</div>
+<div>
+    <?=t('Date Creation: ') . $this->dt->date($edition['date_creation'])?>
+</div>
+<div class="page-header">
+        <h2><?=t('Content')?></h2>
+</div>
+
+<article class="markdown">
+    <?=$this->text->markdown($edition['content'])?>
+</article>
+
+
+<?php endforeach?>
+<!-- `edition` INT NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `content` TEXT,
+        `creator_id` int(11) DEFAULT 0,
+        `date_creation` VARCHAR(10) DEFAULT NULL, -->
 
 <!-- <hr/> -->
 <!-- Title
@@ -33,38 +58,8 @@ Created
 Last modifier
 Modified -->
 
-        <table class="table-fixed table-stripped">
-            <tr>
-                <th><?=t('Title')?></th>
-                <th><?=t('Id')?></th>
-                <th><?=t('Editions')?></th>
-                <th><?=t('Current Edition')?></th>
-                <th><?=t('Creator')?></th>
-                <th><?=t('Created')?></th>
-                <th><?=t('Last modifier')?></th>
-                <th><?=t('Modified')?></th>
-            </tr>
-            <?php foreach ($wikipages as $wikipage): ?>
-            <tr>
-                <td>
-                <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-
-                <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-                </td>
-                <td><?=$wikipage['id']?></td>
-                <td><?=$wikipage['editions']?></td>
-                <td><?=$wikipage['current_edition']?></td>
-                <td><?=t($wikipage['creator_name'])?></td>
-                <td><?=$this->dt->date($wikipage['date_creation'])?></td>
-                <td><?=t($wikipage['modifier_name'])?></td>
-                <td><?=$this->dt->date($wikipage['date_modification'])?></td>
-            </tr>
-            <?php endforeach?>
-        </table>
-    </div>
-
 <?php else: ?>
-    <p class="alert"><?=t('There is not enough data to show something.')?></p>
+    <p class="alert"><?=t('There are not editions to restore.')?></p>
 <?php endif?>
 </div>
 
