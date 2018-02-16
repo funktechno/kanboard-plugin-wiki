@@ -2,7 +2,7 @@
     <h2><?=t('Wikipage Editions:')?></h2>
     <br>
     
-    <?=$this->url->icon('long-arrow-alt-left', t('Back to details'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
+    <?=$this->url->icon('long-arrow-alt-left', t('Back to details'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
 
 
 </div>
