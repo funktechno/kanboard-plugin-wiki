@@ -1,3 +1,9 @@
+Version 0.2.2-alpha
+
+Bug fixes:
+
+* tested and fixed schema sql statements for postgress & sqlite
+
 Version 0.2.1-alpha
 
 New features:
