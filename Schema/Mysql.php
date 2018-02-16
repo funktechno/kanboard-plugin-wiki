@@ -4,7 +4,7 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 4;
+const VERSION = 5;
 
 function version_5(PDO $pdo){
     // insert persistEditions into settings
