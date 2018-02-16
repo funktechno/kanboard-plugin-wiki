@@ -2,11 +2,7 @@
 
 namespace Kanboard\Plugin\Wiki\Model;
 
-use DateInterval;
-use DateTime;
 use Kanboard\Core\Base;
-use Kanboard\Model\SubwikiModel;
-use Kanboard\Model\SubwikiTimeTrackingModel;
 // use Kanboard\Model\WikiModel;
 use Kanboard\Model\UserModel;
 use SimpleValidator\Validator;
@@ -20,25 +16,6 @@ use SimpleValidator\Validators;
  */
 class Wiki extends Base
 {
-    /**
-     * SQL table name
-     *
-     * @var string
-     */
-    const TABLE = 'wiki_lines';
-
-    /**
-     * Get all wiki lines for a project
-     *
-     * @access public
-     * @param  integer   $project_id
-     * @return array
-     */
-    public function getAll($project_id)
-    {
-        return $this->db->table(self::TABLE)->eq('project_id', $project_id)->desc('date')->findAll();
-    }
-
     /**
      * SQL table name
      *
@@ -101,7 +78,7 @@ class Wiki extends Base
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
-            ->desc('order')->findAll();
+            ->asc('order')->findAll();
 
         // return $this->db->table(self::TABLE)
         // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
@@ -155,101 +132,6 @@ class Wiki extends Base
         // ->findOne();
     }
 
-    /**
-     * Get the current total of the wiki
-     *
-     * @access public
-     * @param  integer   $project_id
-     * @return float
-     */
-    public function getTotal($project_id)
-    {
-        $result = $this->db->table(self::TABLE)->columns('SUM(amount) as total')->eq('project_id', $project_id)->findOne();
-        return isset($result['total']) ? (float) $result['total'] : 0;
-    }
-
-    /**
-     * Get breakdown by wikis/subwikis/users
-     *
-     * @access public
-     * @param  integer    $project_id
-     * @return \PicoDb\Table
-     */
-    public function getSubwikiBreakdown($project_id)
-    {
-        return $this->db
-            ->table(SubwikiTimeTrackingModel::TABLE)
-            ->columns(
-                SubwikiTimeTrackingModel::TABLE . '.id',
-                SubwikiTimeTrackingModel::TABLE . '.user_id',
-                SubwikiTimeTrackingModel::TABLE . '.subwiki_id',
-                SubwikiTimeTrackingModel::TABLE . '.start',
-                SubwikiTimeTrackingModel::TABLE . '.time_spent',
-                SubwikiModel::TABLE . '.wiki_id',
-                SubwikiModel::TABLE . '.title AS subwiki_title',
-                WikiModel::TABLE . '.title AS wiki_title',
-                WikiModel::TABLE . '.project_id',
-                UserModel::TABLE . '.username',
-                UserModel::TABLE . '.name'
-            )
-            ->join(SubwikiModel::TABLE, 'id', 'subwiki_id')
-            ->join(WikiModel::TABLE, 'id', 'wiki_id', SubwikiModel::TABLE)
-            ->join(UserModel::TABLE, 'id', 'user_id')
-            ->eq(WikiModel::TABLE . '.project_id', $project_id)
-            ->callback(array($this, 'applyUserRate'));
-    }
-
-    /**
-     * Gather necessary information to display the wiki graph
-     *
-     * @access public
-     * @param  integer  $project_id
-     * @return array
-     */
-    public function getDailyWikiBreakdown($project_id)
-    {
-        $out = array();
-        $in = $this->db->hashtable(self::TABLE)->eq('project_id', $project_id)->gt('amount', 0)->asc('date')->getAll('date', 'amount');
-        $time_slots = $this->getSubwikiBreakdown($project_id)->findAll();
-
-        foreach ($time_slots as $slot) {
-            $date = date('Y-m-d', $slot['start']);
-
-            if (!isset($out[$date])) {
-                $out[$date] = 0;
-            }
-
-            $out[$date] += $slot['cost'];
-        }
-
-        $start = key($in) ?: key($out);
-        $end = new DateTime;
-        $left = 0;
-        $serie = array();
-
-        for ($today = new DateTime($start); $today <= $end; $today->add(new DateInterval('P1D'))) {
-
-            $date = $today->format('Y-m-d');
-            $today_in = isset($in[$date]) ? (int) $in[$date] : 0;
-            $today_out = isset($out[$date]) ? (int) $out[$date] : 0;
-
-            if ($today_in > 0 || $today_out > 0) {
-
-                $left += $today_in;
-                $left -= $today_out;
-
-                $serie[] = array(
-                    'date' => $date,
-                    'in' => $today_in,
-                    'out' => -$today_out,
-                    'left' => $left,
-                );
-            }
-        }
-
-        return $serie;
-    }
-
     public function getWiki()
     {
         $project_id = $this->request->getIntegerParam('project_id');
@@ -265,35 +147,6 @@ class Wiki extends Base
         }
 
         return $wikipage;
-    }
-
-
-    /**
-     * Filter callback to apply the rate according to the effective date
-     *
-     * @access public
-     * @param  array   $records
-     * @return array
-     */
-    public function applyUserRate(array $records)
-    {
-        $rates = $this->hourlyRate->getAllByProject($records[0]['project_id']);
-
-        foreach ($records as &$record) {
-
-            $hourly_price = 0;
-
-            foreach ($rates as $rate) {
-                if ($rate['user_id'] == $record['user_id'] && date('Y-m-d', $rate['date_effective']) <= date('Y-m-d', $record['start'])) {
-                    $hourly_price = $this->currencyModel->getPrice($rate['currency'], $rate['rate']);
-                    break;
-                }
-            }
-
-            $record['cost'] = $hourly_price * $record['time_spent'];
-        }
-
-        return $records;
     }
 
     /**
@@ -378,20 +231,27 @@ class Wiki extends Base
     public function createEdition($values, $wiki_id, $edition, $date)
     {
 
-        $editionvalues = array(
-            'title' => $values['title'],
-            'edition' => $edition,
-            'content' => $values['content'],
-            'date_creation' => $date, // should alway be the last date
-            'creator_id' => $this->userSession->getId(),
-            'wikipage_id' => $wiki_id,
-        );
+        $persistEditions = $this->configModel->get('persistEditions');
 
-        // $values['creator_id'] = $this->userSession->getId();
-        //     $values['modifier_id'] = $this->userSession->getId();
-        // date_modification
+        if ($persistEditions == 1) {
 
-        return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
+            $editionvalues = array(
+                'title' => $values['title'],
+                'edition' => $edition,
+                'content' => $values['content'],
+                'date_creation' => $date, // should alway be the last date
+                'creator_id' => $this->userSession->getId(),
+                'wikipage_id' => $wiki_id,
+            );
+
+            // $values['creator_id'] = $this->userSession->getId();
+            //     $values['modifier_id'] = $this->userSession->getId();
+            // date_modification
+
+            return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
+        } else {
+            return null;
+        }
 
         // need to also save to editions
     }
@@ -468,28 +328,6 @@ class Wiki extends Base
     }
 
     /**
-     * Add a new wiki line in the database
-     *
-     * @access public
-     * @param  integer   $project_id
-     * @param  float     $amount
-     * @param  string    $comment
-     * @param  string    $date
-     * @return boolean|integer
-     */
-    public function create($project_id, $amount, $comment, $date = '')
-    {
-        $values = array(
-            'project_id' => $project_id,
-            'amount' => $amount,
-            'comment' => $comment,
-            'date' => $date ?: date('Y-m-d'),
-        );
-
-        return $this->db->table(self::TABLE)->persist($values);
-    }
-
-    /**
      * Remove a specific wiki page
      *
      * @access public
@@ -529,7 +367,7 @@ class Wiki extends Base
         $values = [
             'title' => $editionvalues['title'],
             'current_edition' => $edition,
-            'content' => $editionvalues['title'],
+            'content' => $editionvalues['content'],
             'date_modification' => $date ?: date('Y-m-d'),
             'modifier_id' => $this->userSession->getId(),
         ];
@@ -541,37 +379,5 @@ class Wiki extends Base
         // return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
         return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->update($values);
 
-    }
-
-    /**
-     * Remove a specific wiki line
-     *
-     * @access public
-     * @param  integer    $wiki_id
-     * @return boolean
-     */
-    public function remove($wiki_id)
-    {
-        return $this->db->table(self::TABLE)->eq('id', $wiki_id)->remove();
-    }
-
-    /**
-     * Validate creation
-     *
-     * @access public
-     * @param  array   $values           Form values
-     * @return array   $valid, $errors   [0] = Success or not, [1] = List of errors
-     */
-    public function validateCreation(array $values)
-    {
-        $v = new Validator($values, array(
-            new Validators\Required('project_id', t('Field required')),
-            new Validators\Required('amount', t('Field required')),
-        ));
-
-        return array(
-            $v->execute(),
-            $v->getErrors(),
-        );
     }
 }
