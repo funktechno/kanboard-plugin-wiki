@@ -20,7 +20,6 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $this->response->html($this->helper->layout->project('wiki:wiki/show', array(
-            'daily_wiki' => $this->wiki->getDailyWikiBreakdown($project['id']),
             'project' => $project,
             'title' => t('Wiki'),
             'wikipages' => $this->wiki->getWikipages($project['id']),
