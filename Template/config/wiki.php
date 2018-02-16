@@ -11,7 +11,7 @@
 
          <!-- $this->form->checkbox('persistEditions','Save Editions', 1, true)  -->
 
-        <?= $this->form->checkbox('persistEditions','Save Editions', $values, true) ?>
+        <?= $this->form->checkbox('persistEditions','Save Editions', $values, $values) ?>
         
     </fieldset>
 
