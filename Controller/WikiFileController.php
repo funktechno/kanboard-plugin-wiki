@@ -26,7 +26,7 @@ class WikiFileController extends BaseController
             return $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
         }
 
-        return $this->response->html($this->template->render('wiki_file/screenshot', array(
+        return $this->response->html($this->template->render('wiki:wiki_file/screenshot', array(
             'wiki' => $wiki,
         )));
     }
@@ -48,7 +48,7 @@ class WikiFileController extends BaseController
 
         // $this->wiki->getDailyWikiBreakdown($project['id']),
 
-        $this->response->html($this->template->render('wiki_file/create', array(
+        $this->response->html($this->template->render('wiki:wiki_file/create', array(
             'wiki' => $wiki,
             'max_size' => $this->helper->text->phpToBytes(get_upload_max_size()),
         )));
@@ -109,7 +109,7 @@ class WikiFileController extends BaseController
         $wiki = $this->wiki->getWiki();
         $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
 
-        $this->response->html($this->template->render('wiki_file/remove', array(
+        $this->response->html($this->template->render('wiki:wiki_file/remove', array(
             'wiki' => $wiki,
             'file' => $file,
         )));
