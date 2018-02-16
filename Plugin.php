@@ -36,9 +36,12 @@ class Plugin extends Base
         $this->template->hook->attach('template:user:sidebar:actions', 'wiki:user/sidebar');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Assets/css/wiki.css'));
+        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Assets/Javascript/wiki.js'));
+
 
 
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        
 
     }
 
