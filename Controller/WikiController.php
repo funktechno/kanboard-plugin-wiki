@@ -150,7 +150,7 @@ class WikiController extends BaseController
      */
     public function restore()
     {
-        $this->checkCSRFParam();
+        // $this->checkCSRFParam();
         $project = $this->getProject();
 
         if ($this->wiki->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
