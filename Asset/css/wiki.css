@@ -1,0 +1,55 @@
+[draggable] {
+-moz-user-select: none;
+-khtml-user-select: none;
+-webkit-user-select: none;
+user-select: none;
+/* Required to make elements draggable in old WebKit */
+-khtml-user-drag: element;
+-webkit-user-drag: element;
+}
+
+#columns {
+list-style-type: none;
+}
+
+.wikipage {
+width: 162px;
+padding-bottom: 5px;
+padding-top: 5px;
+text-align: center;
+cursor: move;
+}
+.wikipage header {
+height: 20px;
+width: 150px;
+color: black;
+background-color: #ccc;
+padding: 5px;
+border-bottom: 1px solid #ddd;
+border-radius: 10px;
+border: 2px solid #666666;
+}
+
+.wikipage.dragElem {
+opacity: 0.4;
+}
+.wikipage.over {
+border: 2px dashed #000;
+border-top: 2px solid blue;
+}
+
+.clearfix::after {
+content: "";
+clear: both;
+display: table;
+}
+.column {
+float: left;
+min-width: 0;
+}
+.list {
+width: 25%;
+}
+.content {
+width: 75%;
+}
