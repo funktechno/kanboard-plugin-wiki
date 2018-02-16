@@ -59,7 +59,7 @@
         <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
     <?php endif?>
     <?php if ($wikipage['modifier_id'] > 0): ?>
-        <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
+        <li><?=t('Modifier: ')?><strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
     <?php endif?>
     <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
     <li><?=t('Date Creation: ')?><strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>

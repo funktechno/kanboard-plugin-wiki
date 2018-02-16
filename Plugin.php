@@ -52,6 +52,7 @@ class Plugin extends Base
             'Plugin\Wiki\Model' => array(
                 'HourlyRate',
                 'Wiki',
+                'WikiFile'
             ),
         );
     }
