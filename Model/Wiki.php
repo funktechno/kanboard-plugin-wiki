@@ -500,13 +500,21 @@ class Wiki extends Base
             ->eq('wikipage_id', $wiki_id)
             ->findOne(); // this may possibly not support joins
 
-        $values = array(
+        // $values = array(
+        //     'title' => $editionvalues['title'],
+        //     'current_edition' => $edition,
+        //     'content' => $editionvalues['title'],
+        //     'date_modification' => $date ?: date('Y-m-d'),
+        //     'modifier_id' => $this->userSession->getId(),
+        // );
+
+        $values = [
             'title' => $editionvalues['title'],
             'current_edition' => $edition,
             'content' => $editionvalues['title'],
             'date_modification' => $date ?: date('Y-m-d'),
             'modifier_id' => $this->userSession->getId(),
-        );
+        ];
 
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();
