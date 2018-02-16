@@ -5,9 +5,9 @@ namespace Kanboard\Plugin\Wiki\Model;
 use DateInterval;
 use DateTime;
 use Kanboard\Core\Base;
-use Kanboard\Model\SubtaskModel;
-use Kanboard\Model\SubtaskTimeTrackingModel;
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\SubwikiModel;
+use Kanboard\Model\SubwikiTimeTrackingModel;
+// use Kanboard\Model\WikiModel;
 use Kanboard\Model\UserModel;
 use SimpleValidator\Validator;
 use SimpleValidator\Validators;
@@ -97,7 +97,7 @@ class Wiki extends Base
                 self::WIKITABLE . '.modifier_id'
             )
         // ->join(UserModel::TABLE, 'id', 'creator_id')
-        // ->left(UserModel::TABLE, 'uc', 'id', TaskModel::TABLE, 'creator_id')
+        // ->left(UserModel::TABLE, 'uc', 'id', WikiModel::TABLE, 'creator_id')
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
@@ -169,33 +169,33 @@ class Wiki extends Base
     }
 
     /**
-     * Get breakdown by tasks/subtasks/users
+     * Get breakdown by wikis/subwikis/users
      *
      * @access public
      * @param  integer    $project_id
      * @return \PicoDb\Table
      */
-    public function getSubtaskBreakdown($project_id)
+    public function getSubwikiBreakdown($project_id)
     {
         return $this->db
-            ->table(SubtaskTimeTrackingModel::TABLE)
+            ->table(SubwikiTimeTrackingModel::TABLE)
             ->columns(
-                SubtaskTimeTrackingModel::TABLE . '.id',
-                SubtaskTimeTrackingModel::TABLE . '.user_id',
-                SubtaskTimeTrackingModel::TABLE . '.subtask_id',
-                SubtaskTimeTrackingModel::TABLE . '.start',
-                SubtaskTimeTrackingModel::TABLE . '.time_spent',
-                SubtaskModel::TABLE . '.task_id',
-                SubtaskModel::TABLE . '.title AS subtask_title',
-                TaskModel::TABLE . '.title AS task_title',
-                TaskModel::TABLE . '.project_id',
+                SubwikiTimeTrackingModel::TABLE . '.id',
+                SubwikiTimeTrackingModel::TABLE . '.user_id',
+                SubwikiTimeTrackingModel::TABLE . '.subwiki_id',
+                SubwikiTimeTrackingModel::TABLE . '.start',
+                SubwikiTimeTrackingModel::TABLE . '.time_spent',
+                SubwikiModel::TABLE . '.wiki_id',
+                SubwikiModel::TABLE . '.title AS subwiki_title',
+                WikiModel::TABLE . '.title AS wiki_title',
+                WikiModel::TABLE . '.project_id',
                 UserModel::TABLE . '.username',
                 UserModel::TABLE . '.name'
             )
-            ->join(SubtaskModel::TABLE, 'id', 'subtask_id')
-            ->join(TaskModel::TABLE, 'id', 'task_id', SubtaskModel::TABLE)
+            ->join(SubwikiModel::TABLE, 'id', 'subwiki_id')
+            ->join(WikiModel::TABLE, 'id', 'wiki_id', SubwikiModel::TABLE)
             ->join(UserModel::TABLE, 'id', 'user_id')
-            ->eq(TaskModel::TABLE . '.project_id', $project_id)
+            ->eq(WikiModel::TABLE . '.project_id', $project_id)
             ->callback(array($this, 'applyUserRate'));
     }
 
@@ -210,7 +210,7 @@ class Wiki extends Base
     {
         $out = array();
         $in = $this->db->hashtable(self::TABLE)->eq('project_id', $project_id)->gt('amount', 0)->asc('date')->getAll('date', 'amount');
-        $time_slots = $this->getSubtaskBreakdown($project_id)->findAll();
+        $time_slots = $this->getSubwikiBreakdown($project_id)->findAll();
 
         foreach ($time_slots as $slot) {
             $date = date('Y-m-d', $slot['start']);
@@ -249,6 +249,24 @@ class Wiki extends Base
 
         return $serie;
     }
+
+    public function getWiki()
+    {
+        $project_id = $this->request->getIntegerParam('project_id');
+        $wikipage = $this->getWikipage($this->request->getIntegerParam('wiki_id'));
+        // $wikipage = $this->wikiFinderModel->getDetails($this->request->getIntegerParam('wiki_id'));
+
+        if (empty($wikipage)) {
+            throw new PageNotFoundException();
+        }
+
+        if ($project_id !== 0 && $project_id != $wikipage['project_id']) {
+            throw new AccessForbiddenException();
+        }
+
+        return $wikipage;
+    }
+
 
     /**
      * Filter callback to apply the rate according to the effective date
@@ -389,7 +407,7 @@ class Wiki extends Base
         // $values = $this->dateParser->convert($values, array('date_due'), true);
         // $values = $this->dateParser->convert($values, array('date_started'), true);
 
-        // $this->helper->model->removeFields($values, array('another_task', 'duplicate_multiple_projects'));
+        // $this->helper->model->removeFields($values, array('another_wiki', 'duplicate_multiple_projects'));
         // $this->helper->model->resetFields($values, array('creator_id', 'owner_id', 'date_due', 'date_started', 'score', 'category_id', 'time_estimated', 'time_spent'));
 
         // if (empty($values['column_id'])) {
@@ -417,7 +435,7 @@ class Wiki extends Base
         if (empty($values['date_modification'])) {
             $values['date_modification'] = $values['date_creation'];
         }
-        // $values['order'] = $this->taskFinderModel->countByColumnAndSwimlaneId($values['project_id'], $values['column_id'], $values['swimlane_id']) + 1;
+        // $values['order'] = $this->wikiFinderModel->countByColumnAndSwimlaneId($values['project_id'], $values['column_id'], $values['swimlane_id']) + 1;
 
         $this->hook->reference('model:wikipage:creation:prepare', $values);
     }

@@ -4,13 +4,13 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 5;
+const VERSION = 4;
 
-function version_5(PDO $pdo){
+function version_4(PDO $pdo){
     $pdo->exec("ALTER TABLE wikipage ADD `modifier_id` int(11) DEFAULT 0;");
 }
 
-function version_4(PDO $pdo)
+function version_3(PDO $pdo)
 {
     // future feature, track old editions, won't ever be modified, but could be viewed or restored
     $pdo->exec("CREATE TABLE wikipage_editions (
@@ -29,22 +29,10 @@ function version_4(PDO $pdo)
 }
 
 // add edition column
-function version_3(PDO $pdo)
+function version_2(PDO $pdo)
 {
     $pdo->exec("ALTER TABLE wikipage ADD `editions` int default 1;");
     $pdo->exec("ALTER TABLE wikipage ADD `date_modification` VARCHAR(10) DEFAULT NULL;");
-}
-
-// dummy data
-function version_2(PDO $pdo)
-{
-    $pdo->exec("INSERT INTO `funktech_kanb738`.`wikipage` (`project_id`, `title`, `content`, `is_active`, `creator_id`, `order`) VALUES ('1', 'Intro	', 'bla bla', '1', '2', '1');
-INSERT INTO `funktech_kanb738`.`wikipage` (`project_id`, `title`, `content`, `is_active`, `creator_id`, `order`) VALUES ('1', 'Security', 'yes', '1', '2', '2');
-INSERT INTO `funktech_kanb738`.`wikipage` (`project_id`, `title`, `content`, `is_active`, `creator_id`, `order`) VALUES ('1', 'Front end', 'asdf', '1', '2', '3');
-");
-
-    // $pdo->exec("ALTER TABLE wikipage DROP COLUMN category_id;");
-
 }
 
 function version_1(PDO $pdo)
