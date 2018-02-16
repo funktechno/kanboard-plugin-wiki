@@ -11,8 +11,12 @@ class ConfigController extends \Kanboard\Controller\ConfigController
 {
     public function show()
     {
+        $values =$this->configModel->get('persistEditions');
+        // public function get($name, $default_value = '')
+
         $this->response->html($this->helper->layout->config('Wiki:config/wiki', array(
             'title' => t('Settings').' &gt; '.t('Wiki settings'),
+            'values' => $values
         )));
     }
 
