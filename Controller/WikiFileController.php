@@ -61,7 +61,12 @@ class WikiFileController extends BaseController
      */
     public function save()
     {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
         $wiki = $this->wiki->getWiki();
+        
         $result = $this->wikiFile->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
 
         if ($this->request->isAjax()) {
@@ -74,8 +79,10 @@ class WikiFileController extends BaseController
             if (!$result) {
                 $this->flash->failure(t('Unable to upload files, check the permissions of your data folder.'));
             }
+            
+            $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $wiki['project_id'], 'wiki_id' => $wiki['id'])), true);
 
-            $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
+            // $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
         }
     }
 
