@@ -20,6 +20,12 @@ class Plugin extends Base
 
         // show images as list
         $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'show', 'wiki_file');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'create', 'wiki_file');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'remove', 'wiki_file');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'images', 'wiki_file');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'files', 'wiki_file');
+
+
 
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
 
