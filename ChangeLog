@@ -1,0 +1,21 @@
+Version 0.1.7-beta
+---------------------------------
+1st stable version
+
+New features:
+
+* full crud on wikipages
+* wiki page ui
+    * wiki overview page
+    * detail pages
+    * save/edit modals
+* save editions config ui
+* stores copies of pages as editions
+
+Improvements:
+
+* 
+
+Bug fixes:
+
+*

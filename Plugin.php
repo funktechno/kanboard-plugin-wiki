@@ -16,7 +16,9 @@ class Plugin extends Base
         
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'editions', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'edit', 'wiki');
+        
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
 
 
@@ -64,7 +66,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.1.7';
+        return '0.1.8';
     }
 
     public function getPluginHomepage()
