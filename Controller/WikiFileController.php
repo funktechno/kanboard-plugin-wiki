@@ -19,9 +19,9 @@ class WikiFileController extends BaseController
      */
     public function screenshot()
     {
-        $wiki = $this->getWiki();
+        $wiki = $this->wiki->getWiki();
 
-        if ($this->request->isPost() && $this->wikiFileModel->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
+        if ($this->request->isPost() && $this->wikiFile->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
             $this->flash->success(t('Screenshot uploaded successfully.'));
             return $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
         }
@@ -30,10 +30,6 @@ class WikiFileController extends BaseController
             'wiki' => $wiki,
         )));
     }
-
-
-        
- 
 
     /**
      * File upload form
@@ -45,7 +41,12 @@ class WikiFileController extends BaseController
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
-        $wiki = $this->getWiki();
+        $wiki = $this->wiki->getWiki();
+
+        // $this->hourlyRate->getAllByProject($records[0]['project_id']);
+        // $this->wikiFile->getAllByProject($records[0]['project_id']);
+
+        // $this->wiki->getDailyWikiBreakdown($project['id']),
 
         $this->response->html($this->template->render('wiki_file/create', array(
             'wiki' => $wiki,
@@ -60,17 +61,17 @@ class WikiFileController extends BaseController
      */
     public function save()
     {
-        $wiki = $this->getWiki();
-        $result = $this->wikiFileModel->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
+        $wiki = $this->wiki->getWiki();
+        $result = $this->wikiFile->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
 
         if ($this->request->isAjax()) {
-            if (! $result) {
+            if (!$result) {
                 $this->response->json(array('message' => t('Unable to upload files, check the permissions of your data folder.')), 500);
             } else {
                 $this->response->json(array('message' => 'OK'));
             }
         } else {
-            if (! $result) {
+            if (!$result) {
                 $this->flash->failure(t('Unable to upload files, check the permissions of your data folder.'));
             }
 
@@ -86,10 +87,10 @@ class WikiFileController extends BaseController
     public function remove()
     {
         $this->checkCSRFParam();
-        $wiki = $this->getWiki();
-        $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+        $wiki = $this->wiki->getWiki();
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
 
-        if ($file['wiki_id'] == $wiki['id'] && $this->wikiFileModel->remove($file['id'])) {
+        if ($file['wiki_id'] == $wiki['id'] && $this->wikiFile->remove($file['id'])) {
             $this->flash->success(t('File removed successfully.'));
         } else {
             $this->flash->failure(t('Unable to remove this file.'));
@@ -105,8 +106,8 @@ class WikiFileController extends BaseController
      */
     public function confirm()
     {
-        $wiki = $this->getWiki();
-        $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+        $wiki = $this->wiki->getWiki();
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
 
         $this->response->html($this->template->render('wiki_file/remove', array(
             'wiki' => $wiki,
