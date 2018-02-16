@@ -54,8 +54,6 @@ Very similar to task screen. You can edit via a modal. Copies are stored as edit
 
 ![Editions Listing](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/editionslisting.png)
 
-![Editions Listing](https://cloud.githubusercontent.com/assets/323546/20451620/965a4a2e-adc9-11e6-9131-3088ce6d8d78.png)
-
 Can see previous editions saved of a wikipage. Can also restore from this page.
 
 ### TODO
