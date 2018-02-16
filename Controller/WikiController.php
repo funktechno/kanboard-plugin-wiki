@@ -43,7 +43,6 @@ class WikiController extends BaseController
 
         // restore button use undo
 
-
         $this->response->html($this->helper->layout->project('wiki:wiki/editions', array(
             'project' => $project,
             'title' => t('Wiki Editions'),
@@ -56,7 +55,7 @@ class WikiController extends BaseController
     {
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
-        
+
         $editwiki = $this->wiki->getWikipage($wiki_id);
 
         // if (empty($values)) {
@@ -73,7 +72,6 @@ class WikiController extends BaseController
         ), 'wiki:wiki/sidebar'));
     }
 
-
     /**
      * details for single wiki page
      */
@@ -84,7 +82,7 @@ class WikiController extends BaseController
 
         $wikipages = $this->wiki->getWikipages($project['id']);
 
-        foreach ($wikipages as $page){
+        foreach ($wikipages as $page) {
             if (t($wiki_id) == t($page['id'])) {
                 $wikipage = $page;
                 break;
@@ -95,7 +93,6 @@ class WikiController extends BaseController
 
         // $wikipage= $wikipages->eq('id', $wiki_id);
 
-
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
             'project' => $project,
@@ -103,7 +100,7 @@ class WikiController extends BaseController
             'wiki_id' => $wiki_id,
             // 'wikipage' => $this->wiki->getWikipage($wiki_id),
             'wikipage' => $wikipage,
-            'wikipages' => $wikipages
+            'wikipages' => $wikipages,
         ), 'wiki:wiki/sidebar'));
 
         // ,array(
@@ -146,6 +143,41 @@ class WikiController extends BaseController
     }
 
     /**
+     * Remove a wikipage
+     *
+     * @access public
+     */
+    public function restore()
+    {
+        $this->checkCSRFParam();
+        $project = $this->getProject();
+
+        if ($this->wiki->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
+            $this->flash->success(t('Edition was restored successfully.'));
+        } else {
+            $this->flash->failure(t('Unable to restore this wiki edition.'));
+        }
+
+        $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+    }
+
+    /**
+     * Confirmation dialog before restoring an edition
+     *
+     * @access public
+     */
+    public function confirm_restore()
+    {
+        $project = $this->getProject();
+
+        $this->response->html($this->template->render('wiki:wiki/confirm_restore', array(
+            'project' => $project,
+            'wiki_id' => $this->request->getIntegerParam('wiki_id'),
+            'edition' => $this->request->getIntegerParam('edition'),
+        )));
+    }
+
+    /**
      * Validate and save a new wikipage
      *
      * @access public
@@ -181,11 +213,12 @@ class WikiController extends BaseController
      * switch the orders between two wikipages
      * @access public
      */
-    public function switchOrder(){
+    public function switchOrder()
+    {
 
     }
 
-     /**
+    /**
      * Validate and update a wikipage
      *
      * @access public
@@ -200,7 +233,7 @@ class WikiController extends BaseController
         if ($valid) {
 
             $newDate = date('Y-m-d');
-            $editions = $values['editions']+1;
+            $editions = $values['editions'] + 1;
 
             $wiki_id = $this->wiki->updatepage($values, $editions, $newDate);
             if ($wiki_id > 0) {

@@ -485,6 +485,37 @@ class Wiki extends Base
     {
         return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
     }
+    /** 
+    * restore a specific edition
+    *
+    * @access public
+    * @param  integer    $wiki_id
+    * @param  integer    $edition
+    * @return boolean
+    */
+    public function restoreEdition($wiki_id,$edition){
+
+        $date=date('Y-m-d');
+        $editionvalues= $this->db->
+            table(self::WIKI_EDITION_TABLE)
+            ->eq('edition', $edition)->findOne(); // this may possibly not support joins
+
+        $values= array(
+            'title' => $editionvalues['title'],
+            'current_edition' => $edition,
+            'content' => $editionvalues['title'],
+            'date_modification' => $date ?: date('Y-m-d'),
+            'modifier_id' => $this->userSession->getId()
+        );
+
+        if ($this->userSession->isLogged()) {
+            $values['modifier_id'] = $this->userSession->getId();
+        }
+
+        // return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
+        return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->update($values);
+
+    }
 
     /**
      * Remove a specific wiki line
