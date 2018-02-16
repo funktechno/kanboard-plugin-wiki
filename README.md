@@ -31,63 +31,47 @@ You have the choice between 3 methods:
 
 Note: Plugin folder is case-sensitive.
 
+Documentation
+-------------
+
+### Wiki plugin
+
+Wiki is based off of taiga.io's project [wiki module](https://taiga.pm/the-wiki-module/). The budget plugin was modified to create this plugin. The main reason for this plugin is behind the need to keep project documentation together with a project and give access to the same user listing. There are many chat integrations that kanboard has and many wikis out there. However, none of the opensourced wikis or any I'm aware of have great integrations shared users with other solutions.
+
+This section is available from project settings page: **Project > Wiki**. There is also a shortcut from the drop-down menu on the board.
+
+### Supported
+
+* Simple wikipages per project
+* Backup of previous versions of wikipages as editions
+
+#### Wikipage detail
+
+![Wikipage detail](https://cloud.githubusercontent.com/assets/323546/20451620/965a4a2e-adc9-11e6-9131-3088ce6d8d78.png)
+
+Very similar to task screen. You can edit via a modal. Copies are stored as editions. Should support uploading COMING SOON. Desired look will be to be able to reorder wikipages via dragging on left column.
+
+### Editions Listing
+
+![Editions Listing](https://cloud.githubusercontent.com/assets/323546/20451620/965a4a2e-adc9-11e6-9131-3088ce6d8d78.png)
+
+Can see previous editions saved of a wikipage. Can also restore from this page.
+
 ### TODO
-* [] editions listing and restore
+* [x] editions listing and restore
 * [x] finish edit
 * [] ordering
     * [] drop down to switch
     * [] drag to move, require css magic
-* inspired by taiga wikis
 * [] fix wiki sidebar
     * use html template render properly to list wiki pages
 * [] get rid of additional old budget plugin code
 * [] kanboard rest api support
+* [] translations, maybe buttons, won't be translating "Wiki"
 
 ### Roadmap
 * style updates
+* ordering
+* attachment support
+* rest support - LOW PRIORITY
 * issues/bugs
-
-Documentation
--------------
-
-### Wiki management
-
-Wiki management is based on the sub-task time tracking, the user timetable and the user hourly rate.
-
-This section is available from project settings page: **Project > Wiki**. There is also a shortcut from the drop-down menu on the board.
-
-#### Wiki Lines
-
-![Cost Lines](https://cloud.githubusercontent.com/assets/323546/20451620/965a4a2e-adc9-11e6-9131-3088ce6d8d78.png)
-
-Wiki lines are used to define a wiki for the project.
-This wiki can be adjusted by adding a new entry with an effective date.
-
-#### Cost Breakdown
-
-![Cost Breakdown](https://cloud.githubusercontent.com/assets/323546/20451619/9658c9ba-adc9-11e6-8dd9-97b7d01db7f2.png)
-
-Based on the subtask time tracking table and user information you can see the cost of each subtask.
-
-The time spent is rounded to the nearest quarter.
-
-#### Wiki Chart
-
-![Wiki Graph](https://cloud.githubusercontent.com/assets/323546/20451621/965c1110-adc9-11e6-925c-c37c5a738c26.png)
-
-Finally, by combining all information we can generate a graph:
-
-- Expenses represent user costs
-- Wiki lines are the provisioned wiki
-- Remaining is the wiki left at the given time
-
-### Hourly Rate
-
-Each user can have a pre-defined hourly rate.
-This feature is used for wiki calculation.
-
-To define a new price, go to **User profile > Hourly rates**.
-
-![Hourly Rate](https://cloud.githubusercontent.com/assets/323546/20451622/965da606-adc9-11e6-9537-cd987abac06d.png)
-
-Each hourly rate can have an effective date and different currencies.
