@@ -7,10 +7,11 @@
 
     <fieldset>
         <legend><?= t('Editions\' settings') ?></legend>
+        <?= json_encode($values) ?>
 
          <!-- $this->form->checkbox('persistEditions','Save Editions', 1, true)  -->
 
-        <?= $this->form->checkbox('persistEditions','Save Editions', $values, $errors) ?>
+        <?= $this->form->checkbox('persistEditions','Save Editions', $values) ?>
         
     </fieldset>
 

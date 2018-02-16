@@ -9,6 +9,10 @@ Improvements:
 
 * code cleanup
 
+Bug fixes:
+
+* properly restore content from edition
+
 Version 0.1.9-beta
 ---------------------------------
 
