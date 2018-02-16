@@ -48,12 +48,10 @@
 
 <div class="column content">
 <div class="page-header">
-    <h2><?=t($wikipage['title'])?></h2> 
-    <?= $this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'])) ?>
+    <h2><?=t($wikipage['title'])?></h2>
+    <?=$this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
     <br>
-    <?=$this->url->link(t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-    <br>
-    <?= $this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id'])) ?>
+    <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
 
 </div>
 <ul class="panel">
@@ -80,7 +78,7 @@
         <h2><?=t('Attachments')?></h2>
 </div>
 <ul>
-    <?= $this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
+    <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
 </ul>
 
 
