@@ -62,6 +62,8 @@
         <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
     <?php endif?>
     <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
+    <li><?=t('Date Creation: ')?><strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
+    <li><?=t('Date Modification: ')?><strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
 </ul>
 
 <?php if (!empty($wikipage['content'])): ?>
