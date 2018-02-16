@@ -64,9 +64,10 @@ Can see previous editions saved of a wikipage. Can also restore from this page.
     * [] drag to move, require css magic
 * [] fix wiki sidebar
     * use html template render properly to list wiki pages
-* [] get rid of additional old budget plugin code
+* [x] get rid of additional old budget plugin code
 * [] kanboard rest api support
 * [] translations, maybe buttons, won't be translating "Wiki"
+* [] active, archived wikipages?
 
 ### Roadmap
 * style updates
