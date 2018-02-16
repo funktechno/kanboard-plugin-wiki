@@ -6,6 +6,11 @@ use PDO;
 
 const VERSION = 4;
 
+function version_5(PDO $pdo){
+    // insert persistEditions into settings
+    $pdo->exec("INSERT INTO `settings` (`option`, `value`) VALUES ('persistEditions', '1');");
+}
+
 function version_4(PDO $pdo){
     $pdo->exec("ALTER TABLE wikipage ADD `modifier_id` int(11) DEFAULT 0;");
 }
