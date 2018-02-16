@@ -1,5 +1,9 @@
 Version 0.2.2-alpha
 
+New features:
+
+* dragable wikipages ui for reordering, does not persist changes reordering
+
 Bug fixes:
 
 * tested and fixed schema sql statements for postgress & sqlite
