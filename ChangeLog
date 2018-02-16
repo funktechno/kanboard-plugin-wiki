@@ -1,8 +1,16 @@
+Version 0.2.0-beta
+---------------------------------
+
+Improvements:
+
+* code cleanup
+
 Version 0.1.9-beta
 ---------------------------------
 
 New features:
-* file attachment STARTED
+
+* file attachment ui only, doesn't save
 
 Improvements:
 
@@ -12,6 +20,7 @@ Version 0.1.8-beta
 ---------------------------------
 
 New features:
+
 * show editions listing
 * restore edition
 
