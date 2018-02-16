@@ -364,7 +364,7 @@ class Wiki extends Base
         $values = [
             'title' => $editionvalues['title'],
             'current_edition' => $edition,
-            'content' => $editionvalues['title'],
+            'content' => $editionvalues['content'],
             'date_modification' => $date ?: date('Y-m-d'),
             'modifier_id' => $this->userSession->getId(),
         ];
