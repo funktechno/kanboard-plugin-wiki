@@ -1,4 +1,4 @@
-Version 0.2.0-beta
+Version 0.2.0-alpha
 ---------------------------------
 
 New features:
@@ -11,7 +11,7 @@ Improvements:
 
 Bug fixes:
 
-* properly restore content from edition
+* properly restore 'content' from edition
 
 Version 0.1.9-beta
 ---------------------------------

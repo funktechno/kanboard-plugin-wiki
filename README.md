@@ -5,9 +5,8 @@ Wiki to document projects
 
 [![Build Status](https://travis-ci.org/kanboard/plugin-wiki.svg?branch=master)](https://travis-ci.org/kanboard/plugin-wiki)
 
-- Create wiki lines
-- See expenses based on sub-task time tracking
-- Manage user hourly rates
+- Create and manage wikipages per project
+- Store different editions of wikipages
 
 Author
 ------
@@ -36,7 +35,7 @@ Documentation
 
 ### Wiki plugin
 
-Wiki is based off of taiga.io's project [wiki module](https://taiga.pm/the-wiki-module/). The budget plugin was modified to create this plugin. The main reason for this plugin is behind the need to keep project documentation together with a project and give access to the same user listing. There are many chat integrations that kanboard has and many wikis out there. However, none of the opensourced wikis or any I'm aware of have great integrations shared users with other solutions.
+Wiki is based off of taiga.io's project [wiki module](https://taiga.pm/the-wiki-module/). The budget plugin was modified to create this plugin. The main reason for this plugin is behind the need to keep project documentation together with a project and give access to the same user listing. There are many chat integrations that kanboard has and many wikis out there. However, none of the open-sourced wikis or any I'm aware of have great integrations that shared users with other solutions.
 
 This section is available from project settings page: **Project > Wiki**. There is also a shortcut from the drop-down menu on the board.
 
