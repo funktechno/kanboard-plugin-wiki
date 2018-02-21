@@ -8,6 +8,11 @@ const VERSION = 6;
 
 function version_5(PDO $pdo){
     // insert persistEditions into settings
+    $pdo->exec("ALTER TABLE `wikipage` CHANGE COLUMN `order` `ordercolumn` int(11) NOT NULL;");
+}
+
+function version_5(PDO $pdo){
+    // insert persistEditions into settings
     $pdo->exec("INSERT INTO `settings` (`option`, `value`) VALUES ('persistEditions', '1');");
 }
 
