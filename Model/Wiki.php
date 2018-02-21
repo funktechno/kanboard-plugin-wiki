@@ -65,7 +65,7 @@ class Wiki extends Base
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
-                self::WIKITABLE . '.order',
+                self::WIKITABLE . '.ordercolumn',
                 self::WIKITABLE . '.creator_id',
                 self::WIKITABLE . '.date_creation',
                 self::WIKITABLE . '.date_modification',
@@ -78,7 +78,7 @@ class Wiki extends Base
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
-            ->asc('\'order\'')->findAll();
+            ->asc('ordercolumn')->findAll();
 
         // return $this->db->table(self::TABLE)
         // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
@@ -110,7 +110,7 @@ class Wiki extends Base
                 self::WIKITABLE . '.title',
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
-                self::WIKITABLE . '.order',
+                self::WIKITABLE . '.ordercolumn',
                 self::WIKITABLE . '.is_active',
                 self::WIKITABLE . '.creator_id',
                 self::WIKITABLE . '.date_creation',
@@ -202,7 +202,7 @@ class Wiki extends Base
             'title' => $title,
             'content' => $content,
             'date_creation' => $date ?: date('Y-m-d'),
-            'order' => $order ?: time(),
+            'ordercolumn' => $order ?: time(),
         );
         $this->prepare($values);
 
