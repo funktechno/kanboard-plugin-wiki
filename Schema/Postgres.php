@@ -4,7 +4,13 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 1;
+const VERSION = 2;
+
+function version_2(PDO $pdo)
+{
+    $pdo->exec('ALTER TABLE wikipage RENAME COLUMN "order" TO "ordercolumn"');
+
+}
 
 function version_1(PDO $pdo)
 {

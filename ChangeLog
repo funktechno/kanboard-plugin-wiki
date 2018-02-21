@@ -1,3 +1,9 @@
+Version 0.2.3-alpha
+
+Bug fixes:
+
+* fixed order column bug for sqlite
+
 Version 0.2.2-alpha
 
 New features:
