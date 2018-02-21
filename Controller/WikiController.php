@@ -17,6 +17,10 @@ class WikiController extends BaseController
      */
     public function show()
     {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
         $project = $this->getProject();
 
         $this->response->html($this->helper->layout->project('wiki:wiki/show', array(

@@ -1,5 +1,5 @@
 plugin=Wiki
-version=0.2.2
+version=0.2.3
 all:
 	@ echo "Build archive for plugin ${plugin} version=${version}"
 	@ git archive HEAD --prefix=${plugin}/ --format=zip -o ${plugin}-${version}.zip

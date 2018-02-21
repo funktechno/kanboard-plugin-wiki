@@ -4,7 +4,12 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 5;
+const VERSION = 6;
+
+function version_6(PDO $pdo){
+    // insert persistEditions into settings
+    $pdo->exec("ALTER TABLE `wikipage` CHANGE COLUMN `order` `ordercolumn` int(11) NOT NULL;");
+}
 
 function version_5(PDO $pdo){
     // insert persistEditions into settings
