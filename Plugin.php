@@ -33,7 +33,6 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
 
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
-        $this->template->hook->attach('template:user:sidebar:actions', 'wiki:user/sidebar');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
         $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
