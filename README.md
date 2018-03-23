@@ -44,6 +44,12 @@ This section is available from project settings page: **Project > Wiki**. There 
 * Simple wikipages per project
 * Backup of previous versions of wikipages as editions
 
+#### Wikilink
+
+Find the wiki button for a project in the menu dropdown.
+
+![Wiki link](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/kanboard-wiki-link.png)
+
 #### Wikipage detail
 
 ![Wikipage detail](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/wikipage.png)
