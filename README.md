@@ -74,10 +74,12 @@ Can see previous editions saved of a wikipage. Can also restore from this page.
 * [] kanboard rest api support
 * [] translations, maybe buttons, won't be translating "Wiki"
 * [] active, archived wikipages?
+* [] global wiki page search
 
 ### Roadmap
 * style updates
 * ordering
-* attachment support
+* [file attachment support](https://github.com/funktechno/kanboard-plugin-wiki/issues/3)
+* global wiki page search [issue 5](https://github.com/funktechno/kanboard-plugin-wiki/issues/5) prob next year
 * rest support - LOW PRIORITY
-* issues/bugs
+* [issues/bugs](https://github.com/funktechno/kanboard-plugin-wiki/issues)
