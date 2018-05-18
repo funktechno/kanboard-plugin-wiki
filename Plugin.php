@@ -76,12 +76,12 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.2.4';
+        return '0.2.5';
     }
 
     public function getPluginHomepage()
     {
-        return 'https://bitbucket.org/lastlink/kanboard-plugin-wiki/';
+        return 'https://github.com/funktechno/kanboard-plugin-wiki';
     }
 
     public function getCompatibleVersion()
