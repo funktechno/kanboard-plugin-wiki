@@ -4,10 +4,14 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 6;
+const VERSION = 7;
+
+function version_7(PDO $pdo){
+    $pdo->exec("ALTER TABLE wikipage CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;");
+    $pdo->exec("ALTER TABLE wikipage_editions CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;");
+}
 
 function version_6(PDO $pdo){
-    // insert persistEditions into settings
     $pdo->exec("ALTER TABLE `wikipage` CHANGE COLUMN `order` `ordercolumn` int(11) NOT NULL;");
 }
 
