@@ -41,8 +41,8 @@ This section is available from project settings page: **Project > Wiki**. There 
 
 ### Supported
 
-* Simple wikipages per project
-* Backup of previous versions of wikipages as editions
+- Simple wikipages per project
+- Backup of previous versions of wikipages as editions
 
 #### Wikilink
 
@@ -61,25 +61,70 @@ Very similar to task screen. You can edit via a modal. Copies are stored as edit
 ![Editions Listing](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/editionslisting.png)
 
 Can see previous editions saved of a wikipage. Can also restore from this page.
+Note that you can only restore **saved** editions. So you if you have the global setting **Saving Editions** as false then you are not currently saving editions when you make changes.
 
 ### TODO
-* [x] editions listing and restore
-* [x] finish edit
-* [] ordering
-    * [] drop down to switch
-    * [] drag to move, require css magic
-* [] fix wiki sidebar
-    * use html template render properly to list wiki pages
-* [x] get rid of additional old budget plugin code
-* [] kanboard rest api support
-* [] translations, maybe buttons, won't be translating "Wiki"
-* [] active, archived wikipages?
-* [] global wiki page search
+
+- [x] editions listing and restore
+  - Related issues: [#9](https://github.com/kanboard/kanboard/issues/9)
+- [x] finish edit
+- [] ordering
+  - [] drop down to switch
+  - [] drag to move, require css magic
+- [] fix wiki sidebar
+  - use html template render properly to list wiki pages
+- [x] get rid of additional old budget plugin code
+- [] kanboard rest api support
+- [] translations, maybe buttons, won't be translating "Wiki" for most languages
+  - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13), [#12](https://github.com/kanboard/kanboard/issues/12), [#10](https://github.com/kanboard/kanboard/issues/10)
+- [] active, archived wikipages?
+- [] global wiki page search
 
 ### Roadmap
-* style updates
-* ordering
-* [file attachment support](https://github.com/funktechno/kanboard-plugin-wiki/issues/3)
-* global wiki page search [issue 5](https://github.com/funktechno/kanboard-plugin-wiki/issues/5) prob next year
-* rest support - LOW PRIORITY
-* [issues/bugs](https://github.com/funktechno/kanboard-plugin-wiki/issues)
+
+- style updates
+- ordering
+- [file attachment support](https://github.com/funktechno/kanboard-plugin-wiki/issues/3)
+- global wiki page search [issue 5](https://github.com/funktechno/kanboard-plugin-wiki/issues/5) prob next year
+- rest support - LOW PRIORITY
+- [issues/bugs](https://github.com/funktechno/kanboard-plugin-wiki/issues)
+
+### Development
+
+After a change must update the version in Plugin.php and Makefile
+
+Plugin.php E.g.
+
+```php
+public function getPluginVersion()
+{
+    return '0.2.6';
+}
+```
+
+Makefile E.g.
+
+```Makefile
+version=0.2.6
+```
+
+To run a new build type `make`. NOTE: this only zips files in the last commit in the branch you are on. If you haven't commited your changes these won't be included in the zip.
+
+After testing create a new tag in github or via cli. `git tag -a 0.2.6 -m "Translations Updates"` Then upload the new **Wiki-version.zip**. Then do a pull request on https://github.com/kanboard/website for the plugins.json to update the plugin url. The `version` & `download` attributes are important to be correct.
+
+```json
+{
+"wiki": {
+        "title": "Wiki",
+        "version": "0.2.5",
+        "author": "lastlink",
+        "license": "MIT",
+        "description": "Wiki to document projects.",
+        "homepage": "https://github.com/funktechno/kanboard-plugin-wiki",
+        "readme": "https://raw.githubusercontent.com/funktechno/kanboard-plugin-wiki/master/README.md",
+        "download": "https://github.com/funktechno/kanboard-plugin-wiki/releases/download/0.2.5-alpha/Wiki-0.2.5.zip",
+        "remote_install": true,
+        "compatible_version": ">=1.0.37"
+    }
+}
+```
