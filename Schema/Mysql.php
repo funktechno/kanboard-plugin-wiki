@@ -7,12 +7,8 @@ use PDO;
 const VERSION = 7;
 
 function version_7(PDO $pdo){
-    // $pdo->exec("SET foreign_key_checks = 0;");
-    // double check if utf8 correct type for foreign letter support
     $pdo->exec("ALTER TABLE wikipage CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;");
     $pdo->exec("ALTER TABLE wikipage_editions CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;");
-    // $pdo->exec("SET foreign_key_checks = 1;");
-
 }
 
 function version_6(PDO $pdo){
