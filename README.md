@@ -61,11 +61,12 @@ Very similar to task screen. You can edit via a modal. Copies are stored as edit
 ![Editions Listing](https://github.com/funktechno/kanboard-plugin-wiki/blob/master/Asset/images/editionslisting.png)
 
 Can see previous editions saved of a wikipage. Can also restore from this page.
+Note that you can only restore **saved** editions. So you if you have the global setting **Saving Editions** as false then you are not currently saving editions when you make changes.
 
 ### TODO
 
 - [x] editions listing and restore
-  - Related issues: #9
+  - Related issues: [#9](https://github.com/kanboard/kanboard/issues/9]
 - [x] finish edit
 - [] ordering
   - [] drop down to switch
@@ -75,7 +76,7 @@ Can see previous editions saved of a wikipage. Can also restore from this page.
 - [x] get rid of additional old budget plugin code
 - [] kanboard rest api support
 - [] translations, maybe buttons, won't be translating "Wiki" for most languages
-  - Related issues: #13, #12, #10
+  - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13], [#12](https://github.com/kanboard/kanboard/issues/12], [#10](https://github.com/kanboard/kanboard/issues/10]
 - [] active, archived wikipages?
 - [] global wiki page search
 
