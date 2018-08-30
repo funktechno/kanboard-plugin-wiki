@@ -26,3 +26,4 @@ This issue is:
 - PHP version:
 - OS:
 - Browser:
+- Application settings Language:
