@@ -1,3 +1,9 @@
+ersion 0.2.7-alpha
+
+Bug fixes:
+
+* Update mysql wiki table encoding to utf8 to support foreign characters
+
 Version 0.2.6-alpha
 
 Improvements:
