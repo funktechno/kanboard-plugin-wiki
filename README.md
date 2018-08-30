@@ -66,7 +66,7 @@ Note that you can only restore **saved** editions. So you if you have the global
 ### TODO
 
 - [x] editions listing and restore
-  - Related issues: [#9](https://github.com/kanboard/kanboard/issues/9]
+  - Related issues: [#9](https://github.com/kanboard/kanboard/issues/9)
 - [x] finish edit
 - [] ordering
   - [] drop down to switch
@@ -76,7 +76,7 @@ Note that you can only restore **saved** editions. So you if you have the global
 - [x] get rid of additional old budget plugin code
 - [] kanboard rest api support
 - [] translations, maybe buttons, won't be translating "Wiki" for most languages
-  - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13], [#12](https://github.com/kanboard/kanboard/issues/12], [#10](https://github.com/kanboard/kanboard/issues/10]
+  - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13), [#12](https://github.com/kanboard/kanboard/issues/12), [#10](https://github.com/kanboard/kanboard/issues/10)
 - [] active, archived wikipages?
 - [] global wiki page search
 
