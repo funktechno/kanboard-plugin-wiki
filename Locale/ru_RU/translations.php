@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Детализация затрат',
     'Do you really want to remove this wiki line?' => 'Вы действительно хотите удалить эту строку wiki?',
     'Expenses' => 'Расходы',
-    'New wiki line' => 'Новая wiki строка',
+    'New wikipage' => 'Новая wiki строка',
     'Remove a wiki line' => 'Удалить строку в wiki',
     'Remove wiki line' => 'Удалить wiki строку',
     'The wiki line have been created successfully.' => 'Wiki строка успешно создана.',

@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Kostenaufschlüsselung',
     'Do you really want to remove this wiki line?' => 'Soll diese Wikilinie wirklich entfernt werden?',
     'Expenses' => 'Kosten',
-    'New wiki line' => 'Neue Wikilinie',
+    'New wikipage' => 'Neue Wikilinie',
     'Remove a wiki line' => 'Wikilinie entfernen',
     'Remove wiki line' => 'Wikilinie entfernen',
     'The wiki line have been created successfully.' => 'Die Wikilinie wurde erfolgreich angelegt.',

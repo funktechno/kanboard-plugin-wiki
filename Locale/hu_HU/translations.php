@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Költség visszaszámlálás',
     'Do you really want to remove this wiki line?' => 'Biztos törölni akarja ezt a költségvetési tételt?',
     'Expenses' => 'Kiadások',
-    'New wiki line' => 'Új költségvetési tétel',
+    'New wikipage' => 'Új költségvetési tétel',
     'Remove a wiki line' => 'Költségvetési tétel törlése',
     'Remove wiki line' => 'Költségvetési tétel törlése',
     'The wiki line have been created successfully.' => 'Költségvetési tétel sikeresen létrehozva.',

@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'รายละเอียดค่าใช้จ่าย',
     'Do you really want to remove this wiki line?' => 'คุณต้องการลบวงเงินงบประมาณนี้?',
     'Expenses' => 'รายจ่าย',
-    'New wiki line' => 'วงเงินงบประมาณใหม่',
+    'New wikipage' => 'วงเงินงบประมาณใหม่',
     'Remove a wiki line' => 'ลบวงเงินประมาณ',
     'Remove wiki line' => 'ลบวงเงินประมาณ',
     'The wiki line have been created successfully.' => 'สร้างวงเงินงบประมาณเรียบร้อยแล้ว',

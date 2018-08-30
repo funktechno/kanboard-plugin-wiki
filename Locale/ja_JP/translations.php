@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'コストブレークダウン',
     'Do you really want to remove this wiki line?' => 'この予算ラインを本当に削除しますか？',
     'Expenses' => '支出',
-    'New wiki line' => '新しい予算ライン',
+    'New wikipage' => '新しい予算ライン',
     'Remove a wiki line' => '予算ラインの削除',
     'Remove wiki line' => '予算ラインの削除',
     'The wiki line have been created successfully.' => '予算ラインを作成しました',
