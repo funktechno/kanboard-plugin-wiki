@@ -5,6 +5,7 @@
 * [ ] Have you updated the getPluginVersion() in Plugin.php and Makefile version appropriately?
 
 ### New Feature Submissions:
+
 * [ ] Have you added an explanation of what your changes do and why you'd like us to include them?
 
 ### Description
@@ -12,7 +13,7 @@
 Fixes # .
 
 Changes proposed in this pull request:
--
--
--
 
+* 
+* 
+* 
