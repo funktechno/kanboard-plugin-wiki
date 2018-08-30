@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Rozpis nákladů',
     'Do you really want to remove this wiki line?' => 'Opravdu chcete odstranit tuto rozpočtovou řádku?',
     'Expenses' => 'Náklady',
-    'New wiki line' => 'Nová položka rozpočtu',
+    'New wikipage' => 'Nová položka rozpočtu',
     'Remove a wiki line' => 'Wikilinie entfernen',
     'Remove wiki line' => 'Wikilinie entfernen',
     'The wiki line have been created successfully.' => 'Položka rozpočtu byla úspěšně vytvořena.',

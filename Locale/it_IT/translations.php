@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Abbattimento dei costi',
     'Do you really want to remove this wiki line?' => 'Vuoi davvero rimuovere questo limite al bilancio?',
     'Expenses' => 'Spese',
-    'New wiki line' => 'Nuovo limite al bilancio',
+    'New wikipage' => 'Nuovo limite al bilancio',
     'Remove a wiki line' => 'Rimuovi un limite al bilancio',
     'Remove wiki line' => 'Rimuovi limite di bilancio',
     'The wiki line have been created successfully.' => 'Il limite al bilancio è stato creato correttamente',

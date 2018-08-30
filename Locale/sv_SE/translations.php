@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Kostnadssammanställning',
     'Do you really want to remove this wiki line?' => 'Vill du verkligen ta bort wikilinjen?',
     'Expenses' => 'Utgifter',
-    'New wiki line' => 'Ny wikilinje',
+    'New wikipage' => 'Ny wikilinje',
     'Remove a wiki line' => 'Ta bort en wikilinje',
     'Remove wiki line' => 'Ta bort wikilinje',
     'The wiki line have been created successfully.' => 'Wikilinjen har skapats.',

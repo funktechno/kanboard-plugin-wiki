@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => '成本分解',
     'Do you really want to remove this wiki line?' => '确定要删除此预算线吗？',
     'Expenses' => '花费',
-    'New wiki line' => '新预算线',
+    'New wikipage' => '新预算线',
     'Remove a wiki line' => '删除预算线',
     'Remove wiki line' => '删除预算线',
     'The wiki line have been created successfully.' => '成功创建预算线。',

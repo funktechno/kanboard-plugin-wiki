@@ -1,3 +1,12 @@
+Version 0.2.6-alpha
+
+Improvements:
+
+* updated some translations
+  * Russian updated
+  * Updated translation for New wikipage (incorrectly was New wiki line)
+* Some linting fixes on readme files
+
 Version 0.2.5-alpha
 
 Bug fixes:

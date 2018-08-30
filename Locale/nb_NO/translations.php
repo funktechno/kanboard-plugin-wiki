@@ -19,7 +19,7 @@ return array(
     // 'Cost breakdown' => '',
     // 'Do you really want to remove this wiki line?' => '',
     // 'Expenses' => '',
-    // 'New wiki line' => '',
+    // 'New wikipage' => '',
     // 'Remove a wiki line' => '',
     // 'Remove wiki line' => '',
     // 'The wiki line have been created successfully.' => '',
