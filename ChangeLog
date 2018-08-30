@@ -3,8 +3,11 @@ Version 0.2.6-alpha
 Improvements:
 
 * updated some translations
-  * Russian updated
+  * Russian updated #10
   * Updated translation for New wikipage (incorrectly was New wiki line)
+  * Missing translation empty attributes added
+  * Portuguese & Spanish updated
+  * 'Wiki' Translation commented out in most language. Was defaulting to budget. 
 * Some linting fixes on readme files
 
 Version 0.2.5-alpha
