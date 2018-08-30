@@ -30,4 +30,17 @@ return array(
     'Burndown chart for "%s"' => 'Trabajo pendiente para "%s"',
     'Wiki overview' => 'Resumen del Wiki',
     'Type' => 'Tipo',
+    'There is not enough data to show something.' => 'No hay suficientes datos para mostrar algo.',
+    'Created' => 'Creado',
+    'Last modifier' => 'Último modificador',
+    'Modified' => 'Modificado',
+    'Edit page' => 'Editar Página',
+    'View Editions' => 'Ver ediciones',
+    'Creator: ' => 'Creador: ',
+    'Modifier: ' => 'Modificador: ',
+    'Editions: ' => 'Ediciones: ',
+    'Current Edition: ' => 'Edición actual: ',
+    'Date Creation: ' => 'Fecha de creación: ',
+    'Date Modification: ' => 'Fecha de modificación: ',
+    'Content' => 'Contenido'
 );

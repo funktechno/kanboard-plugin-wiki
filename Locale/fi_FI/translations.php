@@ -30,4 +30,16 @@ return array(
     // 'Burndown chart for "%s"' => '',
     // 'Wiki overview' => '',
     // 'Type' => '',
+    // 'Created' => 'Creado',
+    // 'Last modifier' => 'Último modificador',
+    // 'Modified' => 'Modificado',
+    // 'Edit page' => 'Editar Página',
+    // 'View Editions' => 'Ver ediciones',
+    // 'Creator: ' => 'Creador: ',
+    // 'Modifier: ' => 'Modificador: ',
+    // 'Editions: ' => 'Ediciones: ',
+    // 'Current Edition: ' => 'Edición actual: ',
+    // 'Date Creation: ' => 'Fecha de creación: ',
+    // 'Date Modification: ' => 'Fecha de modificación: ',
+    // 'Content' => 'Contenido'
 );

@@ -32,4 +32,16 @@ return array(
     'Type' => 'Tipo',
     'Add wiki section for projects and expense reports based on user hourly rates' => 'Adicionar secção de wiki para projectos e relatórios de despesas com base em taxas horárias de utilizadores',
     'There is not enough data to show something.' => 'Não há nada para mostrar',
+    'Created' => 'Criada',
+    'Last modifier' => 'Último modificador',
+    'Modified' => 'Modificado',
+    'Edit page' => 'Editar Página',
+    'View Editions' => 'Visualizar edições',
+    'Creator: ' => 'Dono: ',
+    'Modifier: ' => 'Modificador: ',
+    'Editions: ' => 'Edições: ',
+    'Current Edition: ' => 'Edição atual: ',
+    'Date Creation: ' => 'Data de criação: ',
+    'Date Modification: ' => 'Data de modificação: ',
+    'Content' => 'Conteúdo'
 );

@@ -30,4 +30,17 @@ return array(
     'Burndown chart for "%s"' => 'Burndown diagram för "%s"',
     'Wiki overview' => 'Wikiöversikt',
     'Type' => 'Typ',
+    // 'There is not enough data to show something.' => 'Il n\'y a pas assez de donnée pour montrer quelque chose.',
+    // 'Created' => 'Creado',
+    // 'Last modifier' => 'Último modificador',
+    // 'Modified' => 'Modificado',
+    // 'Edit page' => 'Editar Página',
+    // 'View Editions' => 'Ver ediciones',
+    // 'Creator: ' => 'Creador: ',
+    // 'Modifier: ' => 'Modificador: ',
+    // 'Editions: ' => 'Ediciones: ',
+    // 'Current Edition: ' => 'Edición actual: ',
+    // 'Date Creation: ' => 'Fecha de creación: ',
+    // 'Date Modification: ' => 'Fecha de modificación: ',
+    // 'Content' => 'Contenido'
 );
