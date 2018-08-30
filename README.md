@@ -110,7 +110,7 @@ version=0.2.6
 
 To run a new build type `make`. NOTE: this only zips files in the last commit in the branch you are on. If you haven't commited your changes these won't be included in the zip.
 
-After testing create a new tag in github or via cli. `git tag -a 0.2.6 -m "Translations Updates"` Then upload the new **Wiki-version.zip**. Then do a pull request on https://github.com/kanboard/website for the plugins.json to update the plugin url. The `version` & `download` attributes are important to be correct.
+After testing create a new tag in github or via cli. `git tag -a 0.2.6 -m "Translations Updates"`. Then `git push origin --tags` Then upload the new **Wiki-version.zip** produced from `make`. Then do a pull request on https://github.com/kanboard/website for the plugins.json to update the plugin url. The `version` & `download` attributes are important to be correct.
 
 ```json
 {
