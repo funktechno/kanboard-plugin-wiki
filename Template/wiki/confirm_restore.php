@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h2><?= t('Restore wikipage edition') ?></h2>
+    <h2><?= t('Restore Wiki page edition') ?></h2>
 </div>
 
 <div class="confirm">

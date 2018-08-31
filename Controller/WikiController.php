@@ -13,7 +13,48 @@ use Kanboard\Controller\BaseController;
 class WikiController extends BaseController
 {
     /**
-     * list for wikipages
+     * list for wikipages a user has access to
+     */
+    public function index()
+    {
+        if ($this->userSession->isAdmin()) {
+            $projectIds = $this->projectModel->getAllIds();
+        } else {
+            $projectIds = $this->projectPermissionModel->getProjectIds($this->userSession->getId());
+        }
+        // echo json_encode($projectIds);
+        // exit();
+
+        // $query = $this->projectModel->getQueryByProjectIds($projectIds);
+        $query = $this->wiki->getQueryByProjectIds($projectIds);
+
+
+        // echo json_encode($query->findAll());
+        // exit(); 
+        // $wikipages = $this->wiki->getWikipages($project['id']);
+
+        $search = $this->request->getStringParam('search');
+
+        if ($search !== '') {
+            $query->ilike('wikipage.content', '%' . $search . '%');
+        }
+
+        $paginator = $this->paginator
+            ->setUrl('WikiController', 'index', array('plugin' => 'Wiki'))
+            ->setMax(20)
+            ->setOrder('title')
+            ->setQuery($query)
+            ->calculate();
+
+        $this->response->html($this->helper->layout->app('wiki:wiki_list/listing', array(
+            'paginator'   => $paginator,
+            'title'       => t('Wikis') . ' (' . $paginator->getTotal() . ')',
+            'values'      => array('search' => $search),
+        )));
+    }
+
+    /**
+     * list for wikipages for a project
      */
     public function show()
     {
@@ -23,7 +64,7 @@ class WikiController extends BaseController
 
         $project = $this->getProject();
 
-        $this->response->html($this->helper->layout->project('wiki:wiki/show', array(
+        $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
             'title' => t('Wiki'),
             'wikipages' => $this->wiki->getWikipages($project['id']),
@@ -68,7 +109,7 @@ class WikiController extends BaseController
         // }
 
         // $values['wikipage']
-        $this->response->html($this->helper->layout->project('wiki:wiki/edit', array(
+        $this->response->html($this->helper->layout->app('wiki:wiki/edit', array(
             'wiki_id' => $wiki_id,
             'values' => $editwiki,
             'errors' => $errors,
@@ -93,12 +134,8 @@ class WikiController extends BaseController
             }
         }
 
-        // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
-
-        // $wikipage= $wikipages->eq('id', $wiki_id);
-
         // use a wiki helper for better side bar TODO:
-        $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
+        $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
             'title' => t('Wikipage'),
             'wiki_id' => $wiki_id,
@@ -106,6 +143,19 @@ class WikiController extends BaseController
             'wikipage' => $wikipage,
             'wikipages' => $wikipages,
         ), 'wiki:wiki/sidebar'));
+
+        // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
+
+        // $wikipage= $wikipages->eq('id', $wiki_id);
+
+        // $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
+        //     'project' => $project,
+        //     'title' => t('Wikipage'),
+        //     'wiki_id' => $wiki_id,
+        //     // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+        //     'wikipage' => $wikipage,
+        //     'wikipages' => $wikipages,
+        // ), 'wiki:wiki/sidebar'));
 
         // ,array(
         //     'wikipages' => $this->wiki->getWikipages($project['id'])

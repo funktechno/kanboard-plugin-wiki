@@ -71,21 +71,22 @@ Note that you can only restore **saved** editions. So you if you have the global
 - [] ordering
   - [] drop down to switch
   - [] drag to move, require css magic
-- [] fix wiki sidebar
+- [x] fix wiki sidebar
   - use html template render properly to list wiki pages
+    - still having difficulty getting template helper working, manually added for each page
 - [x] get rid of additional old budget plugin code
 - [] kanboard rest api support
 - [] translations, maybe buttons, won't be translating "Wiki" for most languages
   - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13), [#12](https://github.com/kanboard/kanboard/issues/12), [#10](https://github.com/kanboard/kanboard/issues/10)
 - [] active, archived wikipages?
-- [] global wiki page search
+- [x] global wiki page search
 
 ### Roadmap
 
 - style updates
 - ordering
 - [file attachment support](https://github.com/funktechno/kanboard-plugin-wiki/issues/3)
-- global wiki page search [issue 5](https://github.com/funktechno/kanboard-plugin-wiki/issues/5) prob next year
+- [x] global wiki page search [issue 5](https://github.com/funktechno/kanboard-plugin-wiki/issues/5) prob next year
 - rest support - LOW PRIORITY
 - [issues/bugs](https://github.com/funktechno/kanboard-plugin-wiki/issues)
 
