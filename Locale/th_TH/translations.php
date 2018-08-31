@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'รายละเอียดค่าใช้จ่าย',
     'Do you really want to remove this wiki page?' => 'คุณต้องการลบวงเงินงบประมาณนี้?',
     'Expenses' => 'รายจ่าย',
-    'New wikipage' => 'วงเงินงบประมาณใหม่',
+    'New Wiki page' => 'วงเงินงบประมาณใหม่',
     'Remove a wiki line' => 'ลบวงเงินประมาณ',
     'Remove wiki line' => 'ลบวงเงินประมาณ',
     'The wiki line have been created successfully.' => 'สร้างวงเงินงบประมาณเรียบร้อยแล้ว',
@@ -45,7 +45,7 @@ return array(
     // 'Content' => 'Contenido',
     // 'Date Created' => 'Fecha de creacion',
     // 'Date Modified' => 'Fecha modificada',
-    // '%d Wikipages' => '%d Páginas Wiki',
+    // '%d Wiki pages' => '%d Páginas Wiki',
     // 'Search by content' => 'Buscar por contenido',
-    // 'Wikipage Title' => 'Título de la página Wiki'
+    // 'Wiki page Title' => 'Título de la página Wiki'
 );

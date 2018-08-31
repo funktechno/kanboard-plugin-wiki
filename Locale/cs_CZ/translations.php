@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Rozpis nákladů',
     'Do you really want to remove this wiki page?' => 'Opravdu chcete odstranit tuto rozpočtovou řádku?',
     'Expenses' => 'Náklady',
-    'New wikipage' => 'Nová položka rozpočtu',
+    'New Wiki page' => 'Nová položka rozpočtu',
     'Remove a wiki line' => 'Wikilinie entfernen',
     'Remove wiki line' => 'Wikilinie entfernen',
     'The wiki line have been created successfully.' => 'Položka rozpočtu byla úspěšně vytvořena.',
@@ -45,7 +45,7 @@ return array(
     // 'Content' => 'Contenido',
     // 'Date Created' => 'Fecha de creacion',
     // 'Date Modified' => 'Fecha modificada',
-    // '%d Wikipages' => '%d Páginas Wiki',
+    // '%d Wiki pages' => '%d Páginas Wiki',
     // 'Search by content' => 'Buscar por contenido',
-    // 'Wikipage Title' => 'Título de la página Wiki'
+    // 'Wiki page Title' => 'Título de la página Wiki'
 );

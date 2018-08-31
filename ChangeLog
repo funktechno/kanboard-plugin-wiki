@@ -2,10 +2,14 @@ Version 0.2.8-alpha
 
 Improvements:
 
-* Global search feature
+* Global Wiki search feature
   * added ability to list all wikipages (paginated) as a high level overview
   * Can order them
   * Also can search by content.
+* Translation cleanups
+  * removed ': ' from translations
+  * Cleaned up some gramar
+  * Renamed wikipage to Wiki page
 
 Version 0.2.7-alpha
 

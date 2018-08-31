@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Детализация затрат',
     'Do you really want to remove this wiki page?' => 'Вы действительно хотите удалить эту строку wiki?',
     'Expenses' => 'Расходы',
-    'New wikipage' => 'Новая wiki строка',
+    'New Wiki page' => 'Новая wiki строка',
     'Remove a wiki line' => 'Удалить строку в wiki',
     'Remove wiki line' => 'Удалить wiki строку',
     'The wiki line have been created successfully.' => 'Wiki строка успешно создана.',
@@ -33,7 +33,7 @@ return array(
 	'Created' => 'Создана',
     'Last modifier' => 'Последний редактор',
     'Modified' => 'Изменена',
-    'New wikipage' => 'Новая wiki страница',
+    'New Wiki page' => 'Новая wiki страница',
     'Edit page' => 'Редактировать страницу',
     'View Editions' => 'Просмотреть редакции',
     'Creator' => 'Автор',
@@ -45,7 +45,7 @@ return array(
     'Content' => 'Контент',
     // 'Date Created' => 'Fecha de creacion',
     // 'Date Modified' => 'Fecha modificada',
-    // '%d Wikipages' => '%d Páginas Wiki',
+    // '%d Wiki pages' => '%d Páginas Wiki',
     // 'Search by content' => 'Buscar por contenido',
-    // 'Wikipage Title' => 'Título de la página Wiki'
+    // 'Wiki page Title' => 'Título de la página Wiki'
 );

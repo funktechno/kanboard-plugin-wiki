@@ -16,7 +16,7 @@
 </div>
 
 <?php if ($paginator->isEmpty()): ?>
-    <p class="alert"><?= t('There is no wiki.') ?></p>
+    <p class="alert"><?= t('There are no Wiki pages that you have access to.') ?></p>
 <?php else: ?>
     <div class="table-list">
         <?= $this->render('Wiki:wiki_list/header', array('paginator' => $paginator)) ?>

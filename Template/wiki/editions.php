@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h2><?=t('Wikipage Editions:')?></h2>
+    <h2><?=t('Wiki page Editions:')?></h2>
     <br>
     
     <?=$this->url->icon('long-arrow-alt-left', t('Back to details'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
@@ -68,7 +68,7 @@ Last modifier
 Modified -->
 
 <?php else: ?>
-    <p class="alert"><?=t('There are not editions to restore.')?></p>
+    <p class="alert"><?=t('There are no editions for this Wiki page saved to restore.')?></p>
 <?php endif?>
 </div>
 

@@ -5,7 +5,7 @@
             <?= $paginator->order(t('Project ID'), \Kanboard\Plugin\Wiki\Model\Wiki::WIKITABLE.'.id') ?>
         </li>
         <li>
-            <?= $paginator->order(t('Wikipage Title'), \Kanboard\Plugin\Wiki\Model\Wiki::WIKITABLE.'.title') ?>
+            <?= $paginator->order(t('Wiki page Title'), \Kanboard\Plugin\Wiki\Model\Wiki::WIKITABLE.'.title') ?>
         </li>
         <li>
             <?= $paginator->order(t('Date Created'), \Kanboard\Plugin\Wiki\Model\Wiki::WIKITABLE.'.date_creation') ?>
