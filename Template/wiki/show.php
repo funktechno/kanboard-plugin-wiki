@@ -59,7 +59,7 @@ Modified -->
                 <td><?=$wikipage['current_edition']?></td>
                 <td><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></td>
                 <td><?=$this->dt->date($wikipage['date_creation'])?></td>
-                <td><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></td>
+                <td><?=$this->text->e($wikipage['modifier_name'] ?: $wikipage['modifier_username'])?></td>
                 <td><?=$this->dt->date($wikipage['date_modification'])?></td>
             </tr>
             <?php endforeach?>
