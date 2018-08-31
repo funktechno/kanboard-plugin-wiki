@@ -1,6 +1,7 @@
+<?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <div class="page-header">
     <h2><?=t('Wiki overview')?></h2>
-    <?=$this->modal->medium('plus', t('New wikipage'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
+    <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
 
 </div>
 
@@ -56,9 +57,9 @@ Modified -->
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['editions']?></td>
                 <td><?=$wikipage['current_edition']?></td>
-                <td><?=t($wikipage['creator_name'])?></td>
+                <td><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></td>
                 <td><?=$this->dt->date($wikipage['date_creation'])?></td>
-                <td><?=t($wikipage['modifier_name'])?></td>
+                <td><?=$this->text->e($wikipage['modifier_name'] ?: $wikipage['modifier_username'])?></td>
                 <td><?=$this->dt->date($wikipage['date_modification'])?></td>
             </tr>
             <?php endforeach?>
@@ -66,7 +67,7 @@ Modified -->
     </div>
 
 <?php else: ?>
-    <p class="alert"><?=t('There is not enough data to show something.')?></p>
+    <p class="alert"><?=t('There are no Wiki pages for this project.')?></p>
 <?php endif?>
 </div>
 

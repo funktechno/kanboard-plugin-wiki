@@ -34,12 +34,20 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
 
+        $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
+
+        $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
+
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
         $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
 
 
+        // $this->template->setTemplateOverride('wiki', 'wiki:wiki/layout');
+        // can't figure out how to register helper template
+        // $this->layout->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
+        // $this->helper->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
 
-        $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        // $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
         
 
     }
@@ -76,7 +84,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.2.7';
+        return '0.2.8';
     }
 
     public function getPluginHomepage()
