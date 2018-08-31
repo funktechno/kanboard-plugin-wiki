@@ -87,6 +87,55 @@ class Wiki extends Base
         // ->findOne();
     }
 
+
+
+    /**
+     * Get query for list of all wikis without column statistics
+     *
+     * @access public
+     * @param  array $projectIds
+     * @return \PicoDb\Table
+     */
+    public function getQueryByProjectIds(array $projectIds)
+    {
+        if (empty($projectIds)) {
+            return $this->db->table(self::WIKITABLE)->eq(self::WIKITABLE.'.project_id', 0);
+        }
+
+        return $this->db->
+            table(self::WIKITABLE)
+            ->columns(
+                'c.name as creator_name',
+                'c.username as creator_username',
+                'mod.name as modifier_name',
+                'mod.username as modifier_username',
+                self::WIKITABLE . '.id',
+                self::WIKITABLE . '.title',
+                self::WIKITABLE . '.content',
+                self::WIKITABLE . '.project_id',
+                self::WIKITABLE . '.is_active',
+                self::WIKITABLE . '.ordercolumn',
+                self::WIKITABLE . '.creator_id',
+                self::WIKITABLE . '.date_creation',
+                self::WIKITABLE . '.date_modification',
+                self::WIKITABLE . '.editions',
+                self::WIKITABLE . '.current_edition',
+                self::WIKITABLE . '.modifier_id'
+            )
+            ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+            ->in(self::WIKITABLE.'.project_id', $projectIds);
+            // ->eq('project_id', $project_id)
+            // ->asc('ordercolumn')
+            // ->findAll();
+
+        // return $this->db
+        //     ->table(self::WIKITABLE)
+        //     ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
+        //     ->join(UserModel::TABLE, 'id', 'owner_id')
+        //     ->in(self::TABLE.'.id', $projectIds);
+    }
+
     /**
      * Get a single Wiki Page
      *
