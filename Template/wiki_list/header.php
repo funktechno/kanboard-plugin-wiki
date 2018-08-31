@@ -1,9 +1,9 @@
 <div class="table-list-header">
     <div class="table-list-header-count">
         <?php if ($paginator->getTotal() > 1): ?>
-            <?= t('%d Wikipages', $paginator->getTotal()) ?>
+            <?= t('%d Wiki pages', $paginator->getTotal()) ?>
         <?php else: ?>
-            <?= t('%d Wikipage', $paginator->getTotal()) ?>
+            <?= t('%d Wiki page', $paginator->getTotal()) ?>
         <?php endif ?>
     </div>
     <div class="table-list-header-menu">

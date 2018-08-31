@@ -1,7 +1,7 @@
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <div class="page-header">
     <h2><?=t('Wiki overview')?></h2>
-    <?=$this->modal->medium('plus', t('New wikipage'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
+    <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
 
 </div>
 
@@ -67,7 +67,7 @@ Modified -->
     </div>
 
 <?php else: ?>
-    <p class="alert"><?=t('There is not enough data to show something.')?></p>
+    <p class="alert"><?=t('There are no Wiki pages for this project.')?></p>
 <?php endif?>
 </div>
 

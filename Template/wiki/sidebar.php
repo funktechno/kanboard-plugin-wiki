@@ -17,7 +17,7 @@
         <?php endforeach ?>
         <?php //else: ?>
         <!-- <li class="alert alert-info"> -->
-            <!--  //t('There are no wikipages.')  -->
+            <!--  //t('There are no Wiki pages.')  -->
         <!-- </li> -->
         <?php endif ?>
 

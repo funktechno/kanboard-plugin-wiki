@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Kostenaufschlüsselung',
     'Do you really want to remove this wiki page?' => 'Soll diese Wikilinie wirklich entfernt werden?',
     'Expenses' => 'Kosten',
-    'New wikipage' => 'Neue Wikilinie',
+    'New Wiki page' => 'Neue Wikilinie',
     'Remove a wiki line' => 'Wikilinie entfernen',
     'Remove wiki line' => 'Wikilinie entfernen',
     'The wiki line have been created successfully.' => 'Die Wikilinie wurde erfolgreich angelegt.',
@@ -45,7 +45,7 @@ return array(
     // 'Content' => 'Contenido',
     // 'Date Created' => 'Fecha de creacion',
     // 'Date Modified' => 'Fecha modificada',
-    // '%d Wikipages' => '%d Páginas Wiki',
+    // '%d Wiki pages' => '%d Páginas Wiki',
     // 'Search by content' => 'Buscar por contenido',
-    // 'Wikipage Title' => 'Título de la página Wiki'
+    // 'Wiki page Title' => 'Título de la página Wiki'
 );

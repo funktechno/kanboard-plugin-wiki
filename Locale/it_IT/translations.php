@@ -19,7 +19,7 @@ return array(
     'Cost breakdown' => 'Abbattimento dei costi',
     'Do you really want to remove this wiki page?' => 'Vuoi davvero rimuovere questo limite al bilancio?',
     'Expenses' => 'Spese',
-    'New wikipage' => 'Nuovo limite al bilancio',
+    'New Wiki page' => 'Nuovo limite al bilancio',
     'Remove a wiki line' => 'Rimuovi un limite al bilancio',
     'Remove wiki line' => 'Rimuovi limite di bilancio',
     'The wiki line have been created successfully.' => 'Il limite al bilancio è stato creato correttamente',
@@ -45,7 +45,7 @@ return array(
     // 'Content' => 'Contenido',
     // 'Date Created' => 'Fecha de creacion',
     // 'Date Modified' => 'Fecha modificada',
-    // '%d Wikipages' => '%d Páginas Wiki',
+    // '%d Wiki pages' => '%d Páginas Wiki',
     // 'Search by content' => 'Buscar por contenido',
-    // 'Wikipage Title' => 'Título de la página Wiki'
+    // 'Wiki page Title' => 'Título de la página Wiki'
 );
