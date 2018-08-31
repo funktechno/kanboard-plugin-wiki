@@ -1,3 +1,4 @@
+<?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <div class="page-header">
     <h2><?=t('Wiki overview')?></h2>
     <?=$this->modal->medium('plus', t('New wikipage'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
@@ -56,9 +57,9 @@ Modified -->
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['editions']?></td>
                 <td><?=$wikipage['current_edition']?></td>
-                <td><?=t($wikipage['creator_name'])?></td>
+                <td><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></td>
                 <td><?=$this->dt->date($wikipage['date_creation'])?></td>
-                <td><?=t($wikipage['modifier_name'])?></td>
+                <td><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></td>
                 <td><?=$this->dt->date($wikipage['date_modification'])?></td>
             </tr>
             <?php endforeach?>

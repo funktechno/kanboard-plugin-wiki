@@ -1,3 +1,4 @@
+<!-- no longer used -->
 <div class="sidebar">
     <ul>
         <li <?= $this->app->checkMenuSelection('WikiController', 'show') ?>>

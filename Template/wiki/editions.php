@@ -33,15 +33,15 @@
 <?php foreach ($editions as $edition): ?>
 <div class="page-header">
     <h2>
-        <?=t('Title: ') . t($edition['title'])?>
+        <?=t('Title') . ': ' . t($edition['title'])?>
         <?=$this->modal->confirm('undo', t(''), 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
         <br>
-        <?=t('Edition: ') . t($edition['edition'])?>
+        <?=t('Edition') . ': ' . t($edition['edition'])?>
     </h2>
 
 </div>
 <div>
-    <?=t('Date Creation: ') . $this->dt->date($edition['date_creation'])?>
+    <?=t('Date Creation') . ': ' . $this->dt->date($edition['date_creation'])?>
 </div>
 <div class="page-header">
         <h2><?=t('Content')?></h2>

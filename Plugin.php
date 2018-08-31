@@ -42,8 +42,12 @@ class Plugin extends Base
         $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
 
 
+        // $this->template->setTemplateOverride('wiki', 'wiki:wiki/layout');
+        // can't figure out how to register helper template
+        // $this->layout->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
+        // $this->helper->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
 
-        $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        // $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
         
 
     }
@@ -80,7 +84,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.2.8';
+        return '0.2.7';
     }
 
     public function getPluginHomepage()

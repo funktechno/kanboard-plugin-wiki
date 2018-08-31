@@ -29,10 +29,6 @@
                 <?= $this->render('Wiki:wiki_list/wiki_details', array(
                     'wiki' => $wiki,
                 )) ?>
-
-                <?= $this->render('Wiki:wiki_list/wiki_icons', array(
-                    'wiki' => $wiki,
-                )) ?>
             </div>
         <?php endforeach ?>
     </div>
