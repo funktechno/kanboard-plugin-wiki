@@ -13,7 +13,45 @@ use Kanboard\Controller\BaseController;
 class WikiController extends BaseController
 {
     /**
-     * list for wikipages
+     * list for wikipages a user has access to
+     */
+    public function index()
+    {
+        if ($this->userSession->isAdmin()) {
+            $projectIds = $this->projectModel->getAllIds();
+        } else {
+            $projectIds = $this->projectPermissionModel->getProjectIds($this->userSession->getId());
+        }
+        // echo json_encode($projectIds);
+        // exit();
+
+        // $query = $this->projectModel->getQueryByProjectIds($projectIds);
+        $query = $this->wiki->getQueryByProjectIds($projectIds);
+
+        // $wikipages = $this->wiki->getWikipages($project['id']);
+
+        $search = $this->request->getStringParam('search');
+
+        if ($search !== '') {
+            $query->ilike('wikipage.content', '%' . $search . '%');
+        }
+
+        $paginator = $this->paginator
+            ->setUrl('WikiController', 'index')
+            ->setMax(20)
+            ->setOrder('title')
+            ->setQuery($query)
+            ->calculate();
+
+        $this->response->html($this->helper->layout->app('wiki:wiki_list/listing', array(
+            'paginator'   => $paginator,
+            'title'       => t('Wikis') . ' (' . $paginator->getTotal() . ')',
+            'values'      => array('search' => $search),
+        )));
+    }
+
+    /**
+     * list for wikipages for a project
      */
     public function show()
     {
