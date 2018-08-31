@@ -36,11 +36,16 @@ return array(
     // 'Modified' => 'Modificado',
     // 'Edit page' => 'Editar Página',
     // 'View Editions' => 'Ver ediciones',
-    // 'Creator: ' => 'Creador: ',
-    // 'Modifier: ' => 'Modificador: ',
-    // 'Editions: ' => 'Ediciones: ',
-    // 'Current Edition: ' => 'Edición actual: ',
-    // 'Date Creation: ' => 'Fecha de creación: ',
-    // 'Date Modification: ' => 'Fecha de modificación: ',
-    // 'Content' => 'Contenido'
+    // 'Creator' => 'Creador',
+    // 'Modifier' => 'Modificador',
+    // 'Editions' => 'Ediciones',
+    // 'Current Edition' => 'Edición actual',
+    // 'Date Creation' => 'Fecha de creación',
+    // 'Date Modification' => 'Fecha de modificación',
+    // 'Content' => 'Contenido',
+    // 'Date Created' => 'Fecha de creacion',
+    // 'Date Modified' => 'Fecha modificada',
+    // '%d Wikipages' => '%d Páginas Wiki',
+    // 'Search by content' => 'Buscar por contenido',
+    // 'Wikipage Title' => 'Título de la página Wiki'
 );
