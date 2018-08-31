@@ -28,6 +28,9 @@ class WikiController extends BaseController
         // $query = $this->projectModel->getQueryByProjectIds($projectIds);
         $query = $this->wiki->getQueryByProjectIds($projectIds);
 
+
+        // echo json_encode($query->findAll());
+        // exit(); 
         // $wikipages = $this->wiki->getWikipages($project['id']);
 
         $search = $this->request->getStringParam('search');
@@ -37,7 +40,7 @@ class WikiController extends BaseController
         }
 
         $paginator = $this->paginator
-            ->setUrl('WikiController', 'index')
+            ->setUrl('WikiController', 'index', array('plugin' => 'Wiki'))
             ->setMax(20)
             ->setOrder('title')
             ->setQuery($query)

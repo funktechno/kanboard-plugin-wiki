@@ -11,7 +11,7 @@
         <?= $this->form->hidden('controller', array('controller' => 'WikiController')) ?>
         <?= $this->form->hidden('action', array('action' => 'index')) ?>
 		<?= $this->form->hidden('plugin', array('plugin' => 'Wiki')) ?>
-        <?= $this->form->text('search', $values, array(), array('placeholder="'.t('Search').'"')) ?>
+        <?= $this->form->text('search', $values, array(), array('placeholder="'.t('Search by content').'"')) ?>
     </form>
 </div>
 
@@ -19,18 +19,18 @@
     <p class="alert"><?= t('There is no wiki.') ?></p>
 <?php else: ?>
     <div class="table-list">
-        <?= $this->render('wiki_list/header', array('paginator' => $paginator)) ?>
+        <?= $this->render('Wiki:wiki_list/header', array('paginator' => $paginator)) ?>
         <?php foreach ($paginator->getCollection() as $wiki): ?>
             <div class="table-list-row table-border-left">
-                <?= $this->render('wiki_list/wiki_title', array(
+                <?= $this->render('Wiki:wiki_list/wiki_title', array(
                     'wiki' => $wiki,
                 )) ?>
 
-                <?= $this->render('wiki_list/wiki_details', array(
+                <?= $this->render('Wiki:wiki_list/wiki_details', array(
                     'wiki' => $wiki,
                 )) ?>
 
-                <?= $this->render('wiki_list/wiki_icons', array(
+                <?= $this->render('Wiki:wiki_list/wiki_icons', array(
                     'wiki' => $wiki,
                 )) ?>
             </div>
