@@ -125,15 +125,6 @@ class Wiki extends Base
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->in(self::WIKITABLE.'.project_id', $projectIds);
-            // ->eq('project_id', $project_id)
-            // ->asc('ordercolumn')
-            // ->findAll();
-
-        // return $this->db
-        //     ->table(self::WIKITABLE)
-        //     ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
-        //     ->join(UserModel::TABLE, 'id', 'owner_id')
-        //     ->in(self::TABLE.'.id', $projectIds);
     }
 
     /**

@@ -1,5 +1,7 @@
 <div class="page-header">
-    <h2><?=t('Wiki overview')?></h2>
+    <h2>
+    <?= $this->url->link(t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
+    </h2>
 </div>
 
 <style>
@@ -56,14 +58,14 @@
 </div>
 <ul class="panel">
     <?php if ($wikipage['creator_id'] > 0): ?>
-        <li><?=t('Creator: ')?><strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
+        <li><?=t('Creator')?>: <strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
     <?php endif?>
     <?php if ($wikipage['modifier_id'] > 0): ?>
-        <li><?=t('Modifier: ')?><strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
+        <li><?=t('Modifier')?>: <strong><?=$this->text->e($wikipage['modifier_username'] ?: $wikipage['modifier_username'])?></strong></li>
     <?php endif?>
-    <li><?=t('Editions: ')?><strong><?=$wikipage['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wikipage['current_edition']?></strong></li>
-    <li><?=t('Date Creation: ')?><strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
-    <li><?=t('Date Modification: ')?><strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
+    <li><?=t('Editions')?>: <strong><?=$wikipage['editions']?></strong> <?=t('Current Edition')?>: <strong> <?=$wikipage['current_edition']?></strong></li>
+    <li><?=t('Date Creation')?>: <strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
+    <li><?=t('Date Modification')?>: <strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
 </ul>
 
 <?php if (!empty($wikipage['content'])): ?>
