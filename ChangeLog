@@ -6,10 +6,12 @@ Improvements:
   * added ability to list all wikipages (paginated) as a high level overview
   * Can order them
   * Also can search by content.
-* Translation cleanups
+* Some Translation/grammar cleanups
   * removed ': ' from translations
   * Cleaned up some gramar
   * Renamed wikipage to Wiki page
+* Updated sidebar
+  * removed excess space from left side
 
 Version 0.2.7-alpha
 
