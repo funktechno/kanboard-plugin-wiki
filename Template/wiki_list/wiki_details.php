@@ -1,15 +1,24 @@
-<div class="table-list-details table-list-details-with-icons">
+<div class="table-list-details">
     <ul>
-        <?php if ($project['owner_id'] > 0): ?>
-            <li><?= $this->text->e($project['owner_name'] ?: $project['owner_username']) ?></li>
-        <?php endif ?>
+        <?php if ($wiki['creator_id'] > 0): ?>
+            <li><?=t('Creator: ')?><strong><?=$this->text->e($wiki['creator_name'] ?: $wiki['creator_username'])?></strong></li>
+        <?php endif?>
+        <?php if ($wiki['modifier_id'] > 0): ?>
+            <li><?=t('Last Modifier: ')?><strong><?=$this->text->e($wiki['modifier_username'] ?: $wiki['modifier_username'])?></strong></li>
+        <?php endif?>
 
-        <?php if ($project['start_date']): ?>
-            <li><?= t('Start date:').' '.$this->dt->date($project['start_date']) ?></li>
-        <?php endif ?>
+        <li><?=t('Editions: ')?><strong><?=$wiki['editions']?></strong> <?=t('Current Edition: ')?><strong> <?=$wiki['current_edition']?></strong></li>
 
-        <?php if ($project['end_date']): ?>
-            <li><?= t('End date:').' '.$this->dt->date($project['end_date']) ?></li>
-        <?php endif ?>
+        <li><?=t('Date Created: ')?><strong><?=$this->dt->date($wiki['date_creation'])?></strong></li>
+
+        <li><?=t('Last Date Modified: ')?><strong><?=$this->dt->date($wiki['date_modification'])?></strong></li>
+
+        <?php if ($wiki['content']): ?>
+            <li>
+                <h4><?=t('Content:')?></h4>
+                <?=$this->text->markdown($wiki['content'])?>
+            </li>
+        <?php endif?>
+
     </ul>
 </div>

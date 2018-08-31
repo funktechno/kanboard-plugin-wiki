@@ -1,4 +1,13 @@
-ersion 0.2.7-alpha
+Version 0.2.8-alpha
+
+Improvements:
+
+* Global search feature
+  * added ability to list all wikipages (paginated) as a high level overview
+  * Can order them
+  * Also can search by content.
+
+Version 0.2.7-alpha
 
 Bug fixes:
 

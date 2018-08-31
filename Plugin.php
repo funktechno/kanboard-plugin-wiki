@@ -34,6 +34,8 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
 
+        $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
+
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
@@ -78,7 +80,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.2.7';
+        return '0.2.8';
     }
 
     public function getPluginHomepage()
