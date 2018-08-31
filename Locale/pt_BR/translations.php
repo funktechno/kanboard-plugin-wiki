@@ -45,5 +45,8 @@ return array(
     'Date Modified' => 'Data modificada',
     '%d Wiki pages' => '%d Páginas Wiki',
     'Search by content' => 'Buscar por conteúdo',
-    'Wiki page Title' => 'Página do Wiki Título'
+    'Wiki page Title' => 'Página do Wiki Título',
+    'There are no editions for this Wiki page saved to restore.' => 'Não há edições salvas para restaurar.',
+    'There are no Wiki pages that you have access to.' => 'Não há páginas wiki que você tenha acesso.',
+    'There are no Wiki pages for this project.' => 'Não há páginas wiki para este projeto.'
 );
