@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h2><?= t('New wikipage') ?></h2>
+    <h2><?= t('New Wiki page') ?></h2>
 </div>
 
 <form method="post" action="<?= $this->url->href('WikiController', 'save', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>" autocomplete="off">
