@@ -92,9 +92,9 @@
 </ul>
 
 <?php if (!empty($files) || !empty($images)): ?>
-    <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki, 'project' => $project)) ?>
+    <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki_id, 'project' => $project)) ?>
     <?= $this->render('wiki:wiki_file/show', array(
-        'wiki' => $wiki,
+        'wiki' => $wiki_id,
         'files' => $files,
         'images' => $images
     )) ?>
