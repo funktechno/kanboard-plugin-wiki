@@ -97,7 +97,7 @@ class WikiFileController extends BaseController
         $wiki = $this->wiki->getWiki();
         $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
 
-        if ($file['wiki_id'] == $wiki['id'] && $this->wikiFile->remove($file['id'])) {
+        if ($file['wikipage_id'] == $wiki['id'] && $this->wikiFile->remove($file['id'])) {
             $this->flash->success(t('File removed successfully.'));
         } else {
             $this->flash->failure(t('Unable to remove this file.'));
