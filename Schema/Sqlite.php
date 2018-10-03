@@ -4,7 +4,7 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 2;
+const VERSION = 3;
 
 function version_3(PDO $pdo)
 {
