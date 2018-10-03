@@ -146,7 +146,7 @@ class WikiFileViewController extends BaseController
     public function download()
     {
         try {
-            $file = $this->getFile();
+            $file = $this->wikiFile->getById($fid);
             $this->response->withFileDownload($file['name']);
             $this->response->send();
             $this->objectStorage->output($file['path']);
