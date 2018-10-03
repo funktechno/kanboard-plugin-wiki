@@ -149,7 +149,6 @@ class WikiFileViewController extends BaseController
         try {
             $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
             $file['model'] = 'wikiFile';
-            $file['name'] = 'test';
             $this->response->withFileDownload($file['name']);
             $this->response->send();
             $this->objectStorage->output($file['path']);
