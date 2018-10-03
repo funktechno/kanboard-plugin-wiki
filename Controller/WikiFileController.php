@@ -102,8 +102,8 @@ class WikiFileController extends BaseController
         } else {
             $this->flash->failure(t('Unable to remove this file.'));
         }
+            $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $wiki['project_id'], 'wiki_id' => $wiki['id'])), true);
 
-        $this->response->redirect($this->helper->url->to('WikiController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])));
     }
 
     /**
