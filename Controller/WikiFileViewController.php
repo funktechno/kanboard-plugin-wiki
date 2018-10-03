@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Core\ObjectStorage\ObjectStorageException;
+use Kanboard\Controller\BaseController;
 
 /**
  * File Viewer Controller
