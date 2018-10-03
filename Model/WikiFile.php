@@ -26,6 +26,7 @@ class WikiFile extends FileModel
      * @var string
      */
     const EVENT_CREATE = 'wiki.file.create';
+   
 
     /**
      * Get the table
@@ -37,6 +38,11 @@ class WikiFile extends FileModel
     protected function getTable()
     {
         return self::TABLE;
+    }
+    
+    public function getById($file_id)
+    {
+        return $this->db->table($this->getTable())->eq('id', $file_id)->findOne();
     }
 
     /**
