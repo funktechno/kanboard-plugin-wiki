@@ -139,6 +139,7 @@ class WikiController extends BaseController
             'project' => $project,
             'title' => t('Wikipage'),
             'wiki_id' => $wiki_id,
+            'wiki' => $wikipage,
             'files' => $this->wikiFile->getAllDocuments($wiki_id),
             'images' => $this->wikiFile->getAllImages($wiki_id),
             // 'wikipage' => $this->wiki->getWikipage($wiki_id),
