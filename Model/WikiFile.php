@@ -3,7 +3,7 @@
 namespace Kanboard\Plugin\Wiki\Model;
 
 use Kanboard\Model\FileModel;
-use Kanboard\Plugin\Wiki\Model\WikiModel;
+use Kanboard\Plugin\Wiki\Model\Wiki;
 
 /**
  * Wiki File Model
@@ -11,7 +11,7 @@ use Kanboard\Plugin\Wiki\Model\WikiModel;
  * @package  Kanboard\Model
  * @author   Frederic Guillot
  */
-class WikiFileModel extends FileModel
+class WikiFile extends FileModel
 {
     /**
      * Table name
