@@ -98,9 +98,10 @@ class WikiFile extends FileModel
      *
      * @access protected
      * @param  integer $file_id
-     */
+     
     protected function fireCreationEvent($file_id)
     {
         $this->queueManager->push($this->wikiFileEventJob->withParams($file_id, self::EVENT_CREATE));
     }
+    */
 }
