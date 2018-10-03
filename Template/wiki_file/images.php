@@ -7,9 +7,9 @@
                     'image' => $file,
                     'regex' => 'FILE_ID',
                     'url' => array(
-                        'image' => $this->url->to('FileViewerController', 'image', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wiki_id' => $wiki['id'])),
-                        'thumbnail' => $this->url->to('FileViewerController', 'thumbnail', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wiki_id' => $wiki['id'])),
-                        'download' => $this->url->to('FileViewerController', 'download', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wiki_id' => $wiki['id'])),
+                        'image' => $this->url->to('FileViewerController', 'image', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'task_id' => $wiki['id'])),
+                        'thumbnail' => $this->url->to('FileViewerController', 'thumbnail', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'task_id' => $wiki['id'])),
+                        'download' => $this->url->to('FileViewerController', 'download', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'task_id' => $wiki['id'])),
                     )
                 )) ?>
 
@@ -19,11 +19,11 @@
                             <a href="#" class="dropdown-menu dropdown-menu-link-text" title="<?= $this->text->e($file['name']) ?>"><?= $this->text->e($file['name']) ?> <i class="fa fa-caret-down"></i></a>
                             <ul>
                                 <li>
-                                    <?= $this->url->icon('download', t('Download'), 'FileViewerController', 'download', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                    <?= $this->url->icon('download', t('Download'), 'FileViewerController', 'download', array('task_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
                                 </li>
                                 <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                     <li>
-                                        <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiFileController', 'confirm', array('plugin' => 'wiki', 'wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                        <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiFileController', 'confirm', array('plugin' => 'wiki', 'task_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
                                     </li>
                                 <?php endif ?>
                             </ul>
