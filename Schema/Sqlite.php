@@ -6,6 +6,13 @@ use PDO;
 
 const VERSION = 2;
 
+function version_3(PDO $pdo)
+{
+    $pdo->exec('ALTER TABLE wikipage_has_files ADD COLUMN "date" INTEGER NOT NULL DEFAULT 0');
+    $pdo->exec('ALTER TABLE wikipage_has_files ADD COLUMN "user_id" INTEGER NOT NULL DEFAULT 0');
+    $pdo->exec('ALTER TABLE wikipage_has_files ADD COLUMN "size" INTEGER NOT NULL DEFAULT 0');
+}
+
 function version_2(PDO $pdo)
 {
 
