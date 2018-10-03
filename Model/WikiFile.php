@@ -2,6 +2,9 @@
 
 namespace Kanboard\Plugin\Wiki\Model;
 
+use Kanboard\Model\FileModel;
+use Kanboard\Plugin\Wiki\Model\WikiModel;
+
 /**
  * Wiki File Model
  *
