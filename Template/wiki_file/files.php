@@ -15,12 +15,12 @@
                         <ul>
                             <?php if ($this->file->getPreviewType($file['name']) !== null): ?>
                                 <li>
-                                    <?= $this->modal->large('eye', t('View file'), 'FileViewerController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                    <?= $this->modal->large('eye', t('View file'), 'FileViewerController', 'show', array('task_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
                                 </li>
                             <?php elseif ($this->file->getBrowserViewType($file['name']) !== null): ?>
                                 <li>
                                     <i class="fa fa-eye fa-fw"></i>
-                                    <?= $this->url->link(t('View file'), 'FileViewerController', 'browser', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id']), false, '', '', true) ?>
+                                    <?= $this->url->link(t('View file'), 'FileViewerController', 'browser', array('task_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id']), false, '', '', true) ?>
                                 </li>
                             <?php endif ?>
                             <li>
