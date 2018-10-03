@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\WikiController;
+namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Core\ObjectStorage\ObjectStorageException;
 
