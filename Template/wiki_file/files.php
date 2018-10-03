@@ -15,16 +15,16 @@
                         <ul>
                             <?php if ($this->file->getPreviewType($file['name']) !== null): ?>
                                 <li>
-                                    <?= $this->modal->large('eye', t('View file'), 'FileViewerController', 'show', array('task_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                    <?= $this->modal->large('eye', t('View file'), 'WikiFileViewController', 'show', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'], 'fid' => $file['id'])) ?>
                                 </li>
                             <?php elseif ($this->file->getBrowserViewType($file['name']) !== null): ?>
                                 <li>
                                     <i class="fa fa-eye fa-fw"></i>
-                                    <?= $this->url->link(t('View file'), 'FileViewerController', 'browser', array('task_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id']), false, '', '', true) ?>
+                                    <?= $this->url->link(t('View file'), 'WikiFileViewController', 'browser', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'], 'fid' => $file['id']), false, '', '', true) ?>
                                 </li>
                             <?php endif ?>
                             <li>
-                                <?= $this->url->icon('download', t('Download'), 'FileViewerController', 'download', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'], 'fid' => $file['id'])) ?>
                             </li>
                             <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                 <li>
