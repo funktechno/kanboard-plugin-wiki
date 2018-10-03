@@ -19,7 +19,7 @@
                             <a href="#" class="dropdown-menu dropdown-menu-link-text" title="<?= $this->text->e($file['name']) ?>"><?= $this->text->e($file['name']) ?> <i class="fa fa-caret-down"></i></a>
                             <ul>
                                 <li>
-                                    <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
+                                    <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'], 'fid' => $file['id'])) ?>
                                 </li>
                                 <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                     <li>
