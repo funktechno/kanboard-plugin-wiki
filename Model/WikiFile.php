@@ -40,10 +40,6 @@ class WikiFile extends FileModel
         return self::TABLE;
     }
     
-    public function getById($file_id)
-    {
-        return $this->db->table($this->getTable())->eq('id', $file_id)->findOne();
-    }
 
     /**
      * Define the foreign key
