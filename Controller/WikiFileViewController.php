@@ -65,7 +65,7 @@ class WikiFileViewController extends BaseController
      */
     public function show()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->getFile();
         $type = $this->helper->file->getPreviewType($file['name']);
         $params = array('file_id' => $file['id'], 'project_id' => $this->request->getIntegerParam('project_id'));
 
@@ -88,7 +88,7 @@ class WikiFileViewController extends BaseController
      */
     public function image()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->getFile();
         $this->renderFileWithCache($file, $this->helper->file->getImageMimeType($file['name']));
     }
 
@@ -99,7 +99,7 @@ class WikiFileViewController extends BaseController
      */
     public function browser()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->getFile();
         $this->renderFileWithCache($file, $this->helper->file->getBrowserViewType($file['name']));
     }
 
@@ -110,7 +110,7 @@ class WikiFileViewController extends BaseController
      */
     public function thumbnail()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->getFile();
         $model = 'wikiFile';
         $filename = $this->$model->getThumbnailPath($file['path']);
         $etag = md5($filename);
@@ -146,7 +146,7 @@ class WikiFileViewController extends BaseController
     public function download()
     {
         try {
-            $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+            $file = $this->getFile();
             $this->response->withFileDownload($file['name']);
             $this->response->send();
             $this->objectStorage->output($file['path']);
