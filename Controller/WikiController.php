@@ -63,10 +63,13 @@ class WikiController extends BaseController
         // error_reporting(E_ALL);
 
         $project = $this->getProject();
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
             'title' => t('Wiki'),
+            'files' => $this->wikiFile->getAllDocuments($wiki_id),
+            'images' => $this->wikiFile->getAllImages($wiki_id),
             'wikipages' => $this->wiki->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
 
