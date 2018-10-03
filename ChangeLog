@@ -1,3 +1,13 @@
+Version 0.2.9-alpha
+
+Improvements:
+
+* File and Image Attachments Feature
+  * Added Thumbnail Support
+  * Added Download Support
+  * Added Removal Support
+  * Added Slideshow Support for images  
+  
 Version 0.2.8-alpha
 
 Improvements:
