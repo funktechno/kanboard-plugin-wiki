@@ -7,9 +7,9 @@
                     'image' => $file,
                     'regex' => 'FILE_ID',
                     'url' => array(
-                        'image' => $this->url->to('FileViewerController', 'image', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'task_id' => $wiki['id'])),
-                        'thumbnail' => $this->url->to('FileViewerController', 'thumbnail', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'task_id' => $wiki['id'])),
-                        'download' => $this->url->to('FileViewerController', 'download', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'task_id' => $wiki['id'])),
+                        'image' => $this->url->to('FileViewerController', 'image', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
+                        'thumbnail' => $this->url->to('FileViewerController', 'thumbnail', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
+                        'download' => $this->url->to('FileViewerController', 'download', array('file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
                     )
                 )) ?>
 
