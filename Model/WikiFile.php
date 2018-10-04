@@ -2,13 +2,16 @@
 
 namespace Kanboard\Plugin\Wiki\Model;
 
+use Kanboard\Model\FileModel;
+use Kanboard\Plugin\Wiki\Model\Wiki;
+
 /**
  * Wiki File Model
  *
  * @package  Kanboard\Model
  * @author   Frederic Guillot
  */
-class WikiFileModel extends FileModel
+class WikiFile extends FileModel
 {
     /**
      * Table name
@@ -23,6 +26,7 @@ class WikiFileModel extends FileModel
      * @var string
      */
     const EVENT_CREATE = 'wiki.file.create';
+   
 
     /**
      * Get the table
@@ -35,6 +39,7 @@ class WikiFileModel extends FileModel
     {
         return self::TABLE;
     }
+    
 
     /**
      * Define the foreign key
@@ -98,6 +103,7 @@ class WikiFileModel extends FileModel
      */
     protected function fireCreationEvent($file_id)
     {
-        $this->queueManager->push($this->wikiFileEventJob->withParams($file_id, self::EVENT_CREATE));
+        return null;
     }
+    
 }
