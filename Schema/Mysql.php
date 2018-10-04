@@ -4,7 +4,14 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 7;
+const VERSION = 8;
+
+function version_8(PDO $pdo)
+{
+    $pdo->exec('ALTER TABLE wikipage_has_files ADD COLUMN `date` INT NOT NULL DEFAULT 0');
+    $pdo->exec('ALTER TABLE wikipage_has_files ADD COLUMN `user_id` INT NOT NULL DEFAULT 0');
+    $pdo->exec('ALTER TABLE wikipage_has_files ADD COLUMN `size` INT NOT NULL DEFAULT 0');
+}
 
 function version_7(PDO $pdo){
     $pdo->exec("ALTER TABLE wikipage CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;");
