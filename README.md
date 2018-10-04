@@ -85,7 +85,7 @@ Note that you can only restore **saved** editions. So you if you have the global
 
 - style updates
 - ordering
-- [file attachment support](https://github.com/funktechno/kanboard-plugin-wiki/issues/3)
+- [x] [file attachment support](https://github.com/funktechno/kanboard-plugin-wiki/issues/3)
 - [x] global wiki page search [issue 5](https://github.com/funktechno/kanboard-plugin-wiki/issues/5) prob next year
 - rest support - LOW PRIORITY
 - [issues/bugs](https://github.com/funktechno/kanboard-plugin-wiki/issues)
