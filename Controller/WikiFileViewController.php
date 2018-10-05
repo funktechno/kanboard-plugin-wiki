@@ -95,7 +95,7 @@ class WikiFileViewController extends BaseController
      */
     public function browser()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
         $this->renderFileWithCache($file, $this->helper->file->getBrowserViewType($file['name']));
     }
 
