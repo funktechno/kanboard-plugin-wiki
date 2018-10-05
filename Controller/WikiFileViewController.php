@@ -89,7 +89,7 @@ class WikiFileViewController extends BaseController
      */
     public function image()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
         $this->renderFileWithCache($file, $this->helper->file->getImageMimeType($file['name']));
     }
 
@@ -147,7 +147,7 @@ class WikiFileViewController extends BaseController
     public function download()
     {
         try {
-            $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+            $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
             $file['model'] = 'wikiFile';
             $this->response->withFileDownload($file['name']);
             $this->response->send();
