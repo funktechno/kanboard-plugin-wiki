@@ -3,7 +3,7 @@
 </div>
 <div class="file-viewer">
     <?php if ($file['is_image']): ?>
-        <img src="<?= $this->url->href('WikiFileViewController', 'image', $params, array('plugin' => 'wiki', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'], 'fid' => $file['id']) ?>" alt="<?= $this->text->e($file['name']) ?>">
+        <img src="<?= $this->url->href('WikiFileViewController', 'image', $params, array('plugin' => 'wiki', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'], 'file_id' => $file['id']) ?>" alt="<?= $this->text->e($file['name']) ?>">
     <?php elseif ($type === 'markdown'): ?>
         <article class="markdown">
             <?= $this->text->markdown($content) ?>
