@@ -38,6 +38,8 @@ class Plugin extends Base
         $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
 
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
+        
+        $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
         $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
