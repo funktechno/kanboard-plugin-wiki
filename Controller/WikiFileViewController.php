@@ -66,7 +66,7 @@ class WikiFileViewController extends BaseController
      */
     public function show()
     {
-        $file = $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
         $type = $this->helper->file->getPreviewType($file['name']);
         $params = array('file_id' => $file['id'], 'project_id' => $this->request->getIntegerParam('project_id'));
 
@@ -100,7 +100,7 @@ class WikiFileViewController extends BaseController
      */
     public function browser()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
         $this->renderFileWithCache($file, $this->helper->file->getBrowserViewType($file['name']));
     }
 
