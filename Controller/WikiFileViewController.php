@@ -5,12 +5,7 @@ namespace Kanboard\Plugin\Wiki\Controller;
 use Kanboard\Core\ObjectStorage\ObjectStorageException;
 use Kanboard\Controller\BaseController;
 
-/**
- * File Viewer Controller
- *
- * @package  Kanbaord\Controller
- * @author   Frederic Guillot
- */
+
 class WikiFileViewController extends BaseController
 {
     /**
@@ -66,7 +61,7 @@ class WikiFileViewController extends BaseController
      */
     public function show()
     {
-        $file = $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
+        $file = $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
         $type = $this->helper->file->getPreviewType($file['name']);
         $params = array('file_id' => $file['id'], 'project_id' => $this->request->getIntegerParam('project_id'));
 
