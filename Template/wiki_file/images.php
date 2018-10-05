@@ -5,11 +5,11 @@
                 <?= $this->app->component('image-slideshow', array(
                     'images' => $images,
                     'image' => $file,
-                    'regex' => 'FID',
+                    'regex' => 'FILE_ID',
                     'url' => array(
-                        'image' => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'], 'fid' => $file['id'])),
-                        'thumbnail' => $this->url->to('WikiFileViewController', 'thumbnail', array('plugin' => 'wiki', 'file_id' => 'FID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'], 'fid' => $file['id'])),
-                        'download' => $this->url->to('WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => 'FID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'], 'fid' => $file['id'])),
+                        'image' => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
+                        'thumbnail' => $this->url->to('WikiFileViewController', 'thumbnail', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
+                        'download' => $this->url->to('WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
                     )
                 )) ?>
 
@@ -19,7 +19,7 @@
                             <a href="#" class="dropdown-menu dropdown-menu-link-text" title="<?= $this->text->e($file['name']) ?>"><?= $this->text->e($file['name']) ?> <i class="fa fa-caret-down"></i></a>
                             <ul>
                                 <li>
-                                    <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'], 'fid' => $file['id'])) ?>
+                                    <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'wikipage_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'], 'file_id' => $file['id'])) ?>
                                 </li>
                                 <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                     <li>
