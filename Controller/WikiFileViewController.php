@@ -61,7 +61,7 @@ class WikiFileViewController extends BaseController
      */
     public function show()
     {
-        $file = $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
         $type = $this->helper->file->getPreviewType($file['name']);
         $params = array('file_id' => $file['id'], 'project_id' => $this->request->getIntegerParam('project_id'));
 
