@@ -5,12 +5,7 @@ namespace Kanboard\Plugin\Wiki\Controller;
 use Kanboard\Core\ObjectStorage\ObjectStorageException;
 use Kanboard\Controller\BaseController;
 
-/**
- * File Viewer Controller
- *
- * @package  Kanbaord\Controller
- * @author   Frederic Guillot
- */
+
 class WikiFileViewController extends BaseController
 {
     /**
@@ -66,7 +61,7 @@ class WikiFileViewController extends BaseController
      */
     public function show()
     {
-        $file = $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
         $type = $this->helper->file->getPreviewType($file['name']);
         $params = array('file_id' => $file['id'], 'project_id' => $this->request->getIntegerParam('project_id'));
 
@@ -89,7 +84,7 @@ class WikiFileViewController extends BaseController
      */
     public function image()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
         $this->renderFileWithCache($file, $this->helper->file->getImageMimeType($file['name']));
     }
 
@@ -111,7 +106,7 @@ class WikiFileViewController extends BaseController
      */
     public function thumbnail()
     {
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
         $model = 'wikiFile';
         $filename = $this->$model->getThumbnailPath($file['path']);
         $etag = md5($filename);
@@ -147,7 +142,7 @@ class WikiFileViewController extends BaseController
     public function download()
     {
         try {
-            $file = $this->wikiFile->getById($this->request->getIntegerParam('fid'));
+            $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
             $file['model'] = 'wikiFile';
             $this->response->withFileDownload($file['name']);
             $this->response->send();
