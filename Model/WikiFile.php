@@ -106,4 +106,8 @@ class WikiFile extends FileModel
         return null;
     }
     
+    protected function fireDestructionEvent($file_id)
+    {
+        return null;
+    }
 }
