@@ -54,5 +54,9 @@ return array(
     'There are no Wiki pages that you have access to.' => 'Il n\'y a pas de page wiki auxquelles vous avez accès.',
     'There are no Wiki pages for this project.' => 'Il n\'y a pas de page wiki pour ce projet.',
     'Wiki settings' => 'Paramètres Wiki',
-    'Editions\' settings' => 'Paramètres d\'édition'
+    'Editions\' settings' => 'Paramètres d\'édition',
+    'Saving Editions:' => 'Sauvegarde de l\'édition :',
+    'Switch Edition Saving' => 'Editer',
+    'true' => 'activé',
+    'false' => 'desactivé'
 );
