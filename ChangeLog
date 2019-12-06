@@ -1,3 +1,10 @@
+Version 0.3.1-alpha
+
+Improvements:
+
+* make config settings variable so that they can be translated
+* french translation improvements
+
 Version 0.3.0-alpha
 
 Improvements:
