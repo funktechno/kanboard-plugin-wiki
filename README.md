@@ -1,6 +1,8 @@
 Wiki Plugin for Kanboard
 ==============================
 
+Looking for contributors.
+
 Wiki to document projects
 
 [![Build Status](https://api.travis-ci.org/funktechno/kanboard-plugin-wiki.svg?branch=master)](https://travis-ci.org/funktechno/kanboard-plugin-wiki)
