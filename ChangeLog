@@ -1,5 +1,9 @@
 Version 0.3.1-alpha
 
+Bug fixes:
+
+* On remove Wiki page, also remove all associated files. Fixes #34.
+
 Improvements:
 
 * make config settings variable so that they can be translated
