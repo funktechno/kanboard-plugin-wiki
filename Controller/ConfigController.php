@@ -28,6 +28,10 @@ class ConfigController extends \Kanboard\Controller\ConfigController
     {
         $values =  $this->request->getValues();
 
+        if (!isset($values['persistEditions'])) {
+          $values['persistEditions'] = 0;
+        }
+
         if ($this->configModel->save($values)) {
             $this->flash->success(t('Settings saved successfully.'));
         } else {
