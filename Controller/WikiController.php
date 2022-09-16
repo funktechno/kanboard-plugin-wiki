@@ -351,7 +351,7 @@ class WikiController extends BaseController
         $project = $this->getProject();
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        // First delete all associated files, the delete the page itself.
+        // First delete all associated files, then delete the page itself.
         if ($this->wikiFile->removeAll($wiki_id) && $this->wiki->removepage($wiki_id)) {
             $this->flash->success(t('Wiki page removed successfully.'));
         } else {
