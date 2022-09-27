@@ -2,7 +2,7 @@ Version 0.3.1-alpha
 
 Bug fixes:
 
-* Setting 'Save editions' made changeable, stored permanently.
+* Setting 'Save editions' made changeable, stored permanently. Fixes #43.
 
 Improvements:
 
