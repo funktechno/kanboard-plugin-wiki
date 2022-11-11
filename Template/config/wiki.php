@@ -8,7 +8,7 @@
     <fieldset>
         <legend><?=t('Editions\' settings')?></legend>
         <h2><?=t('Saving Editions:')?> <?=$values['persistEditions'] == 1 ? t('true') : t('false') ?></h2>
-        <?=$this->form->checkbox('persistEditions', t('Switch Edition Saving'), $values['persistEditions'] == 1 ? 0 : 1, true)?>
+        <?=$this->form->checkbox('persistEditions', t('Switch Edition Saving'), 1, $values['persistEditions'] == 1)?>
     </fieldset>
 
     <div class="form-actions">
