@@ -3,6 +3,7 @@ Version 0.3.1-alpha
 Bug fixes:
 
 * On remove Wiki page, also remove all associated files. Fixes #34.
+* Setting 'Save editions' made changeable, stored permanently. Fixes #43.
 
 Improvements:
 
