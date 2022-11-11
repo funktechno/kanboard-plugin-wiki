@@ -134,6 +134,11 @@ class WikiController extends BaseController
             }
         }
 
+        // If the last wikipage was deleted, select the new last wikipage.
+        if (!isset($wikipage)) {
+          $wikipage = end($wikipages);
+        }
+
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
@@ -344,8 +349,10 @@ class WikiController extends BaseController
     {
         $this->checkCSRFParam();
         $project = $this->getProject();
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        if ($this->wiki->removepage($this->request->getIntegerParam('wiki_id'))) {
+        // First delete all associated files, then delete the page itself.
+        if ($this->wikiFile->removeAll($wiki_id) && $this->wiki->removepage($wiki_id)) {
             $this->flash->success(t('Wiki page removed successfully.'));
         } else {
             $this->flash->failure(t('Unable to remove this wiki page.'));
