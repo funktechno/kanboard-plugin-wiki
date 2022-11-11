@@ -22,6 +22,7 @@ This issue is:
 ### Configuration
 
 - Kanboard version:
+- Plugin version:
 - Database type and version:
 - PHP version:
 - OS:
