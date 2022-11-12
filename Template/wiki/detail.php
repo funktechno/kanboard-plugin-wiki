@@ -1,7 +1,13 @@
+<?php if (!$not_editable): ?>
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
+<?php endif ?>
 <div class="page-header">
     <h2>
-    <?= $this->url->link(t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
+    <?php if (!$not_editable): ?>
+        <?= $this->url->link(t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
+    <?php else: ?>
+        <?= $this->url->link(t('Wiki overview'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token'])) ?>
+    <?php endif ?>
     </h2>
 </div>
 
@@ -29,10 +35,14 @@
         <?php if (!empty($wikipages)): ?>
         <?php foreach ($wikipages as $page): ?>
 
-        <li class="wikipage" draggable="true">
-            <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
+        <li class="wikipage" <?php if (!$not_editable): ?>draggable="true"<?php endif ?>>
+            <?php if (!$not_editable): ?>
+                <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
 
-            <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
+                <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
+            <?php else: ?>    
+                <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
+            <?php endif ?>    
         </li>
 
 
@@ -42,9 +52,11 @@
             <?=t('There are no Wiki pages.')?>
         </li>
         <?php endif?>
+        <?php if (!$not_editable): ?>
         <li>
             <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
         </li>
+        <?php endif ?>  
 
     </ul>
 </div>
@@ -52,10 +64,11 @@
 <div class="column content">
 <div class="page-header">
     <h2><?=t($wikipage['title'])?></h2>
-    <?=$this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
-    <br>
-    <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-
+    <?php if (!$not_editable): ?>
+        <?=$this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
+        <br>
+        <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+    <?php endif ?>  
 </div>
 <ul class="panel">
     <?php if ($wikipage['creator_id'] > 0): ?>
@@ -79,6 +92,7 @@
     </article>
 <?php endif?>
 
+<?php if (!$not_editable): ?>
 <div class="page-header">
         <h2><?=t('Attachments')?></h2>
 </div>
@@ -99,6 +113,7 @@
         'images' => $images
     )) ?>
 <?php endif ?>
+<?php endif ?>  
 
 </div>
 

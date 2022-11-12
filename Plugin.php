@@ -11,9 +11,12 @@ class Plugin extends Base
     public function initialize()
     {
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
+        $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
 
+        // $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'readonly', 'wiki');
+        // dont think these are even currently used
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'editions', 'wiki');
