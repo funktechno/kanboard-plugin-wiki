@@ -3,6 +3,8 @@
 namespace Kanboard\Plugin\Wiki\Model;
 
 use Kanboard\Core\Base;
+use Kanboard\Core\Controller\PageNotFoundException;
+use Kanboard\Core\Controller\AccessForbiddenException;
 // use Kanboard\Model\WikiModel;
 use Kanboard\Model\UserModel;
 use SimpleValidator\Validator;
@@ -41,6 +43,15 @@ class Wiki extends Base
      * @var string
      */
     const WIKITABLE = 'wikipage';
+
+       /**
+     * Events
+     *
+     * @var string
+     */
+    const EVENT_UPDATE       = 'wikipage.update';
+    const EVENT_CREATE       = 'wikipage.create';
+    const EVENT_DELETE       = 'wikipage.delete';
     /**
      * Get all Wiki Pages by order for a project
      *
@@ -216,6 +227,11 @@ class Wiki extends Base
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();
         }
+        
+        $wikiEventJob = new WikiEventJob($this->container);
+        $wikiEventJob->executeWithId($paramvalues['id'], self::EVENT_DELETE);
+        // $wikiEventJob = new WikiEventJob($this->container);
+        // $wikiEventJob->execute($paramvalues['title'], $paramvalues['project_id'], $values, self::EVENT_UPDATE);
         $this->db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
 
         return (int) $paramvalues['id'];
@@ -249,6 +265,9 @@ class Wiki extends Base
         // $values['creator_id'] = $this->userSession->getId();
         //     $values['modifier_id'] = $this->userSession->getId();
         // date_modification
+        // TODO notification
+        $wikiEventJob = new WikiEventJob($this->container);
+        $wikiEventJob->execute($title, $project_id, $values, self::EVENT_CREATE);
 
         return $this->db->table(self::WIKITABLE)->persist($values);
 
@@ -380,6 +399,8 @@ class Wiki extends Base
      */
     public function removepage($wiki_id)
     {
+        $wikiEventJob = new WikiEventJob($this->container);
+        $wikiEventJob->executeWithId($wiki_id, self::EVENT_DELETE);
         return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
     }
     /**
