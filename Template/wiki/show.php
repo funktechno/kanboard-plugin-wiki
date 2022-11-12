@@ -9,6 +9,8 @@
             <br>
             <?= $this->url->icon('share-alt', t('Public link'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token']), false, '', '', true) ?>
         <?php endif ?>
+    <?php else: ?>
+        <?= $this->url->link(t('Board'), 'BoardViewController', 'readonly', array('token' => $project['token']), false, '', '', true) ?>
     <?php endif ?>
 </div>
 
