@@ -77,8 +77,8 @@ class WikiFile extends FileModel
         return $this->db
             ->table(self::TABLE)
             ->eq(self::TABLE.'.id', $file_id)
-            ->join(WikiModel::TABLE, 'id', 'wiki_id')
-            ->findOneColumn(WikiModel::TABLE . '.project_id') ?: 0;
+            ->join(Wiki::WIKITABLE, 'id', 'wiki_id')
+            ->findOneColumn(Wiki::WIKITABLE . '.project_id') ?: 0;
     }
 
     /**

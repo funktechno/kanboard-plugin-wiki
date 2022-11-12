@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Controller\BaseController;
+use Kanboard\Core\Controller\AccessForbiddenException;
 
 /**
  * Wiki
@@ -53,6 +54,24 @@ class WikiController extends BaseController
         )));
     }
 
+    public function readonly()
+    {
+        $token = $this->request->getStringParam('token');
+        $project = $this->projectModel->getByToken($token);
+
+        if (empty($project)) {
+            throw AccessForbiddenException::getInstance()->withoutLayout();
+        }
+
+        $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
+            'project' => $project,
+            'no_layout' => true,
+            'not_editable' => true,
+            'title' => $project['name'] .= " ". t('Wiki'),
+            'wikipages' => $this->wiki->getWikipages($project['id']),
+        ), 'wiki:wiki/sidebar'));
+    }
+
     /**
      * list for wikipages for a project
      */
@@ -66,7 +85,7 @@ class WikiController extends BaseController
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
-            'title' => t('Wiki'),
+            'title' => $project['name'] .= " ". t('Wiki'),
             'wikipages' => $this->wiki->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
 
@@ -117,12 +136,53 @@ class WikiController extends BaseController
         ), 'wiki:wiki/sidebar'));
     }
 
+    public function detail_readonly() {
+        $token = $this->request->getStringParam('token');
+        
+        $project = $this->projectModel->getByToken($token);
+
+        if (empty($project)) {
+            throw AccessForbiddenException::getInstance()->withoutLayout();
+        }
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
+
+        $wikipages = $this->wiki->getWikipages($project['id']);
+
+        foreach ($wikipages as $page) {
+            if (t($wiki_id) == t($page['id'])) {
+                $wikipage = $page;
+                break;
+            }
+        }
+
+        // If the last wikipage was deleted, select the new last wikipage.
+        if (!isset($wikipage)) {
+          $wikipage = end($wikipages);
+        }
+
+        // use a wiki helper for better side bar TODO:
+        $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
+            'project' => $project,
+            'title' => t('Wikipage'),
+            'wiki_id' => $wiki_id,
+            'wiki' => $wikipage,
+            'no_layout' => true,
+            'not_editable' => true,
+            'files' => $this->wikiFile->getAllDocuments($wiki_id),
+            'images' => $this->wikiFile->getAllImages($wiki_id),
+            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'wikipage' => $wikipage,
+            'wikipages' => $wikipages,
+        ), 'wiki:wiki/sidebar'));
+    }
+
     /**
      * details for single wiki page
      */
     public function detail()
     {
         $project = $this->getProject();
+        
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wiki->getWikipages($project['id']);
