@@ -36,16 +36,16 @@ Created
 Last modifier
 Modified -->
 
-        <table class="table-fixed table-stripped">
+        <table class="table-fixed table-stripped" style="width:100%">
             <tr>
                 <th><?=t('Title')?></th>
-                <th><?=t('Id')?></th>
-                <th><?=t('Editions')?></th>
-                <th><?=t('Current Edition')?></th>
-                <th><?=t('Creator')?></th>
-                <th><?=t('Created')?></th>
-                <th><?=t('Last modifier')?></th>
-                <th><?=t('Modified')?></th>
+                <th style="width:5%"><?=t('Id')?></th>
+                <th style="width:5%"><?=t('Editions')?></th>
+                <th style="width:5%"><?=t('Current Edition')?></th>
+                <th style="width:9%"><?=t('Creator')?></th>
+                <th style="width:9%"><?=t('Created')?></th>
+                <th style="width:12%"><?=t('Last modifier')?></th>
+                <th style="width:9%"><?=t('Modified')?></th>
             </tr>
             <?php foreach ($wikipages as $wikipage): ?>
             <tr>
