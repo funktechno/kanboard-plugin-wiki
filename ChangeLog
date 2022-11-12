@@ -1,3 +1,11 @@
+Version 0.3.2
+Improvements:
+
+* width updates to wiki table list
+* public mode
+* initialize notifications(?) maybe works
+* some syntax error fixes
+
 Version 0.3.1-alpha
 
 Bug fixes:
