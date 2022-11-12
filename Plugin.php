@@ -42,6 +42,8 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
         
+        $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
+        
         $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
@@ -90,7 +92,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.3.2';
+        return '0.3.3';
     }
 
     public function getPluginHomepage()
