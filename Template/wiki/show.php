@@ -1,8 +1,15 @@
+<?php if (!$not_editable): ?>
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
+<?php endif ?>
 <div class="page-header">
     <h2><?=t('Wiki overview')?></h2>
-    <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
-
+    <?php if (!$not_editable): ?>
+        <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
+        <?php if ($project['is_public']): ?>
+            <br>
+            <?= $this->url->icon('share-alt', t('Public link'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token']), false, '', '', true) ?>
+        <?php endif ?>
+    <?php endif ?>
 </div>
 
 <style>
@@ -50,9 +57,12 @@ Modified -->
             <?php foreach ($wikipages as $wikipage): ?>
             <tr>
                 <td>
-                <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-
-                <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+                <?php if (!$not_editable): ?>
+                    <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+                    <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+                <?php else: ?>    
+                    <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['id']))?>
+                <?php endif ?>    
                 </td>
                 <td><?=$wikipage['id']?></td>
                 <td><?=$wikipage['editions']?></td>
