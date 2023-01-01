@@ -31,7 +31,7 @@ class WikiController extends BaseController
 
 
         // echo json_encode($query->findAll());
-        // exit(); 
+        // exit();
         // $wikipages = $this->wiki->getWikipages($project['id']);
 
         $search = $this->request->getStringParam('search');
@@ -138,7 +138,6 @@ class WikiController extends BaseController
 
     public function detail_readonly() {
         $token = $this->request->getStringParam('token');
-        
         $project = $this->projectModel->getByToken($token);
 
         if (empty($project)) {
@@ -182,7 +181,6 @@ class WikiController extends BaseController
     public function detail()
     {
         $project = $this->getProject();
-        
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wiki->getWikipages($project['id']);
@@ -420,5 +418,4 @@ class WikiController extends BaseController
 
         $this->response->redirect($this->helper->url->to('WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])), true);
     }
-    
 }
