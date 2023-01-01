@@ -85,6 +85,8 @@ class WikiController extends BaseController
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
+            'no_layout' => false,
+            'not_editable' => false,
             'title' => $project['name'] .= " ". t('Wiki'),
             'wikipages' => $this->wiki->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
@@ -203,6 +205,8 @@ class WikiController extends BaseController
             'title' => t('Wikipage'),
             'wiki_id' => $wiki_id,
             'wiki' => $wikipage,
+            'no_layout' => false,
+            'not_editable' => false,
             'files' => $this->wikiFile->getAllDocuments($wiki_id),
             'images' => $this->wikiFile->getAllImages($wiki_id),
             // 'wikipage' => $this->wiki->getWikipage($wiki_id),
