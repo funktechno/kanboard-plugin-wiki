@@ -3,6 +3,10 @@ Improvements:
 
 * public wiki link to board
 
+Bug fixes:
+
+* Make pages editable when logged in. Fixes #56.
+
 Version 0.3.2
 Improvements:
 
