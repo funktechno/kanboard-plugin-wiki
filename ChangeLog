@@ -3,6 +3,11 @@ Improvements:
 
 * public wiki link to board
 
+Bug fixes:
+
+* Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/56
+* Fix `'max_size' => get_upload_max_size(),`
+
 Version 0.3.2
 Improvements:
 
