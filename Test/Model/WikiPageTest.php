@@ -33,8 +33,8 @@ class WikiPageTest extends Base
 
         $wikimodel = new Wiki($this->container);
         // create wiki pages
-        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Security", "Some content", '2015-01-01', 'Failed to a create wiki page on project'));
-        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Conventions", 'More content', 'Failed to an additional create wiki page on project'));
+        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Security", "Some content", '2015-01-01'), 'Failed to a create wiki page on project');
+        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Conventions", 'More content'), 'Failed to an additional create wiki page on project');
 
         // grab editions for first wiki page
         $editions = $wikimodel->getEditions(1);
