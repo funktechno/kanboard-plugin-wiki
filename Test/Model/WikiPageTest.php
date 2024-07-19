@@ -24,34 +24,34 @@ class WikiPageTest extends Base
     public function testCreation()
     {
         $wikimodel = new Wiki($this->container);
-        // $this->assertEquals(1, $wikimodel->createpage(1, "Security", "Some content", '2015-01-01'));
-        // $this->assertEquals(2, $wikimodel->createpage(1, "Conventions", 'More content'));
+        $this->assertEquals(1, $wikimodel->createpage(1, "Security", "Some content", '2015-01-01'));
+        $this->assertEquals(2, $wikimodel->createpage(1, "Conventions", 'More content'));
 
         
-        // $editions = $wikimodel->getEditions(1);
-        // $this->assertEmpty($editions);
+        $editions = $wikimodel->getEditions(1);
+        $this->assertEmpty($editions);
 
-        // $values = [
-        //     'title' => "Security",
-        //     'content' => "Some content",
-        // ];
+        $values = [
+            'title' => "Security",
+            'content' => "Some content",
+        ];
 
-        // $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1));
+        $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1));
 
         // createpage
 
         // $rates = $hr->getAllByUser(0);
         // $this->assertEmpty($rates);
 
-        // $editions = $wikimodel->getEditions(1);
-        // $this->assertNotEmpty($editions);
+        $editions = $wikimodel->getEditions(1);
+        $this->assertNotEmpty($editions);
         // $rates = $hr->getAllByUser(1);
         // $this->assertNotEmpty($rates);
         // $this->assertCount(1, $editions);
 
         // $this->assertEquals(42, $rates[0]['rate']);
-        // $this->assertEquals('Security', $editions[0]['title']);
-        // $this->assertEquals('Some content', $editions[0]['content']);
+        $this->assertEquals('Security', $editions[0]['title']);
+        $this->assertEquals('Some content', $editions[0]['content']);
 
         // $this->assertEquals('2015-02-01', date('Y-m-d', $rates[0]['date_effective']));
 
