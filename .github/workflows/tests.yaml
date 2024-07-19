@@ -38,7 +38,7 @@ jobs:
               echo "$FILE exists."
           fi
           export PATH="${PHPENV_ROOT}/bin:${PATH}"
-          eval "$(/home/runner/.phpenv-root/bin/phpenv init -)"
+          eval "$($PHPENV_ROOT/bin/phpenv init -)"
           exec $SHELL -l
 
           # source ~/.bash_profile
