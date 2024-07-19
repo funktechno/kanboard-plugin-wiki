@@ -30,7 +30,10 @@ jobs:
           php-version: ${{ matrix.php }}
 
       - name: install phpenv
-        run: curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | PHPENV_ROOT=$HOME/.phpenv-root bash
+        run: |
+          curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | PHPENV_ROOT=$HOME/.phpenv-root bash
+          echo 'export PATH="${PHPENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
+          exec $SHELL -l
 
       - name: Clone Kanboard repository
         run: git clone --depth 1 $KANBOARD_REPO
