@@ -1,0 +1,21 @@
+name: 'Unit Tests'
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run .travis.yml build script
+        uses: ktomk/run-travis-yml@v1
+        with:
+          file: .travis.yml
+          steps: |
+            install
+            script
+          allow-failure: false
+        env:
+          TRAVIS_PHP_VERSION: ${{ matrix.php-versions }}
