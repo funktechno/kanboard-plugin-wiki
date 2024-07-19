@@ -57,6 +57,9 @@ jobs:
       - name: Create symbolic link
         run: ln -s ${{ github.workspace }} kanboard/plugins/$PLUGIN
 
+        
+  # - phpenv config-add tests/php.ini
+
       - name: Install Composer dependencies
         run: |
           cd kanboard
