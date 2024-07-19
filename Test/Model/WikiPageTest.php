@@ -4,12 +4,22 @@ require_once 'tests/units/Base.php';
 
 use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Wiki\Model\Wiki;
+use Kanboard\Model\ProjectModel;
+use Kanboard\Core\User\UserSession;
+use Kanboard\Core\Security\AuthenticationManager;
+use Kanboard\Auth\DatabaseAuth;
 
 class WikiPageTest extends Base
 {
-    public function setUp()
+    /**
+     * @var Plugin
+     */
+    protected $plugin;
+
+    protected function setUp(): void
     {
         parent::setUp();
+        // $this->plugin = new Plugin($this->container);
 
         $plugin = new Loader($this->container);
         $plugin->scan();
@@ -17,52 +27,45 @@ class WikiPageTest extends Base
 
     public function testCreation()
     {
-        $wikimodel = new Wiki($this->container);
-        // $this->assertEquals(1, $wikimodel->createpage(1, "Security", "Some content", '2015-01-01'));
-        // $this->assertEquals(2, $wikimodel->createpage(1, "Conventions", 'More content'));
-
         
-        // $editions = $wikimodel->getEditions(1);
-        // $this->assertEmpty($editions);
+        $projectModel = new ProjectModel($this->container);
 
-        // $values = [
-        //     'title' => "Security",
-        //     'content' => "Some content",
-        // ];
+        $this->assertEquals($projectModel->create(array('name' => 'UnitTest')), 1, 'Failed to create project');
 
-        // $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1));
+        $project = $projectModel->getById(1);
 
-        // createpage
+        $wikimodel = new Wiki($this->container);
+        // create wiki pages
+        $this->assertEquals($wikimodel->createpage($project['id'], "Security", "Some content", '2015-01-01'), 1, 'Failed to a create wiki page on project');
+        $this->assertEquals($wikimodel->createpage($project['id'], "Conventions", 'More content'), 2, 'Failed to an additional create wiki page on project');
 
-        // $rates = $hr->getAllByUser(0);
-        // $this->assertEmpty($rates);
+        // grab editions for first wiki page
+        $editions = $wikimodel->getEditions(1);
+        $this->assertEmpty($editions);
 
-        // $editions = $wikimodel->getEditions(1);
-        // $this->assertNotEmpty($editions);
-        // $rates = $hr->getAllByUser(1);
-        // $this->assertNotEmpty($rates);
-        // $this->assertCount(1, $editions);
+        $values = [
+            'title' => "Security",
+            'content' => "Some content",
+        ];
 
-        // $this->assertEquals(42, $rates[0]['rate']);
-        // $this->assertEquals('Security', $editions[0]['title']);
-        // $this->assertEquals('Some content', $editions[0]['content']);
+        // create wiki page edition
+        
+        $authManager = new AuthenticationManager($this->container);
+        $authManager->register(new DatabaseAuth($this->container));
 
-        // $this->assertEquals('2015-02-01', date('Y-m-d', $rates[0]['date_effective']));
+        $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
 
-        // $this->assertEquals(32.4, $rates[1]['rate']);
-        // $this->assertEquals('EUR', $rates[1]['currency']);
-        // $this->assertEquals('2015-01-01', date('Y-m-d', $rates[1]['date_effective']));
+        $this->assertTrue($this->container['userSession']->isLogged(), 'Failed to login');
 
-        // $this->assertEquals(0, $hr->getCurrentRate(0));
-        // $this->assertEquals(42, $hr->getCurrentRate(1));
+        $this->userSession = new UserSession($this->container);
+        // result is not a consistent 1. is this true or id for new edition?
+        $createEditionResult = $wikimodel->createEdition($values, 1, 1);
+        // $this->assertEquals($wikimodel->createEdition($values, 1, 1), 1, 'Failed to create wiki edition');
 
-        // $this->assertTrue($wikimodel->removepage(1));
-        // $this->assertEquals(32.4, $hr->getCurrentRate(1));
+        $editions = $wikimodel->getEditions(1);
+        $this->assertNotEmpty($editions, 'Failed to get wiki editions');
 
-        // $this->assertTrue($hr->remove(1));
-        // $this->assertEquals(0, $hr->getCurrentRate(1));
-
-        // $rates = $hr->getAllByUser(1);
-        // $this->assertEmpty($rates);
+        $this->assertEquals('Security', $editions[0]['title']);
+        $this->assertEquals('Some content', $editions[0]['content']);
     }
 }
