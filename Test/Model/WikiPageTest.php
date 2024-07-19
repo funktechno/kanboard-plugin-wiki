@@ -4,6 +4,7 @@ require_once 'tests/units/Base.php';
 
 use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Wiki\Model\Wiki;
+use Kanboard\Model\ProjectModel;
 
 class WikiPageTest extends Base
 {
