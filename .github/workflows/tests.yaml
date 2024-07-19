@@ -41,7 +41,7 @@ jobs:
           eval "$($PHPENV_ROOT/bin/phpenv init -)"
           exec $SHELL -l
 
-          # source ~/.bash_profile
+      # source ~/.bash_profile
       # - name: ls $PHPENV_ROOT
       #   run: ls $PHPENV_ROOT
 
