@@ -7,13 +7,18 @@ use Kanboard\Plugin\Wiki\Model\Wiki;
 
 class WikiPageTest extends Base
 {
-    public function setUp()
+    /**
+     * @var Plugin
+     */
+    protected $plugin;
+
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->plugin = new Plugin($this->container);
+        // $this->plugin = new Plugin($this->container);
 
-        // $plugin = new Loader($this->container);
-        // $plugin->scan();
+        $plugin = new Loader($this->container);
+        $plugin->scan();
     }
 
     public function testCreation()
