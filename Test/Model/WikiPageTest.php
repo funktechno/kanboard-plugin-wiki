@@ -76,23 +76,25 @@ class WikiPageTest extends Base
         $project = $projectModel->getById(1);
 
         $wikimodel = new Wiki($this->container);
+
+        ]
         // create wiki pages
         $this->assertEquals($wikimodel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
         $this->assertEquals($wikimodel->createpage($project['id'], "Page 2", ""), 2, 'Failed to a create wiki page 2 on project');
         $this->assertEquals($wikimodel->createpage($project['id'], "Page 3", ""), 3, 'Failed to a create wiki page 3 on project');
         $this->assertEquals($wikimodel->createpage($project['id'], "Page 4", ""), 4, 'Failed to a create wiki page 4 on project');
-        $this->assertEquals($wikimodel->createpage($project['id'], "Page 5", ""), 4, 'Failed to a create wiki page 5 on project');
+        $this->assertEquals($wikimodel->createpage($project['id'], "Page 5", ""), 5, 'Failed to a create wiki page 5 on project');
 
         // reorder
         $wikimodel->reorderPages($project['id'], 5, 3);
 
-        $wikiPages = $wikimodel->getWikipages($project['id']);
-        $this->assertEquals(5, count($wikiPages));
-        $this->assertEquals($wikiPages[0]['ordercolumn'], 1, 'Failed to '. 0 . ' reorder');
-        $this->assertEquals($wikiPages[1]['ordercolumn'], 2, 'Failed to '. 1 . ' reorder');
-        $this->assertEquals($wikiPages[2]['ordercolumn'], 4, 'Failed to '. 2 . ' reorder');
-        $this->assertEquals($wikiPages[3]['ordercolumn'], 5, 'Failed to '. 3 . ' reorder');
-        $this->assertEquals($wikiPages[4]['ordercolumn'], 3, 'Failed to '. 4 . ' reorder');
+        $expectedColumnOrders = [1,2,4,5,3]
 
+        $wikiPages = $wikimodel->getWikipages($project['id']);
+        $this->assertEquals(count($expectedColumnOrders), count($wikiPages), 'expected column order count doesn\'t match pages');
+
+        for ($i=0; $i < count($expectedColumnOrders); $i++) { 
+            $this->assertEquals($wikiPages[$]['ordercolumn'], $expectedColumnOrders[$i], 'Failed to reorder '. $i);
+        }
     }
 }
