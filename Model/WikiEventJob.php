@@ -39,7 +39,11 @@ class WikiEventJob extends BaseJob
             ->buildEventWiki($wikiPage);
 
         if ($event !== null) {
-            $this->dispatcher->dispatch($eventName, $event);
+            if (APP_VERSION < '1.2.31') {
+                $this->dispatcher->dispatch($eventName, $event);
+            } else {
+                $this->dispatcher->dispatch($event, $eventName);
+            }
 
             // if ($eventName === Wiki::EVENT_CREATE) {
             //     $userMentionJob = $this->userMentionJob->withParams($event['comment']['comment'], Wiki::EVENT_USER_MENTION, $event);
@@ -55,8 +59,11 @@ class WikiEventJob extends BaseJob
             ->buildEvent();
 
         if ($event !== null) {
-            $this->dispatcher->dispatch($eventName, $event);
-
+            if (APP_VERSION < '1.2.31') {
+                $this->dispatcher->dispatch($eventName, $event);
+            } else {
+                $this->dispatcher->dispatch($event, $eventName);
+            }
             // if ($eventName === Wiki::EVENT_CREATE) {
             //     $userMentionJob = $this->userMentionJob->withParams($event['comment']['comment'], Wiki::EVENT_USER_MENTION, $event);
             //     $this->queueManager->push($userMentionJob);
