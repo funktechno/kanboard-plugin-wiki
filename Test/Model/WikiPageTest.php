@@ -49,12 +49,16 @@ class WikiPageTest extends Base
         ];
 
         // create wiki page edition
-        // $this->userSession = new UserSession($this->container);
         
         $authManager = new AuthenticationManager($this->container);
         $authManager->register(new DatabaseAuth($this->container));
 
         $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
+
+        $this->assertTrue($this->container['userSession']->isLogged());
+
+        $this->userSession = new UserSession($this->container);
+
         $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1), 'Failed to create wiki edition');
 
         $editions = $wikimodel->getEditions(1);
