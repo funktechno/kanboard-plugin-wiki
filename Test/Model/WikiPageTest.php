@@ -77,7 +77,6 @@ class WikiPageTest extends Base
 
         $wikimodel = new Wiki($this->container);
 
-        ]
         // create wiki pages
         $this->assertEquals($wikimodel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
         $this->assertEquals($wikimodel->createpage($project['id'], "Page 2", ""), 2, 'Failed to a create wiki page 2 on project');
