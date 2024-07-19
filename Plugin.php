@@ -42,6 +42,7 @@ class Plugin extends Base
         $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
 
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
+        $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
         
         $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
         
