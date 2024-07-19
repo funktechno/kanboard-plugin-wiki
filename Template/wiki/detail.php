@@ -1,3 +1,5 @@
+<?php (isset($not_editable)) ?: $not_editable = false;
+?>
 <?php if (!$not_editable): ?>
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>

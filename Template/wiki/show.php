@@ -1,3 +1,5 @@
+<?php (isset($not_editable)) ?: $not_editable = false;
+?>
 <?php if (!$not_editable): ?>
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
@@ -9,6 +11,8 @@
             <br>
             <?= $this->url->icon('share-alt', t('Public link'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token']), false, '', '', true) ?>
         <?php endif ?>
+    <?php else: ?>
+        <?= $this->url->link(t('Board'), 'BoardViewController', 'readonly', array('token' => $project['token']), false, '', '', true) ?>
     <?php endif ?>
 </div>
 
