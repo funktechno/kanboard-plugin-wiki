@@ -1,12 +1,14 @@
 Version 0.3.3
 Improvements:
 
+* mysql character set update for emojis
 * synfony deprecation fix
 * public wiki link to board
 * added Ukrainian translation
 
 Bug fixes:
 
+* Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/39
 * Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/60
 * Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/56
 * Fix `'max_size' => get_upload_max_size(),`

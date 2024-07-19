@@ -4,7 +4,18 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 8;
+const VERSION = 9;
+
+/**
+ * Allow unicode emojis in wikipages
+ * @param PDO $pdo
+ */
+function version_9(PDO $pdo)
+{
+    $pdo->exec('ALTER TABLE wikipage CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+    $pdo->exec('ALTER TABLE wikipage_editions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+    $pdo->exec('ALTER TABLE wikipage_has_files CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+}
 
 function version_8(PDO $pdo)
 {
