@@ -73,6 +73,7 @@ Note that you can only restore **saved** editions. So you if you have the global
 - [] ordering
   - [] drop down to switch
   - [] drag to move, require css magic
+- [] subpages and pagination
 - [x] fix wiki sidebar
   - use html template render properly to list wiki pages
     - still having difficulty getting template helper working, manually added for each page
