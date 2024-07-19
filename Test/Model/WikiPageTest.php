@@ -58,7 +58,7 @@ class WikiPageTest extends Base
         $this->assertTrue($this->container['userSession']->isLogged(), 'Failed to login');
 
         $this->userSession = new UserSession($this->container);
-
+        // result is not a consistent 1. is this true or id for new edition?
         $createEditionResult = $wikimodel->createEdition($values, 1, 1);
         // $this->assertEquals($wikimodel->createEdition($values, 1, 1), 1, 'Failed to create wiki edition');
 
