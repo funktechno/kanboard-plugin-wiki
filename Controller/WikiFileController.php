@@ -50,7 +50,7 @@ class WikiFileController extends BaseController
 
         $this->response->html($this->template->render('wiki:wiki_file/create', array(
             'wiki' => $wiki,
-            'max_size' => $this->helper->text->phpToBytes(get_upload_max_size()),
+            'max_size' => get_upload_max_size(),
         )));
     }
 
