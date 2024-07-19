@@ -55,11 +55,11 @@ class WikiPageTest extends Base
 
         $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
 
-        $this->assertTrue($this->container['userSession']->isLogged());
+        $this->assertTrue($this->container['userSession']->isLogged(), 'Failed to login');
 
         $this->userSession = new UserSession($this->container);
 
-        $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1), 'Failed to create wiki edition');
+        $this->assertEquals($wikimodel->createEdition($values, 1, 1), 1, 'Failed to create wiki edition');
 
         $editions = $wikimodel->getEditions(1);
         $this->assertNotEmpty($editions, 'Failed to get wiki editions');
