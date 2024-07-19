@@ -311,8 +311,11 @@ class Wiki extends Base
             //     $values['modifier_id'] = $this->userSession->getId();
             // date_modification
 
+            error_log('editionvalues: '.json_encode($editionvalues));
+
             return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
         } else {
+            error_log('persistEditions: '.json_encode($persistEditions));
             return null;
         }
 
