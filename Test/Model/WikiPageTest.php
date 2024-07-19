@@ -5,6 +5,9 @@ require_once 'tests/units/Base.php';
 use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Wiki\Model\Wiki;
 use Kanboard\Model\ProjectModel;
+use Kanboard\Core\User\UserSession;
+use Kanboard\Core\Security\AuthenticationManager;
+use Kanboard\Auth\DatabaseAuth;
 
 class WikiPageTest extends Base
 {
@@ -46,6 +49,12 @@ class WikiPageTest extends Base
         ];
 
         // create wiki page edition
+        // $this->userSession = new UserSession($this->container);
+        
+        $authManager = new AuthenticationManager($this->container);
+        $authManager->register(new DatabaseAuth($this->container));
+
+        $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
         $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1), 'Failed to create wiki edition');
 
         $editions = $wikimodel->getEditions(1);
