@@ -38,6 +38,62 @@ jQuery(document).ready(function () {
 
         // Don't do anything if dropping the same column we're dragging.
         if (dragSrcEl != this) {
+            
+            let targetRoute;
+            if(e.target.localName == "a"){
+                targetRoute = e.target.href
+            } else {
+                targetRoute = e.target.querySelector("a").href
+            }
+            let targetParams = new URL(targetRoute)
+            var targetProperties = {}
+            for (const [key, value] of targetParams.searchParams.entries()) {
+                targetProperties[key] = value
+            }
+            // console.log("targetProperties", targetProperties)
+            
+            var srcParams = new URL(dragSrcEl.querySelector("a").href)
+            var srcProperties = {}
+
+            for (const [key, value] of srcParams.searchParams.entries()) {
+                srcProperties[key] = value
+            }
+            // console.log("srcProperties", srcProperties)
+
+            let project_id = srcProperties["project_id"]
+
+            // console.log("project_id", project_id)
+
+            let request = {
+                "src_wiki_id": srcProperties["wiki_id"],
+                "target_wiki_id": targetProperties["wiki_id"]
+            }
+
+            console.log("request", request)
+
+            $.ajax({
+                cache: false,
+                url: $("#columns").data("reorder-url"),
+                contentType: "application/json",
+                type: "POST",
+                processData: false,
+                data: JSON.stringify(request),
+                success: function(data) {
+                    // self.refresh(data);
+                    // self.savingInProgress = false;
+                },
+                error: function() {
+                    // self.app.hideLoadingIcon();
+                    // self.savingInProgress = false;
+                },
+                statusCode: {
+                    403: function(data) {
+                        window.alert(data.responseJSON.message);
+                        document.location.reload(true);
+                    }
+                }
+            });
+
             // Set the source column's HTML to the HTML of the column we dropped on.
             //alert(this.outerHTML);
             //dragSrcEl.innerHTML = this.innerHTML;

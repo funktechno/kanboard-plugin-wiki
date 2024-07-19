@@ -70,9 +70,9 @@ Note that you can only restore **saved** editions. So you if you have the global
 - [x] editions listing and restore
   - Related issues: [#9](https://github.com/kanboard/kanboard/issues/9)
 - [x] finish edit
-- [] ordering
-  - [] drop down to switch
-  - [] drag to move, require css magic
+- [x] ordering
+  - [x] drop down to switch
+  - [x] drag to move, require css magic
 - [] subpages and pagination
 - [x] fix wiki sidebar
   - use html template render properly to list wiki pages

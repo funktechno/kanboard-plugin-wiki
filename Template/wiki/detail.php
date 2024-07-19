@@ -33,11 +33,11 @@
 </style>
 <div class="clearfix">
 <div class="sidebar column list">
-    <ul id="columns">
+    <ul id="columns" data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>">
         <?php if (!empty($wikipages)): ?>
         <?php foreach ($wikipages as $page): ?>
 
-        <li class="wikipage" <?php if (!$not_editable): ?>draggable="true"<?php endif ?>>
+        <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-id="<?=$page['id']?>" <?php if (!$not_editable): ?>draggable="true"<?php endif ?>>
             <?php if (!$not_editable): ?>
                 <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
 
