@@ -11,6 +11,7 @@ class Plugin extends Base
     public function initialize()
     {
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
+        $this->projectAccessMap->add('WikiAjaxController', '*', Role::PROJECT_MEMBER);
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
@@ -68,6 +69,9 @@ class Plugin extends Base
     public function getClasses()
     {
         return array(
+            'Plugin\Wiki\Controller' => [
+                'WikiAjaxController'
+            ],
             'Plugin\Wiki\Model' => array(
                 'Wiki',
                 'WikiFile'
@@ -92,7 +96,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.3.3';
+        return '0.3.4';
     }
 
     public function getPluginHomepage()

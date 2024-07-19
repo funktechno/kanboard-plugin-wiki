@@ -98,6 +98,52 @@ class Wiki extends Base
         // ->findOne();
     }
 
+    public function reorderPages($project_id, $src_wiki_id, $target_wiki_id){
+        // retrieve wiki pages
+        $wikiPages = $this->getWikipages($project_id);
+
+        // change order of each in for loop, move matching id to one before target
+        $orderColumn = 1;
+        $targetColumn = 1;
+        $oldSourceColumn = 1;
+        for ($i=0; $i < count($wikiPages); $i++) {
+            $oldOrderColumn = $wikiPages[$i]['ordercolumn'];
+            $id = $wikiPages[$i]['id'];
+            if($id == $target_wiki_id){
+                // add additional order column
+                $orderColumn++;
+                $targetColumn = $orderColumn;
+            }
+
+            if ($id == $src_wiki_id) {
+                $oldSourceColumn = $oldOrderColumn;
+            } else {
+                if ($oldOrderColumn != $orderColumn) {
+                    $this->savePagePosition($id, $orderColumn);
+                } 
+                $orderColumn++;
+            }
+        }
+
+        // update moved src
+        if($oldSourceColumn != $targetColumn -1){
+            $this->savePagePosition($src_wiki_id, $orderColumn);
+        }
+    }
+
+    public function savePagePosition($wiki_id, $orderColumn) {
+        $result = $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->update(array(
+            'ordercolumn' => $orderColumn
+        ));
+
+        if (! $result) {
+            $this->db->cancelTransaction();
+            return false;
+        }
+
+        return true;
+    }
+
 
 
     /**
@@ -229,7 +275,7 @@ class Wiki extends Base
         }
         
         $wikiEventJob = new WikiEventJob($this->container);
-        $wikiEventJob->executeWithId($paramvalues['id'], self::EVENT_DELETE);
+        $wikiEventJob->executeWithId($paramvalues['id'], self::EVENT_UPDATE);
         // $wikiEventJob = new WikiEventJob($this->container);
         // $wikiEventJob->execute($paramvalues['title'], $paramvalues['project_id'], $values, self::EVENT_UPDATE);
         $this->db->table(self::WIKITABLE)->eq('id', $paramvalues['id'])->update($values);
@@ -420,14 +466,6 @@ class Wiki extends Base
             ->eq('edition', $edition)
             ->eq('wikipage_id', $wiki_id)
             ->findOne(); // this may possibly not support joins
-
-        // $values = array(
-        //     'title' => $editionvalues['title'],
-        //     'current_edition' => $edition,
-        //     'content' => $editionvalues['title'],
-        //     'date_modification' => $date ?: date('Y-m-d'),
-        //     'modifier_id' => $this->userSession->getId(),
-        // );
 
         $values = [
             'title' => $editionvalues['title'],
