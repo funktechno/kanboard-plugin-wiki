@@ -10,9 +10,10 @@ class WikiPageTest extends Base
     public function setUp()
     {
         parent::setUp();
+        $this->plugin = new Plugin($this->container);
 
-        $plugin = new Loader($this->container);
-        $plugin->scan();
+        // $plugin = new Loader($this->container);
+        // $plugin->scan();
     }
 
     public function testCreation()
