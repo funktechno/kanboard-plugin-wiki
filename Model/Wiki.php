@@ -136,9 +136,9 @@ class Wiki extends Base
         // update moved src
         $targetColumn--;
         // echo "oldSourceColumn: " . $oldSourceColumn . " targetColumn: " . $targetColumn . "<br>";
-        if($oldSourceColumn != targetColumn){
+        if($oldSourceColumn != $targetColumn){
             // echo "updating src ". $src_wiki_id . " column to ". $targetColumn -1 . "<br>";
-            $result = $this->savePagePosition($src_wiki_id, $orderColumn);
+            $result = $this->savePagePosition($src_wiki_id, $targetColumn);
             if(!$result){
                 return false;
             }
