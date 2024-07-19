@@ -23,11 +23,18 @@ class WikiPageTest extends Base
 
     public function testCreation()
     {
-        $wikimodel = new Wiki($this->container);
-        $this->assertEquals(1, $wikimodel->createpage(1, "Security", "Some content", '2015-01-01'));
-        $this->assertEquals(2, $wikimodel->createpage(1, "Conventions", 'More content'));
-
         
+        $projectModel = new ProjectModel($this->container);
+
+        $this->assertEquals(1, $projectModel->create(array('name' => 'UnitTest')));
+
+        $project = $projectModel->getById(1);
+
+        $wikimodel = new Wiki($this->container);
+        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Security", "Some content", '2015-01-01'));
+        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Conventions", 'More content'));
+
+        // grab editions for first wiki page
         $editions = $wikimodel->getEditions(1);
         $this->assertEmpty($editions);
 
