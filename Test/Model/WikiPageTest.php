@@ -27,13 +27,14 @@ class WikiPageTest extends Base
         
         $projectModel = new ProjectModel($this->container);
 
-        $this->assertEquals(1, $projectModel->create(array('name' => 'UnitTest')));
+        $this->assertEquals(1, $projectModel->create(array('name' => 'UnitTest')), 'Failed to create project');
 
         $project = $projectModel->getById(1);
 
         $wikimodel = new Wiki($this->container);
-        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Security", "Some content", '2015-01-01'));
-        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Conventions", 'More content'));
+        // create wiki pages
+        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Security", "Some content", '2015-01-01', 'Failed to a create wiki page on project'));
+        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Conventions", 'More content', 'Failed to an additional create wiki page on project'));
 
         // grab editions for first wiki page
         $editions = $wikimodel->getEditions(1);
@@ -44,39 +45,13 @@ class WikiPageTest extends Base
             'content' => "Some content",
         ];
 
-        $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1));
-
-        // createpage
-
-        // $rates = $hr->getAllByUser(0);
-        // $this->assertEmpty($rates);
+        // create wiki page edition
+        $this->assertEquals(1, $wikimodel->createEdition($values, 1, 1), 'Failed to create wiki edition');
 
         $editions = $wikimodel->getEditions(1);
-        $this->assertNotEmpty($editions);
-        // $rates = $hr->getAllByUser(1);
-        // $this->assertNotEmpty($rates);
-        // $this->assertCount(1, $editions);
+        $this->assertNotEmpty($editions, 'Failed to get wiki editions');
 
-        // $this->assertEquals(42, $rates[0]['rate']);
         $this->assertEquals('Security', $editions[0]['title']);
         $this->assertEquals('Some content', $editions[0]['content']);
-
-        // $this->assertEquals('2015-02-01', date('Y-m-d', $rates[0]['date_effective']));
-
-        // $this->assertEquals(32.4, $rates[1]['rate']);
-        // $this->assertEquals('EUR', $rates[1]['currency']);
-        // $this->assertEquals('2015-01-01', date('Y-m-d', $rates[1]['date_effective']));
-
-        // $this->assertEquals(0, $hr->getCurrentRate(0));
-        // $this->assertEquals(42, $hr->getCurrentRate(1));
-
-        // $this->assertTrue($wikimodel->removepage(1));
-        // $this->assertEquals(32.4, $hr->getCurrentRate(1));
-
-        // $this->assertTrue($hr->remove(1));
-        // $this->assertEquals(0, $hr->getCurrentRate(1));
-
-        // $rates = $hr->getAllByUser(1);
-        // $this->assertEmpty($rates);
     }
 }
