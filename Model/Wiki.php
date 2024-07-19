@@ -102,6 +102,9 @@ class Wiki extends Base
         // retrieve wiki pages
         $wikiPages = $this->getWikipages($project_id);
 
+        // echo json_encode($wikiPages), true;
+
+        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " target_wiki_id: " . $target_wiki_id . "<br>";
         // change order of each in for loop, move matching id to one before target
         $orderColumn = 1;
         $targetColumn = 1;
@@ -114,21 +117,33 @@ class Wiki extends Base
                 $orderColumn++;
                 $targetColumn = $orderColumn;
             }
+            // echo " id: " . $id . " oldOrderColumn: " . $oldOrderColumn . " orderColumn: " . $orderColumn . "<br>";
 
             if ($id == $src_wiki_id) {
                 $oldSourceColumn = $oldOrderColumn;
             } else {
                 if ($oldOrderColumn != $orderColumn) {
-                    $this->savePagePosition($id, $orderColumn);
+                    // echo "updating ". $id ." column to ". $orderColumn . "<br>";
+                    $result = $this->savePagePosition($id, $orderColumn);
+                    if(!$result){
+                        return false;
+                    }
                 } 
-                $orderColumn++;
             }
+            $orderColumn++;
         }
 
         // update moved src
+        // echo "oldSourceColumn: " . $oldSourceColumn . " targetColumn: " . $targetColumn . "<br>";
         if($oldSourceColumn != $targetColumn -1){
-            $this->savePagePosition($src_wiki_id, $orderColumn);
+            // echo "updating src ". $src_wiki_id . " column to ". $targetColumn -1 . "<br>";
+            $result = $this->savePagePosition($src_wiki_id, $orderColumn -1);
+            if(!$result){
+                return false;
+            }
         }
+
+        return true;
     }
 
     public function savePagePosition($wiki_id, $orderColumn) {
