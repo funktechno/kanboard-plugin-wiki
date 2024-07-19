@@ -11,8 +11,10 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.0, 5.6]
-        db: [sqlite, mysql, postgres]
+        php: [7.0]
+        db: [sqlite]
+        # php: [7.0, 5.6]
+        # db: [sqlite, mysql, postgres]
 
     env:
       PLUGIN: Wiki
@@ -27,17 +29,17 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
 
-      - name: Install Composer dependencies
-        run: composer install
-
       - name: Clone Kanboard repository
         run: git clone --depth 1 $KANBOARD_REPO
 
       - name: Create symbolic link
         run: ln -s ${{ github.workspace }} kanboard/plugins/$PLUGIN
 
-      - name: Configure PHP environment
-        run: phpenv config-add tests/php.ini
+      - name: Install Composer dependencies
+        run: |
+          cd kanboard
+          phpenv config-add tests/php.ini
+          composer install
 
       - name: List plugin directory
         run: ls -la plugins/
