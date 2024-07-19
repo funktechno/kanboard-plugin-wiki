@@ -63,7 +63,6 @@ jobs:
       - name: Install Composer dependencies
         run: |
           cd kanboard
-          phpenv config-add tests/php.ini
           composer install
 
       - name: List plugin directory
