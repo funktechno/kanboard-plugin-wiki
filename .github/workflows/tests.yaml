@@ -33,6 +33,11 @@ jobs:
         run: |
           curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | PHPENV_ROOT=$HOME/.phpenv-root bash
           echo 'export PATH="${PHPENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
+          FILE="$PHPENV_ROOT/bin/phpenv"
+          if [ -f "$FILE" ]; then
+              echo "$FILE exists."
+          fi
+
           source ~/.bash_profile
           export PATH="${PHPENV_ROOT}/bin:${PATH}"
           eval "$(/home/runner/.phpenv-root/bin/phpenv init -)"
