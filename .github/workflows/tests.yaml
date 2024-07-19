@@ -32,6 +32,8 @@ jobs:
       - name: install phpenv
         run: |
           curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | PHPENV_ROOT=$HOME/.phpenv-root bash
+          ls $PHPENV_ROOT
+          ls $PHPENV_ROOT/bin
           echo 'export PATH="${PHPENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
           export PATH="${PHPENV_ROOT}/bin:${PATH}"
           eval "$(phpenv init -)"
