@@ -1,6 +1,8 @@
 jQuery(document).ready(function () {
     var dragSrcEl = null;
 
+    // original example
+    // https://web.dev/articles/drag-and-drop
     function handleDragStart(e) {
         // Target (this) element is the source node.
         dragSrcEl = this;
