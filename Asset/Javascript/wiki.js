@@ -1,6 +1,13 @@
 jQuery(document).ready(function () {
     var dragSrcEl = null;
 
+    /* TODO: nesting support? 
+        * use sortable js
+        * jquery ui sortable? 
+        * auto scroll for long lists
+        * raw javascript:https://www.cssscript.com/sort-nested-list/
+    */
+
     // original example
     // https://web.dev/articles/drag-and-drop
     function handleDragStart(e) {
