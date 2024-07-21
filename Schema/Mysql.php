@@ -4,7 +4,14 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 9;
+const VERSION = 10;
+
+function version_10(PDO $pdo)
+{
+    $pdo->exec("ALTER TABLE wikipage ADD COLUMN parent_id int(11) NULL");
+    // FK
+    $pdo->exec("ALTER TABLE wikipage ADD FOREIGN KEY (parent_id) REFERENCES wikipage (id)");
+}
 
 /**
  * Allow unicode emojis in wikipages
