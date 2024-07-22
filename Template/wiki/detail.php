@@ -34,12 +34,10 @@
 <div class="clearfix">
 <div class="sidebar column list">
     <?php if (!empty($wikipages)): ?>
-    <ul id="columns" data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>">
+    <ul id="columns" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
         
         <?php foreach ($wikipages as $page): ?>
-            <!-- draggable="true" -->
-            <!-- <?php if (!$not_editable): ?><?php endif ?> -->
-            <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-id="<?=$page['id']?>">
+            <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-order="<?=$page['ordercolumn']?>" data-page-id="<?=$page['id']?>">
                 <?php if (!$not_editable): ?>
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
 
@@ -48,9 +46,7 @@
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
                 <?php endif ?>    
                  <?php if (count($page['children']) > 0): ?>
-                    <ul>
-                        <?=$this->wikiHelper->renderChildren($page['children'], $project, $not_editable)?>
-                    </ul>
+                    <?=$this->wikiHelper->renderChildren($page['children'], $page['id'], $project, $not_editable)?>
                 <?php endif ?>
             </li>
 
@@ -133,7 +129,7 @@
         'images' => $images
     )) ?>
 <?php endif ?>
-<?php endif ?>  
+<?php endif ?>
 
 </div>
 
