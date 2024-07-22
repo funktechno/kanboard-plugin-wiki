@@ -1,11 +1,20 @@
-[draggable] {
+/* [draggable] {
 -moz-user-select: none;
 -khtml-user-select: none;
 -webkit-user-select: none;
 user-select: none;
-/* Required to make elements draggable in old WebKit */
 -khtml-user-drag: element;
 -webkit-user-drag: element;
+} */
+
+body.dragging, body.dragging * {
+cursor: move !important;
+}
+  
+.dragged {
+    position: absolute;
+    opacity: 0.5;
+    z-index: 2000;
 }
 
 #columns {
@@ -17,7 +26,7 @@ width: 162px;
 padding-bottom: 5px;
 padding-top: 5px;
 text-align: left;
-cursor: move;
+/* cursor: move; */
 }
 .wikipage header {
 height: 20px;
@@ -52,4 +61,8 @@ width: 25%;
 }
 .content {
 width: 75%;
+}
+
+.sidebar>ul li:last-child {
+    margin-bottom: 0px;
 }
