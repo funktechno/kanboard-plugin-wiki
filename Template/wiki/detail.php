@@ -38,8 +38,8 @@
         
         <?php foreach ($wikipages as $page): ?>
             <!-- draggable="true" -->
-            <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-id="<?=$page['id']?>" <?php if (!$not_editable): ?><?php endif ?>>
-                <!-- <div> -->
+            <!-- <?php if (!$not_editable): ?><?php endif ?> -->
+            <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-id="<?=$page['id']?>">
                 <?php if (!$not_editable): ?>
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
 
@@ -47,7 +47,11 @@
                 <?php else: ?>    
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
                 <?php endif ?>    
-                <!-- </div> -->
+                 <?php if (count($page['children']) > 0): ?>
+                    <ul>
+                        <?=$this->wikiHelper->renderChildren($page['children'], $project, $not_editable)?>
+                    </ul>
+                <?php endif ?>
             </li>
 
     
@@ -76,7 +80,7 @@
     <h2><?=t($wikipage['title'])?></h2>
     <?php if(isset($wikipage['parent_id'])): ?>
         <?=$this->form->label(t('is a child of'), 'is a child of')?>
-        <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?=$this->url->link(t($wikipage['parent_id']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
         <br>
         <br>
     <?php endif ?>

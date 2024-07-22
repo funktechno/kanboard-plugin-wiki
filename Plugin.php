@@ -57,7 +57,7 @@ class Plugin extends Base
         // $this->layout->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
         // $this->helper->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
 
-        // $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
         
 
     }
