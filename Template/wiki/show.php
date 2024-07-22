@@ -49,8 +49,9 @@ Modified -->
 
         <table class="table-fixed table-stripped" style="width:100%">
             <tr>
-                <th><?=t('Title')?></th>
+                <th style="width:10%"><?=t('Title')?></th>
                 <th style="width:5%"><?=t('Id')?></th>
+                <th style="width:5%"><?=t('is a child of')?></th>
                 <th style="width:5%"><?=t('Editions')?></th>
                 <th style="width:5%"><?=t('Current Edition')?></th>
                 <th style="width:9%"><?=t('Creator')?></th>
@@ -64,11 +65,20 @@ Modified -->
                 <?php if (!$not_editable): ?>
                     <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
                     <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-                <?php else: ?>    
+                <?php else: ?>
                     <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['id']))?>
-                <?php endif ?>    
+                <?php endif ?>
                 </td>
-                <td><?=$wikipage['id']?></td>
+                <td>
+                    <?=$wikipage['id']?>
+                </td>
+                <td>
+                    <?php if (!$not_editable): ?>
+                    <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+                    <?php else: ?>
+                        <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+                    <?php endif ?>
+                </td>
                 <td><?=$wikipage['editions']?></td>
                 <td><?=$wikipage['current_edition']?></td>
                 <td><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></td>

@@ -4,7 +4,70 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 3;
+const VERSION = 4;
+
+function version_4(PDO $pdo)
+{
+    $pdo->exec("ALTER TABLE wikipage ADD COLUMN parent_id INTEGER NULL");
+    // FK
+    $pdo->exec('
+    PRAGMA foreign_keys = 0;
+
+    CREATE TABLE wikipage_temp_table AS SELECT * FROM wikipage;
+    DROP TABLE wikipage;
+
+    CREATE TABLE wikipage (
+        id                INTEGER,
+        project_id        INTEGER       NOT NULL,
+        title             VARCHAR (255) NOT NULL,
+        content           TEXT          DEFAULT 1,
+        is_active         INT (4)       DEFAULT 1,
+        creator_id        INT (11)      DEFAULT 0,
+        modifier_id       INT (11),
+        date_creation     INTEGER,
+        date_modification INTEGER,
+        ordercolumn       INTEGER       DEFAULT 1,
+        editions          INTEGER       DEFAULT 1,
+        current_edition   INTEGER       DEFAULT 1,
+        parent_id         INTEGER       REFERENCES wikipage (id),
+        FOREIGN KEY (project_id) REFERENCES projects (id),
+        PRIMARY KEY (id AUTOINCREMENT)
+    );
+
+    INSERT INTO wikipage (
+        id,
+        project_id,
+        title,
+        content,
+        is_active,
+        creator_id,
+        modifier_id,
+        date_creation,
+        date_modification,
+        ordercolumn,
+        editions,
+        current_edition,
+        parent_id
+    )
+    SELECT id,
+        project_id,
+        title,
+        content,
+        is_active,
+        creator_id,
+        modifier_id,
+        date_creation,
+        date_modification,
+        ordercolumn,
+        editions,
+        current_edition,
+        parent_id
+    FROM wikipage_temp_table;
+
+    DROP TABLE wikipage_temp_table;
+
+    PRAGMA foreign_keys = 1;');
+}
 
 function version_3(PDO $pdo)
 {
