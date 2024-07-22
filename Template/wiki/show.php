@@ -65,12 +65,19 @@ Modified -->
                 <?php if (!$not_editable): ?>
                     <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
                     <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-                <?php else: ?>    
+                <?php else: ?>
                     <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['id']))?>
-                <?php endif ?>    
+                <?php endif ?>
                 </td>
                 <td>
-                    <?=$this->url->link(t($wikipage['parent_id']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+                    <?=$wikipage['id']?>
+                </td>
+                <td>
+                    <?php if (!$not_editable): ?>
+                    <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+                    <?php else: ?>
+                        <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+                    <?php endif ?>
                 </td>
                 <td><?=$wikipage['editions']?></td>
                 <td><?=$wikipage['current_edition']?></td>
