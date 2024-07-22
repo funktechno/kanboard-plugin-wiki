@@ -52,6 +52,76 @@ class Wiki extends Base
     const EVENT_UPDATE       = 'wikipage.update';
     const EVENT_CREATE       = 'wikipage.create';
     const EVENT_DELETE       = 'wikipage.delete';
+    
+
+    /**
+     * retrieve wikipages by parent id
+     * @param mixed $project_id
+     * @param mixed $parent_id
+     * @return mixed
+     */
+    function getWikiPagesByParentId($project_id, $parent_id){
+        if(isset ($parent_id)){
+            return $this->db
+            ->table(self::WIKITABLE)
+            ->columns(
+                'c.name as creator_name',
+                'c.username as creator_username',
+                'mod.name as modifier_name',
+                'mod.username as modifier_username',
+                self::WIKITABLE . '.id',
+                self::WIKITABLE . '.title',
+                self::WIKITABLE . '.parent_id',
+                self::WIKITABLE . '.content',
+                self::WIKITABLE . '.project_id',
+                self::WIKITABLE . '.is_active',
+                self::WIKITABLE . '.ordercolumn',
+                self::WIKITABLE . '.creator_id',
+                self::WIKITABLE . '.date_creation',
+                self::WIKITABLE . '.date_modification',
+                self::WIKITABLE . '.editions',
+                self::WIKITABLE . '.current_edition',
+                self::WIKITABLE . '.modifier_id'
+            )
+            ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+            ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+            ->eq('project_id', $project_id)
+            ->eq('parent_id', $parent_id)
+            ->asc('parent_id')
+            ->asc('ordercolumn')
+            ->findAll();
+        }
+        else {
+            return $this->db
+                ->table(self::WIKITABLE)
+                ->columns(
+                    'c.name as creator_name',
+                    'c.username as creator_username',
+                    'mod.name as modifier_name',
+                    'mod.username as modifier_username',
+                    self::WIKITABLE . '.id',
+                    self::WIKITABLE . '.title',
+                    self::WIKITABLE . '.parent_id',
+                    self::WIKITABLE . '.content',
+                    self::WIKITABLE . '.project_id',
+                    self::WIKITABLE . '.is_active',
+                    self::WIKITABLE . '.ordercolumn',
+                    self::WIKITABLE . '.creator_id',
+                    self::WIKITABLE . '.date_creation',
+                    self::WIKITABLE . '.date_modification',
+                    self::WIKITABLE . '.editions',
+                    self::WIKITABLE . '.current_edition',
+                    self::WIKITABLE . '.modifier_id'
+                )
+                ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
+                ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
+                ->eq('project_id', $project_id)
+                ->isNull('parent_id')
+                ->asc('parent_id')
+                ->asc('ordercolumn')
+                ->findAll();
+        }
+    }
     /**
      * Get all Wiki Pages by order for a project
      *
@@ -73,6 +143,7 @@ class Wiki extends Base
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.parent_id',
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
@@ -89,13 +160,71 @@ class Wiki extends Base
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
-            ->asc('ordercolumn')->findAll();
+            ->asc('parent_id')
+            ->asc('ordercolumn')
+            ->findAll();
 
         // return $this->db->table(self::TABLE)
         // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
         // ->eq(self::TABLE.'.id', $project_id)
         // ->join(UserModel::TABLE, 'id', 'owner_id')
         // ->findOne();
+    }
+
+    public function reorderPagesByIndex($project_id, $src_wiki_id, $index, $parent_id){
+        // retrieve wiki pages
+        $wikiPages = $this->getWikiPagesByParentId($project_id, $parent_id);
+
+        // echo json_encode($wikiPages), true;
+
+        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " index: " . 
+            $index . " parent_id: " . $parent_id ." count list: " . count($wikiPages) . "<br>";
+        // change order of each in for loop, move matching id to one before target
+        $orderColumn = 0;
+        $oldSourceColumn = 1;
+        $oldParentId = 0;
+        // disable save if list is empty
+        if(empty($wikiPages)){
+            return false;
+        }
+        for ($i=0; $i < count($wikiPages); $i++) {
+            $oldOrderColumn = $wikiPages[$i]['ordercolumn'];
+            $id = $wikiPages[$i]['id'];
+            // increment by 1 if index matches
+            if($orderColumn == $index && $id != $src_wiki_id){
+                // add additional order column
+                $orderColumn++;
+            }
+            // echo " id: " . $id . " oldOrderColumn: " . $oldOrderColumn . " orderColumn: " . $orderColumn . "<br>";
+
+            if ($id == $src_wiki_id) {
+                $oldSourceColumn = $oldOrderColumn;
+                $oldParentId = $wikiPages[$i]['parent_id'];
+            } else {
+                if ($oldOrderColumn != $orderColumn) {
+                    // echo "updating ". $id ." column to ". $orderColumn . "<br>";
+                    $result = $this->savePagePosition($id, $orderColumn, $wikiPages[$i]['parent_id'] ?? null);
+                    if(!$result){
+                        // echo "Error: ". $id ." column not updated to ". $orderColumn . "<br>";
+                        return false;
+                    }
+                }
+            }
+            $orderColumn++;
+        }
+
+        // update moved src
+        // echo "oldSourceColumn: " . $oldSourceColumn . " index: " . $index . "<br>";
+        if($oldSourceColumn != $index || $oldParentId != $parent_id){
+            // echo "updating src ". $src_wiki_id . " column to ". $targetColumn -1 . "<br>";
+            $result = $this->savePagePosition($src_wiki_id, $index, $parent_id ?? null);
+            if(!$result){
+                // echo "Error: ". $src_wiki_id ." column not updated to ". $index . "<br>";
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function reorderPages($project_id, $src_wiki_id, $target_wiki_id){
@@ -109,6 +238,7 @@ class Wiki extends Base
         $orderColumn = 1;
         $targetColumn = 1;
         $oldSourceColumn = 1;
+        $oldParentId = 0;
         for ($i=0; $i < count($wikiPages); $i++) {
             $oldOrderColumn = $wikiPages[$i]['ordercolumn'];
             $id = $wikiPages[$i]['id'];
@@ -121,10 +251,11 @@ class Wiki extends Base
 
             if ($id == $src_wiki_id) {
                 $oldSourceColumn = $oldOrderColumn;
+                $oldParentId = $wikiPages[$i]['parent_id'];
             } else {
                 if ($oldOrderColumn != $orderColumn) {
                     // echo "updating ". $id ." column to ". $orderColumn . "<br>";
-                    $result = $this->savePagePosition($id, $orderColumn);
+                    $result = $this->savePagePosition($id, $orderColumn, $wikiPages[$i]['parent_id']);
                     if(!$result){
                         return false;
                     }
@@ -138,7 +269,7 @@ class Wiki extends Base
         // echo "oldSourceColumn: " . $oldSourceColumn . " targetColumn: " . $targetColumn . "<br>";
         if($oldSourceColumn != $targetColumn){
             // echo "updating src ". $src_wiki_id . " column to ". $targetColumn -1 . "<br>";
-            $result = $this->savePagePosition($src_wiki_id, $targetColumn);
+            $result = $this->savePagePosition($src_wiki_id, $targetColumn, $oldParentId);
             if(!$result){
                 return false;
             }
@@ -146,10 +277,17 @@ class Wiki extends Base
 
         return true;
     }
-
-    public function savePagePosition($wiki_id, $orderColumn) {
+    /**
+     * update page position and parent id
+     * @param mixed $wiki_id
+     * @param mixed $orderColumn
+     * @param mixed $parent_id
+     * @return bool
+     */
+    public function savePagePosition($wiki_id, $orderColumn, $parent_id) {
         $result = $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->update(array(
-            'ordercolumn' => $orderColumn
+            'ordercolumn' => $orderColumn,
+            'parent_id' => $parent_id
         ));
 
         if (! $result) {
@@ -221,6 +359,7 @@ class Wiki extends Base
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.parent_id',
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.ordercolumn',
@@ -284,7 +423,14 @@ class Wiki extends Base
             'content' => $paramvalues['content'],
             'current_edition' => $editions,
             'date_modification' => $date ?: date('Y-m-d'),
+            // 'parent_id' => $paramvalues['parent_id']
         ];
+
+        if(isset($paramvalues['parent_id']) && $paramvalues['parent_id'] != '') {
+            $values['parent_id'] = $paramvalues['parent_id'];
+        } else {
+            $values['parent_id'] = null;
+        }
 
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();

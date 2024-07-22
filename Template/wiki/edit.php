@@ -12,6 +12,9 @@
     <?=$this->form->label(t('Title'), 'title')?>
     <?=$this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus', 'tabindex="1"'))?>
 
+    <?=$this->form->label(t('is a child of'), 'is a child of')?>
+    <?=$this->form->select('parent_id', $wiki_list, $values, $errors) ?>
+
     <?=$this->form->label(t('Content'), 'content')?>
     <?=$this->form->textEditor('content', $values, $errors)?>
 

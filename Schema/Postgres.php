@@ -4,7 +4,14 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 3;
+const VERSION = 4;
+
+function version_4(PDO $pdo)
+{
+    $pdo->exec("ALTER TABLE wikipage ADD COLUMN parent_id INTEGER NULL");
+    // FK
+    $pdo->exec("ALTER TABLE wikipage ADD FOREIGN KEY (parent_id) REFERENCES wikipage (id)");
+}
 
 function version_3(PDO $pdo)
 {
