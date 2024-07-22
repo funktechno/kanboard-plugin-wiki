@@ -76,7 +76,11 @@
     <h2><?=t($wikipage['title'])?></h2>
     <?php if(isset($wikipage['parent_id'])): ?>
         <?=$this->form->label(t('is a child of'), 'is a child of')?>
-        <?=$this->url->link(t($wikipage['parent_id']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php if (!$not_editable): ?>
+            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php else: ?>
+            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php endif ?>
         <br>
         <br>
     <?php endif ?>
