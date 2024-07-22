@@ -127,11 +127,22 @@ class WikiController extends BaseController
         //     $values['date_modification'] = date('Y-m-d');
         // }
 
+        $wikipages = $this->wiki->getWikipages($editwiki['project_id']);
+
+        $wiki_list = array('' => t('None'));
+
+        foreach ($wikipages as $page) {
+            if (t($wiki_id) != t($page['id'])) {
+                $wiki_list[$page['id']] = $page['title'];
+            }
+        }
+
         // $values['wikipage']
         $this->response->html($this->helper->layout->app('wiki:wiki/edit', array(
             'wiki_id' => $wiki_id,
             'values' => $editwiki,
             'errors' => $errors,
+            'wiki_list' => $wiki_list,
             'title' => t('Edit Wikipage'),
         ), 'wiki:wiki/sidebar'));
     }
