@@ -48,6 +48,7 @@ class Plugin extends Base
         $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
+        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
         $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
 
 
@@ -56,7 +57,7 @@ class Plugin extends Base
         // $this->layout->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
         // $this->helper->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
 
-        // $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
         
 
     }
@@ -96,7 +97,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.3.4';
+        return '0.3.5';
     }
 
     public function getPluginHomepage()

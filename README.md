@@ -73,12 +73,12 @@ Note that you can only restore **saved** editions. So you if you have the global
 - [x] ordering
   - [x] drop down to switch
   - [x] drag to move, require css magic
-- [] subpages and pagination
+- [x] subpages and pagination
 - [x] fix wiki sidebar
   - use html template render properly to list wiki pages
     - still having difficulty getting template helper working, manually added for each page
 - [x] get rid of additional old budget plugin code
-- [] kanboard rest api support
+- [] kanboard rest api support - by request
 - [] translations, maybe buttons, won't be translating "Wiki" for most languages
   - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13), [#12](https://github.com/kanboard/kanboard/issues/12), [#10](https://github.com/kanboard/kanboard/issues/10)
 - [] active, archived wikipages?
