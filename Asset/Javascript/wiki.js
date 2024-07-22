@@ -1,12 +1,15 @@
 jQuery(document).ready(function () {
+    /*
     var dragSrcEl = null;
 
-    /* TODO: nesting support? 
-        * use sortable js
-        * jquery ui sortable? 
-        * auto scroll for long lists
-        * raw javascript:https://www.cssscript.com/sort-nested-list/
-    */
+    //  TODO: nesting support? 
+    //     * use sortable js
+    //     * jquery ui sortable? 
+    //     * auto scroll for long lists
+    //     * raw javascript:https://www.cssscript.com/sort-nested-list/
+    // attempt to do sortable with no new dependencies, need nested support 
+    // https://stackoverflow.com/questions/3308672/sortable-nested-lists-with-jquery-ui-1-8-2
+    
 
     // original example
     // https://web.dev/articles/drag-and-drop
@@ -122,9 +125,9 @@ jQuery(document).ready(function () {
         // this/e.target is the source node.
         this.classList.remove('over');
 
-        /*[].forEach.call(cols, function (col) {
-          col.classList.remove('over');
-        });*/
+        // [].forEach.call(cols, function (col) {
+        //   col.classList.remove('over');
+        // });
     }
 
     function addDnDHandlers(elem) {
@@ -139,5 +142,56 @@ jQuery(document).ready(function () {
 
     var cols = document.querySelectorAll('#columns .wikipage');
     [].forEach.call(cols, addDnDHandlers);
+    */
+    // debugger;
+    // var list = 
+    jQuery('#columns').sortable({
+        change: function( event, ui ) {
 
+            // console.log("change", event, ui)
+        },
+        
+        update: function( event, ui ) {
+            console.log("update", event, ui)
+
+            
+            // let targetRoute;
+            // if(e.target.localName == "a"){
+            //     targetRoute = e.target.href
+            // } else {
+            //     targetRoute = e.target.querySelector("a").href
+            // }
+            // let targetParams = new URL(targetRoute)
+            // var targetProperties = {}
+            // for (const [key, value] of targetParams.searchParams.entries()) {
+            //     targetProperties[key] = value
+            // }
+            // console.log("targetProperties", targetProperties)
+            
+            var srcParams = new URL(ui.item[0].querySelector("a").href)
+            var srcProperties = {}
+
+            for (const [key, value] of srcParams.searchParams.entries()) {
+                srcProperties[key] = value
+            }
+            // console.log("srcProperties", srcProperties)
+
+            let project_id = srcProperties["project_id"]
+
+            // console.log("project_id", project_id)
+
+            let request = {
+                "src_wiki_id": srcProperties["wiki_id"],
+                "index": ui.item.index()
+                // "target_wiki_id": targetProperties["wiki_id"]
+            }
+            // grab 2nd index item from list, or update api
+
+            console.log("request", request)
+        }
+    })
+    //     {
+    //     items: 'li',
+    //     toleranceElement: '> div'
+    //   });
 });
