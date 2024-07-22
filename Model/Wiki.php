@@ -73,6 +73,7 @@ class Wiki extends Base
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.parent_id',
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.is_active',
@@ -221,6 +222,7 @@ class Wiki extends Base
                 // UserModel::TABLE . '.username as modifier_username',
                 self::WIKITABLE . '.id',
                 self::WIKITABLE . '.title',
+                self::WIKITABLE . '.parent_id',
                 self::WIKITABLE . '.content',
                 self::WIKITABLE . '.project_id',
                 self::WIKITABLE . '.ordercolumn',
@@ -285,6 +287,12 @@ class Wiki extends Base
             'current_edition' => $editions,
             'date_modification' => $date ?: date('Y-m-d'),
         ];
+
+        if(isset($paramvalues['parent_id']) && $paramvalues['parent_id'] != '') {
+            $values['parent_id'] = $paramvalues['parent_id'];
+        } else {
+            $values['parent_id'] = null;
+        }
 
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();

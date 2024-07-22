@@ -29,7 +29,7 @@ function version_4(PDO $pdo)
         ordercolumn       INTEGER       DEFAULT 1,
         editions          INTEGER       DEFAULT 1,
         current_edition   INTEGER       DEFAULT 1,
-        parent_id         INTEGER       REFERENCES users (id),
+        parent_id         INTEGER       REFERENCES wikipage (id),
         FOREIGN KEY (project_id) REFERENCES projects (id),
         PRIMARY KEY (id AUTOINCREMENT)
     );
