@@ -187,6 +187,20 @@ class WikiController extends BaseController
         ), 'wiki:wiki/sidebar'));
     }
 
+    function getNestedChildren($parent_id, $items) {
+        $children = [];
+
+        foreach ($items as $item) {
+            if ($item['parent_id'] === $parent_id) {
+                $item['children'] = $this->getNestedChildren($item['id'], $items);
+                array_push($children, $item);
+            }
+        }
+
+        return $children;
+    }
+
+
     /**
      * details for single wiki page
      */
@@ -197,11 +211,17 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wiki->getWikipages($project['id']);
+        $wikiPagesResult = array();
 
         foreach ($wikipages as $page) {
             if (t($wiki_id) == t($page['id'])) {
                 $wikipage = $page;
-                break;
+            }
+            if(!isset($page['parent_id'])){
+                
+                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
+                
+                array_push($wikiPagesResult, $page);
             }
         }
 
@@ -220,7 +240,7 @@ class WikiController extends BaseController
             'images' => $this->wikiFile->getAllImages($wiki_id),
             // 'wikipage' => $this->wiki->getWikipage($wiki_id),
             'wikipage' => $wikipage,
-            'wikipages' => $wikipages,
+            'wikipages' => $wikiPagesResult,
         ), 'wiki:wiki/sidebar'));
 
         // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
