@@ -1,3 +1,13 @@
+Version 0.3.7
+Improvements:
+
+* unit test updates
+* code cleanup
+
+Bug fixes:
+
+* Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/
+
 Version 0.3.6
 Improvements:
 
