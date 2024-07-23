@@ -82,10 +82,9 @@ class WikiModelTest extends Base
 
         // create wiki pages
         $this->assertEquals(1, $wikimodel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
-        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Page 2", ""), 'Failed to a create wiki page 2 on project');
-        $this->assertEquals(3, $wikimodel->createpage($project['id'], "Page 3", ""), 'Failed to a create wiki page 3 on project');
-        $this->assertEquals(4, $wikimodel->createpage($project['id'], "Page 4", ""), 'Failed to a create wiki page 4 on project');
-        $this->assertEquals(5, $wikimodel->createpage($project['id'], "Page 5", ""), 'Failed to a create wiki page 5 on project');
+        for ($i=2; $i <= 5; $i++) { 
+            $this->assertEquals($i, $wikimodel->createpage($project['id'], "Page ". $i, ""), 'Failed to a create wiki page '. $i . ' on project');
+        }
 
         // reorder
         $wikimodel->reorderPages($project['id'], 5, 3);
@@ -112,11 +111,11 @@ class WikiModelTest extends Base
 
         // create wiki pages
         $this->assertEquals(1, $wikimodel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
-        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Page 2", ""), 'Failed to a create wiki page 2 on project');
-        $this->assertEquals(3, $wikimodel->createpage($project['id'], "Page 3", ""), 'Failed to a create wiki page 3 on project');
-        $this->assertEquals(4, $wikimodel->createpage($project['id'], "Page 4", ""), 'Failed to a create wiki page 4 on project');
-        $this->assertEquals(5, $wikimodel->createpage($project['id'], "Page 5", ""), 'Failed to a create wiki page 5 on project');
+        for ($i=2; $i <= 5; $i++) { 
+            $this->assertEquals($i, $wikimodel->createpage($project['id'], "Page ". $i, ""), 'Failed to a create wiki page '. $i . ' on project');
+        }
 
+        // make page 5 a child of home page
         $wikimodel->updatepage(array('id' => 5, 'parent_id' => 1, 'title' => 'Page 5', 'editions' => 1, 'content' => 'Some content'), 1, '2015-01-01');
 
         $childPage = $wikimodel->getWikipage(5);
