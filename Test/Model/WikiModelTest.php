@@ -127,7 +127,7 @@ class WikiPageTest extends Base
         $this->assertEquals('Some content', $childPage['content']);
 
         // reorder
-        $wikimodel->reorderPagesByIndex($project['id'], 4, 2);
+        $wikimodel->reorderPagesByIndex($project['id'], 4, 2, null);
         // expected by id
         $expectedColumnOrders = [1,2,4,2];
 
