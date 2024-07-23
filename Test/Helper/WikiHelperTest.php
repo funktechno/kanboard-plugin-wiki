@@ -5,7 +5,7 @@ require_once 'tests/units/Base.php';
 use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Wiki\Helper\WikiHelper;
 
-class WikiModelTest extends Base
+class WikiHelperTest extends Base
 {
     /**
      * @var Plugin
