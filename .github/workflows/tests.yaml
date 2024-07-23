@@ -72,16 +72,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # healthcheck:
-        #   test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-        #   start_period: 10s
-        #   interval: 10s
-        #   timeout: 5s
-        #   retries: 3
-        # options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    # depends_on:
-    #   mariadb:
-    #     condition: service_healthy
     steps:
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
