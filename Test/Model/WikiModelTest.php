@@ -9,7 +9,7 @@ use Kanboard\Core\User\UserSession;
 use Kanboard\Core\Security\AuthenticationManager;
 use Kanboard\Auth\DatabaseAuth;
 
-class WikiPageTest extends Base
+class WikiModelTest extends Base
 {
     /**
      * @var Plugin
