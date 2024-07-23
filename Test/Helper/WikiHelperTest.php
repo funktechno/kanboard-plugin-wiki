@@ -26,6 +26,7 @@ class WikiHelperTest extends Base
             0=> array(
                 'id'=> '5',
                 'title'=> 'Page 1a',
+                'ordercolumn' => '0',
                 'children'=> array()
             )
         );
