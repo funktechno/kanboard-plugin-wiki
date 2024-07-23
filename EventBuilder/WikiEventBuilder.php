@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanboard\Plugin\Wiki\Model;
+namespace Kanboard\Plugin\Wiki\EventBuilder;
 
 use Kanboard\EventBuilder\BaseEventBuilder;
 use Kanboard\Event\CommentEvent;
