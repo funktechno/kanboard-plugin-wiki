@@ -1,10 +1,9 @@
 <?php
 
-namespace Kanboard\Plugin\Wiki\Model;
+namespace Kanboard\Plugin\Wiki\Job;
 
 use Kanboard\Job\BaseJob;
-// use Kanboard\EventBuilder\CommentEventBuilder;
-// use Kanboard\Model\CommentModel;
+use Kanboard\Plugin\Wiki\EventBuilder\WikiEventBuilder;
 
 /**
  * Class WikiEventJob
