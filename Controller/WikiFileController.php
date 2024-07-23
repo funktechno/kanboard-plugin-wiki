@@ -19,9 +19,9 @@ class WikiFileController extends BaseController
      */
     public function screenshot()
     {
-        $wiki = $this->wiki->getWiki();
+        $wiki = $this->wikiModel->getWiki();
 
-        if ($this->request->isPost() && $this->wikiFile->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
+        if ($this->request->isPost() && $this->wikiFileModel->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
             $this->flash->success(t('Screenshot uploaded successfully.'));
             return $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
         }
@@ -41,12 +41,12 @@ class WikiFileController extends BaseController
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
-        $wiki = $this->wiki->getWiki();
+        $wiki = $this->wikiModel->getWiki();
 
         // $this->hourlyRate->getAllByProject($records[0]['project_id']);
-        // $this->wikiFile->getAllByProject($records[0]['project_id']);
+        // $this->wikiFileModel->getAllByProject($records[0]['project_id']);
 
-        // $this->wiki->getDailyWikiBreakdown($project['id']),
+        // $this->wikiModel->getDailyWikiBreakdown($project['id']),
 
         $this->response->html($this->template->render('wiki:wiki_file/create', array(
             'wiki' => $wiki,
@@ -65,9 +65,9 @@ class WikiFileController extends BaseController
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
 
-        $wiki = $this->wiki->getWiki();
+        $wiki = $this->wikiModel->getWiki();
         
-        $result = $this->wikiFile->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
+        $result = $this->wikiFileModel->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
 
         if ($this->request->isAjax()) {
             if (!$result) {
@@ -94,10 +94,10 @@ class WikiFileController extends BaseController
     public function remove()
     {
         $this->checkCSRFParam();
-        $wiki = $this->wiki->getWiki();
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
+        $wiki = $this->wikiModel->getWiki();
+        $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
 
-        if ($file['wikipage_id'] == $wiki['id'] && $this->wikiFile->remove($file['id'])) {
+        if ($file['wikipage_id'] == $wiki['id'] && $this->wikiFileModel->remove($file['id'])) {
             $this->flash->success(t('File removed successfully.'));
         } else {
             $this->flash->failure(t('Unable to remove this file.'));
@@ -113,8 +113,8 @@ class WikiFileController extends BaseController
      */
     public function confirm()
     {
-        $wiki = $this->wiki->getWiki();
-        $file = $this->wikiFile->getById($this->request->getIntegerParam('file_id'));
+        $wiki = $this->wikiModel->getWiki();
+        $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
 
         $this->response->html($this->template->render('wiki:wiki_file/remove', array(
             'wiki' => $wiki,

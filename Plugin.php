@@ -74,8 +74,8 @@ class Plugin extends Base
                 'WikiAjaxController'
             ],
             'Plugin\Wiki\Model' => array(
-                'Wiki',
-                'WikiFile'
+                'WikiModel',
+                'WikiFileModel'
             ),
         );
     }

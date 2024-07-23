@@ -27,12 +27,12 @@ class WikiController extends BaseController
         // exit();
 
         // $query = $this->projectModel->getQueryByProjectIds($projectIds);
-        $query = $this->wiki->getQueryByProjectIds($projectIds);
+        $query = $this->wikiModel->getQueryByProjectIds($projectIds);
 
 
         // echo json_encode($query->findAll());
         // exit(); 
-        // $wikipages = $this->wiki->getWikipages($project['id']);
+        // $wikipages = $this->wikiModel->getWikipages($project['id']);
 
         $search = $this->request->getStringParam('search');
 
@@ -68,7 +68,7 @@ class WikiController extends BaseController
             'no_layout' => true,
             'not_editable' => true,
             'title' => $project['name'] .= " ". t('Wiki'),
-            'wikipages' => $this->wiki->getWikipages($project['id']),
+            'wikipages' => $this->wikiModel->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
     }
 
@@ -86,11 +86,11 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
             'title' => $project['name'] .= " ". t('Wiki'),
-            'wikipages' => $this->wiki->getWikipages($project['id']),
+            'wikipages' => $this->wikiModel->getWikipages($project['id']),
         ), 'wiki:wiki/sidebar'));
 
         // ,array(
-        //     'wikipages' => $this->wiki->getWikipages($project['id'])
+        //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
         // )
     }
 
@@ -110,7 +110,7 @@ class WikiController extends BaseController
             'project' => $project,
             'title' => t('Wiki Editions'),
             'wiki_id'=> $wiki_id,
-            'editions' => $this->wiki->getEditions($wiki_id),
+            'editions' => $this->wikiModel->getEditions($wiki_id),
         ), 'wiki:wiki/sidebar'));
 
     }
@@ -120,14 +120,14 @@ class WikiController extends BaseController
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        $editwiki = $this->wiki->getWikipage($wiki_id);
+        $editwiki = $this->wikiModel->getWikipage($wiki_id);
 
         // if (empty($values)) {
         //     $values['date_creation'] = date('Y-m-d');
         //     $values['date_modification'] = date('Y-m-d');
         // }
 
-        $wikipages = $this->wiki->getWikipages($editwiki['project_id']);
+        $wikipages = $this->wikiModel->getWikipages($editwiki['project_id']);
 
         $wiki_list = array('' => t('None'));
 
@@ -157,7 +157,7 @@ class WikiController extends BaseController
         }
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        $wikipages = $this->wiki->getWikipages($project['id']);
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
 
         foreach ($wikipages as $page) {
             if (t($wiki_id) == t($page['id'])) {
@@ -179,9 +179,9 @@ class WikiController extends BaseController
             'wiki' => $wikipage,
             'no_layout' => true,
             'not_editable' => true,
-            'files' => $this->wikiFile->getAllDocuments($wiki_id),
-            'images' => $this->wikiFile->getAllImages($wiki_id),
-            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
+            'images' => $this->wikiFileModel->getAllImages($wiki_id),
+            // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
             'wikipage' => $wikipage,
             'wikipages' => $wikipages,
         ), 'wiki:wiki/sidebar'));
@@ -210,7 +210,7 @@ class WikiController extends BaseController
         
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        $wikipages = $this->wiki->getWikipages($project['id']);
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
         $wikiPagesResult = array();
 
         foreach ($wikipages as $page) {
@@ -236,9 +236,9 @@ class WikiController extends BaseController
             'title' => t('Wikipage'),
             'wiki_id' => $wiki_id,
             'wiki' => $wikipage,
-            'files' => $this->wikiFile->getAllDocuments($wiki_id),
-            'images' => $this->wikiFile->getAllImages($wiki_id),
-            // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+            'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
+            'images' => $this->wikiFileModel->getAllImages($wiki_id),
+            // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
             'wikipage' => $wikipage,
             'wikipages' => $wikiPagesResult,
         ), 'wiki:wiki/sidebar'));
@@ -251,13 +251,13 @@ class WikiController extends BaseController
         //     'project' => $project,
         //     'title' => t('Wikipage'),
         //     'wiki_id' => $wiki_id,
-        //     // 'wikipage' => $this->wiki->getWikipage($wiki_id),
+        //     // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
         //     'wikipage' => $wikipage,
         //     'wikipages' => $wikipages,
         // ), 'wiki:wiki/sidebar'));
 
         // ,array(
-        //     'wikipages' => $this->wiki->getWikipages($project['id'])
+        //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
         // )
     }
 
@@ -270,7 +270,7 @@ class WikiController extends BaseController
     //         ->setMax(30)
     //         ->setOrder('start')
     //         ->setDirection('DESC')
-    //         ->setQuery($this->wiki->getSubtaskBreakdown($project['id']))
+    //         ->setQuery($this->wikiModel->getSubtaskBreakdown($project['id']))
     //         ->calculate();
 
     //     $this->response->html($this->helper->layout->project('wiki:wiki/breakdown', array(
@@ -305,7 +305,7 @@ class WikiController extends BaseController
         // $this->checkCSRFParam();
         $project = $this->getProject();
 
-        if ($this->wiki->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
+        if ($this->wikiModel->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
             $this->flash->success(t('Edition was restored successfully.'));
             $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
             // $this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))
@@ -348,16 +348,16 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $values = $this->request->getValues();
-        list($valid, $errors) = $this->wiki->validatePageCreation($values);
+        list($valid, $errors) = $this->wikiModel->validatePageCreation($values);
 
         if ($valid) {
 
             $newDate = date('Y-m-d');
 
-            $wiki_id = $this->wiki->createpage($values['project_id'], $values['title'], $values['content'], $newDate);
+            $wiki_id = $this->wikiModel->createpage($values['project_id'], $values['title'], $values['content'], $newDate);
             if ($wiki_id > 0) {
 
-                $this->wiki->createEdition($values, $wiki_id, 1, $newDate);
+                $this->wikiModel->createEdition($values, $wiki_id, 1, $newDate);
                 // don't really care if edition was successful
 
                 $this->flash->success(t('The wikipage has been created successfully.'));
@@ -389,18 +389,18 @@ class WikiController extends BaseController
         // $project = $this->getProject();
 
         $values = $this->request->getValues();
-        list($valid, $errors) = $this->wiki->validatePageUpdate($values);
+        list($valid, $errors) = $this->wikiModel->validatePageUpdate($values);
 
         if ($valid) {
 
             $newDate = date('Y-m-d');
             $editions = $values['editions'] + 1;
 
-            $wiki_id = $this->wiki->updatepage($values, $editions, $newDate);
+            $wiki_id = $this->wikiModel->updatepage($values, $editions, $newDate);
             if ($wiki_id > 0) {
 
                 // check config if admin wants editions saved
-                $this->wiki->createEdition($values, $wiki_id, $editions, $newDate);
+                $this->wikiModel->createEdition($values, $wiki_id, $editions, $newDate);
                 // don't really care if editions was successful, begin transaction not really needed
 
                 $this->flash->success(t('The wikipage has been updated successfully.'));
@@ -443,7 +443,7 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         // First delete all associated files, then delete the page itself.
-        if ($this->wikiFile->removeAll($wiki_id) && $this->wiki->removepage($wiki_id)) {
+        if ($this->wikiFileModel->removeAll($wiki_id) && $this->wikiModel->removepage($wiki_id)) {
             $this->flash->success(t('Wiki page removed successfully.'));
         } else {
             $this->flash->failure(t('Unable to remove this wiki page.'));

@@ -25,7 +25,7 @@ class WikiHelper extends Base
     {
         return null;
         // return wiki::getWikipages($project['id']);
-        // return $this->wiki->getWikipages($project['id']);
+        // return $this->wikiModel->getWikipages($project['id']);
         // return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
     }
     /**

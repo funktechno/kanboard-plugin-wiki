@@ -17,7 +17,7 @@ use Kanboard\Plugin\Wiki\Job\WikiEventJob;
  * @package  model
  * @author   Frederic Guillot
  */
-class Wiki extends Base
+class WikiModel extends Base
 {
     /**
      * SQL table name
