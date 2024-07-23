@@ -11,7 +11,7 @@ use Kanboard\Plugin\Wiki\Model\Wiki;
  * @package  Kanboard\Model
  * @author   Frederic Guillot
  */
-class WikiFile extends FileModel
+class WikiFileModel extends FileModel
 {
     /**
      * Table name

@@ -9,6 +9,7 @@ use Kanboard\Core\Controller\AccessForbiddenException;
 use Kanboard\Model\UserModel;
 use SimpleValidator\Validator;
 use SimpleValidator\Validators;
+use Kanboard\Plugin\Wiki\Job\WikiEventJob;
 
 /**
  * Wiki
@@ -16,7 +17,7 @@ use SimpleValidator\Validators;
  * @package  model
  * @author   Frederic Guillot
  */
-class Wiki extends Base
+class WikiModel extends Base
 {
     /**
      * SQL table name
