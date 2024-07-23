@@ -49,7 +49,7 @@ class WikiEventBuilder extends BaseEventBuilder
      */
     public function buildEvent()
     {
-        $wikiPage = $this->wiki->getWikipage($this->wiki_id);
+        $wikiPage = $this->wikiModel->getWikipage($this->wiki_id);
 
         if (empty($wikiPage)) {
             return null;

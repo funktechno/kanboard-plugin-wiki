@@ -35,7 +35,7 @@ class WikiAjaxController extends BaseController
         }
 
         try {
-            $result = $this->wiki->reorderPagesByIndex($project_id, $values['src_wiki_id'], $values['index'], $values['parent_id'] ?? null);
+            $result = $this->wikiModel->reorderPagesByIndex($project_id, $values['src_wiki_id'], $values['index'], $values['parent_id'] ?? null);
 
             if (!$result) {
                 $this->response->status(400);
@@ -70,7 +70,7 @@ class WikiAjaxController extends BaseController
         // }
 
         try {
-            $result = $this->wiki->reorderPages($project_id, $values['src_wiki_id'], $values['target_wiki_id']);
+            $result = $this->wikiModel->reorderPages($project_id, $values['src_wiki_id'], $values['target_wiki_id']);
 
             if (!$result) {
                 $this->response->status(400);
