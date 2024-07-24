@@ -1,7 +1,9 @@
 <?php (isset($not_editable)) ?: $not_editable = false;
 ?>
 <?php if (!$not_editable): ?>
-<?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
+    <?=$this->wikiHelper->js("/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
+    <?=$this->wikiHelper->js("/Wiki/Asset/Javascript/wiki.js")?>
+    <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
 <div class="page-header">
     <h2>
