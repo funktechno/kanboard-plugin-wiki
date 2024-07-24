@@ -43,14 +43,15 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
         $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
-        
+
         $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
-        
+
         $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
         // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
         // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
+        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/main.js'));
 
 
         // $this->template->setTemplateOverride('wiki', 'wiki:wiki/layout');
@@ -59,7 +60,7 @@ class Plugin extends Base
         // $this->helper->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
 
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
-        
+
 
     }
 
