@@ -42,14 +42,15 @@ class Plugin extends Base
         $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
 
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
+        $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
         
         $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
         
         $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
-        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
-        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
+        // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
+        // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
 
 
         // $this->template->setTemplateOverride('wiki', 'wiki:wiki/layout');
@@ -74,8 +75,8 @@ class Plugin extends Base
                 'WikiAjaxController'
             ],
             'Plugin\Wiki\Model' => array(
-                'Wiki',
-                'WikiFile'
+                'WikiModel',
+                'WikiFileModel'
             ),
         );
     }
@@ -97,7 +98,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.3.6';
+        return '0.3.7';
     }
 
     public function getPluginHomepage()
