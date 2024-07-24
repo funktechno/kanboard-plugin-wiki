@@ -3,11 +3,13 @@ Improvements:
 
 * unit test updates
 * code cleanup
-* Add Wiki entry to views switcher, fixes issue #61.
+* Add Wiki entry to views switcher
+* only load nested vendor on detail page
 
 Bug fixes:
 
-* Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/
+* Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/61
+* Fix https://github.com/funktechno/kanboard-plugin-wiki/issues/11
 
 Version 0.3.6
 Improvements:
