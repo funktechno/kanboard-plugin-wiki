@@ -3,6 +3,7 @@ Improvements:
 
 * unit test updates
 * code cleanup
+* Add Wiki entry to views switcher, fixes issue #61.
 
 Bug fixes:
 
@@ -85,9 +86,9 @@ Improvements:
   * Added Thumbnail Support
   * Added Download Support
   * Added Removal Support
-  * Added Slideshow Support for images  
+  * Added Slideshow Support for images
 * Updated French translation
-  
+
 Version 0.2.8-alpha
 
 Improvements:
@@ -118,7 +119,7 @@ Improvements:
   * Updated translation for New wikipage (incorrectly was New wiki line)
   * Missing translation empty attributes added
   * Portuguese & Spanish updated
-  * 'Wiki' Translation commented out in most language. Was defaulting to budget. 
+  * 'Wiki' Translation commented out in most language. Was defaulting to budget.
 * Some linting fixes on readme files
 
 Version 0.2.5-alpha
@@ -210,7 +211,7 @@ New features:
 
 Improvements:
 
-* 
+*
 
 Bug fixes:
 
