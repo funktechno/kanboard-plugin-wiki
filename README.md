@@ -1,11 +1,52 @@
-Wiki Plugin for Kanboard
-==============================
+<h1 name="user-content-readme-top" align="center">Wiki Plugin for Kanboard</h1>
+
+<p align="center">
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/releases">
+        <img src="https://img.shields.io/github/v/release/funktechno/kanboard-plugin-wiki?style=for-the-badge&color=brightgreen" alt="GitHub Latest Release (by date)" title="GitHub Latest Release (by date)">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/blob/master/LICENSE" title="Read License">
+        <img src="https://img.shields.io/github/license/funktechno/kanboard-plugin-wiki?style=for-the-badge" alt="kanboard-plugin-Wysiwyg-MD-Editor">
+    </a>
+</p>
+<p align="center">
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/releases">
+        <img src="https://img.shields.io/github/downloads/funktechno/kanboard-plugin-wiki/total?style=for-the-badge&color=orange" alt="GitHub All Releases" title="GitHub All Downloads">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/releases">
+        <img src="https://img.shields.io/github/directory-file-count/funktechno/kanboard-plugin-wiki?style=for-the-badge&color=orange" alt="GitHub Repository File Count" title="GitHub Repository File Count">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/releases">
+        <img src="https://img.shields.io/github/repo-size/funktechno/kanboard-plugin-wiki?style=for-the-badge&color=orange" alt="GitHub Repository Size" title="GitHub Repository Size">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/releases">
+        <img src="https://img.shields.io/github/languages/code-size/funktechno/kanboard-plugin-wiki?style=for-the-badge&color=orange" alt="GitHub Code Size" title="GitHub Code Size">
+    </a>
+</p>
+<p align="center">
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/stargazers" title="View Stargazers">
+        <img src="https://img.shields.io/github/stars/funktechno/kanboard-plugin-wiki?logo=github&style=for-the-badge" alt="kanboard-plugin-Wysiwyg-MD-Editor">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/discussions">
+        <img src="https://img.shields.io/github/discussions/funktechno/kanboard-plugin-wiki?style=for-the-badge&color=blue" alt="GitHub Discussions" title="Read Discussions">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/compare">
+        <img src="https://img.shields.io/github/commits-since/funktechno/kanboard-plugin-wiki/latest?include_prereleases&style=for-the-badge&color=blue" alt="GitHub Commits Since Last Release" title="GitHub Commits Since Last Release">
+    </a>
+    <a href="https://github.com/funktechno/kanboard-plugin-wiki/compare">
+        <img src="https://img.shields.io/github/commit-activity/m/funktechno/kanboard-plugin-wiki?style=for-the-badge&color=blue" alt="GitHub Commit Monthly Activity" title="GitHub Commit Monthly Activity">
+    </a>
+</p>
+<p align="center">
+    <a href="https://github.com/kanboard/kanboard" title="Kanboard - Kanban Project Management Software">
+        <img src="https://img.shields.io/badge/Plugin%20for-kanboard-D40000?style=for-the-badge&labelColor=000000" alt="Kanboard">
+    </a>
+</p>
+
+---
 
 Looking for contributors.
 
 Wiki to document projects
-
-[![Build Status](https://api.travis-ci.org/funktechno/kanboard-plugin-wiki.svg?branch=master)](https://travis-ci.org/funktechno/kanboard-plugin-wiki)
 
 - Create and manage wikipages per project
 - Store different editions of wikipages
