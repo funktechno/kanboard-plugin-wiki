@@ -49,8 +49,8 @@ class Plugin extends Base
         $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
-        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
-        $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
+        // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
+        // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
 
 
         // $this->template->setTemplateOverride('wiki', 'wiki:wiki/layout');
@@ -98,7 +98,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.3.6';
+        return '0.3.7';
     }
 
     public function getPluginHomepage()

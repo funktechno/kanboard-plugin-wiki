@@ -29,6 +29,19 @@ class WikiHelper extends Base
         // return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
     }
     /**
+     * Add a Javascript asset
+     *
+     * @param  string $filename Filename
+     * @param  bool   $async
+     * @return string
+     */
+    public function js($filename, $async = false)
+    {
+        $dir = dirname(__DIR__,2);
+        $filepath = $dir.'/'.$filename;
+        return '<script '.($async ? 'async' : '').' defer type="text/javascript" src="'.$this->helper->url->dir()."plugins".$filename.'?'.filemtime($filepath).'"></script>';
+    }
+    /**
      * render wiki page html children recursively
      * @param mixed $children
      * @param mixed $parent_id
