@@ -31,15 +31,13 @@ class WikiHelper extends Base
     /**
      * Add a Javascript asset
      *
-     * @param  string $filename Filename
+     * @param  string $filepath Filepath
      * @param  bool   $async
      * @return string
      */
-    public function js($filename, $async = false)
+    public function js($filepath, $async = false)
     {
-        $dir = dirname(__DIR__,2);
-        $filepath = $dir.'/'.$filename;
-        return '<script '.($async ? 'async' : '').' defer type="text/javascript" src="'.$this->helper->url->dir()."plugins".$filename.'?'.filemtime($filepath).'"></script>';
+        return '<script '.($async ? 'async' : '').' defer type="text/javascript" src="'.$this->helper->url->dir().$filepath.'?'.filemtime($filepath).'"></script>';
     }
     /**
      * render wiki page html children recursively
