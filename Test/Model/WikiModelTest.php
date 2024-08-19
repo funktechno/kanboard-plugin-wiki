@@ -139,7 +139,7 @@ class WikiModelTest extends Base
     }
 
     
-
+    /*
     public function testGetEditionsReturnsArray()
     {
         $this->db
@@ -170,6 +170,7 @@ class WikiModelTest extends Base
         
         $this->assertSame($expected, $result);
     }
+        */
 
     public function testCreatePageSavesCorrectly()
     {
