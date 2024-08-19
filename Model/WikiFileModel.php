@@ -3,7 +3,6 @@
 namespace Kanboard\Plugin\Wiki\Model;
 
 use Kanboard\Model\FileModel;
-use Kanboard\Plugin\Wiki\Model\Wiki;
 
 /**
  * Wiki File Model
@@ -26,7 +25,7 @@ class WikiFileModel extends FileModel
      * @var string
      */
     const EVENT_CREATE = 'wiki.file.create';
-   
+
 
     /**
      * Get the table
@@ -39,7 +38,7 @@ class WikiFileModel extends FileModel
     {
         return self::TABLE;
     }
-    
+
 
     /**
      * Define the foreign key
@@ -105,7 +104,7 @@ class WikiFileModel extends FileModel
     {
         return null;
     }
-    
+
     protected function fireDestructionEvent($file_id)
     {
         return null;
