@@ -1,8 +1,8 @@
 <?php (isset($not_editable)) ?: $not_editable = false;
 ?>
 <?php if (!$not_editable): ?>
-    <?=$this->wikiHelper->js("/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
-    <?=$this->wikiHelper->js("/Wiki/Asset/Javascript/wiki.js")?>
+    <?=$this->wikiHelper->js("plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
+    <?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
     <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
 <div class="page-header">
@@ -37,22 +37,22 @@
 <div class="sidebar column list">
     <?php if (!empty($wikipages)): ?>
     <ul id="columns" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
-        
+
         <?php foreach ($wikipages as $page): ?>
             <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-order="<?=$page['ordercolumn']?>" data-page-id="<?=$page['id']?>">
                 <?php if (!$not_editable): ?>
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
 
                     <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
-                <?php else: ?>    
+                <?php else: ?>
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
-                <?php endif ?>    
+                <?php endif ?>
                  <?php if (count($page['children']) > 0): ?>
                     <?=$this->wikiHelper->renderChildren($page['children'], $page['id'], $project, $not_editable)?>
                 <?php endif ?>
             </li>
 
-    
+
         <?php endforeach?>
     </ul>
         <?php else: ?>
@@ -68,7 +68,7 @@
             <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
         </li>
     </ul>
-        <?php endif ?>  
+        <?php endif ?>
 
     </ul>
 </div>
@@ -90,7 +90,7 @@
         <?=$this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
         <br>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-    <?php endif ?>  
+    <?php endif ?>
 </div>
 <ul class="panel">
     <?php if ($wikipage['creator_id'] > 0): ?>
@@ -125,6 +125,7 @@
         error_reporting(E_ALL);
     ?>
     <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
+    <?= $this->modal->medium('camera', t('Add a screenshot'), 'WikiFileController', 'screenshot', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
 </ul>
 
 <?php if (!empty($files) || !empty($images)): ?>
@@ -138,4 +139,3 @@
 <?php endif ?>
 
 </div>
-
