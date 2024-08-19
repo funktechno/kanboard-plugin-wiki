@@ -137,4 +137,138 @@ class WikiModelTest extends Base
             $this->assertEquals($expectedColumnOrders[$wikiPages[$i]['id']-1], $wikiPages[$i]['ordercolumn'], 'Failed to reorder page id:'. $wikiPages[$i]['id']);
         }
     }
+
+    
+
+    public function testGetEditionsReturnsArray()
+    {
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKI_EDITION_TABLE)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('eq')
+            ->with('wikipage_id', 123)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('desc')
+            ->with('edition')
+            ->willReturnSelf();
+
+        $expected = [
+            ['id' => 1, 'content' => 'test']
+        ];
+
+        $this->db
+            ->method('findAll')
+            ->willReturn($expected);
+
+        $result = $this->wikiModel->getEditions(123);
+        
+        $this->assertSame($expected, $result);
+    }
+
+    public function testCreatePageSavesCorrectly()
+    {
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('persist')
+            ->willReturn(1);
+
+        $result = $this->wikiModel->createpage(1, 'Test title', 'Test content');
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testUpdatePageUpdatesCorrectly()
+    {
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('eq')
+            ->with('id', 1)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('update')
+            ->willReturn(true);
+
+        $result = $this->wikiModel->updatepage(['title' => 'New Title', 'content' => 'New content', 'id' => 1], 1);
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testRemovePageRemovesCorrectly()
+    {
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('eq')
+            ->with('id', 1)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('remove')
+            ->willReturn(true);
+
+        $result = $this->wikiModel->removepage(1);
+
+        $this->assertTrue($result);
+    }
+
+    public function testGetWikipageReturnsCorrectData()
+    {
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturnSelf();
+
+        $this->db
+            ->method('columns')
+            ->willReturnSelf();
+
+        $this->db
+            ->method('eq')
+            ->with('id', 1)
+            ->willReturnSelf();
+
+        $expected = ['id' => 1, 'title' => 'Test'];
+
+        $this->db
+            ->method('findOne')
+            ->willReturn($expected);
+
+        $result = $this->wikiModel->getWikipage(1);
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function testGetWikipageThrowsPageNotFoundException()
+    {
+        $this->db
+            ->method('findOne')
+            ->willReturn(null);
+
+        $this->expectException(\Kanboard\Core\Controller\PageNotFoundException::class);
+
+        $this->wikiModel->getWiki();
+    }
+
 }
