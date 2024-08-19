@@ -5,11 +5,12 @@
                 <?= $this->app->component('image-slideshow', array(
                     'images' => $images,
                     'image' => $file,
-                    'regex' => 'FILE_ID',
+                    'regex_file_id' => 'FILE_ID',
+                    'regex_etag' => 'ETAG',
                     'url' => array(
-                        'image' => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
+                        'image'     => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
                         'thumbnail' => $this->url->to('WikiFileViewController', 'thumbnail', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
-                        'download' => $this->url->to('WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
+                        'download'  => $this->url->to('WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => 'FILE_ID', 'project_id' => $wiki['project_id'], 'wikipage_id' => $wiki['id'])),
                     )
                 )) ?>
 

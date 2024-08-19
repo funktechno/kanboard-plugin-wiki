@@ -1,3 +1,10 @@
+Version 0.3.8
+Improvements:
+
+* Fixed file viewer for attachments.
+* Added screenshot support.
+* fixes for composer install support
+
 Version 0.3.7
 Improvements:
 
