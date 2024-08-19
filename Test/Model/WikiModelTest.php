@@ -19,6 +19,15 @@ class WikiModelTest extends Base
     protected function setUp(): void
     {
         parent::setUp();
+        
+        $this->db = $this->createMock(\PicoDb\Database::class);
+        $this->container = $this->createMock(\Psr\Container\ContainerInterface::class);
+        
+        // $this->container
+        //     ->method('get')
+        //     ->willReturnMap([
+        //         [\PicoDb\Database::class, $this->db]
+        //     ]);
         // $this->plugin = new Plugin($this->container);
 
         $plugin = new Loader($this->container);
