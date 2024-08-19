@@ -5,7 +5,6 @@ namespace Kanboard\Plugin\Wiki\Model;
 use Kanboard\Core\Base;
 use Kanboard\Core\Controller\PageNotFoundException;
 use Kanboard\Core\Controller\AccessForbiddenException;
-// use Kanboard\Model\WikiModel;
 use Kanboard\Model\UserModel;
 use SimpleValidator\Validator;
 use SimpleValidator\Validators;
@@ -53,7 +52,7 @@ class WikiModel extends Base
     const EVENT_UPDATE       = 'wikipage.update';
     const EVENT_CREATE       = 'wikipage.create';
     const EVENT_DELETE       = 'wikipage.delete';
-    
+
 
     /**
      * retrieve wikipages by parent id
@@ -178,7 +177,7 @@ class WikiModel extends Base
 
         // echo json_encode($wikiPages), true;
 
-        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " index: " . 
+        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " index: " .
             $index . " parent_id: " . $parent_id ." count list: " . count($wikiPages) . "<br>";
         // change order of each in for loop, move matching id to one before target
         $orderColumn = 0;
@@ -260,7 +259,7 @@ class WikiModel extends Base
                     if(!$result){
                         return false;
                     }
-                } 
+                }
             }
             $orderColumn++;
         }
@@ -436,7 +435,7 @@ class WikiModel extends Base
         if ($this->userSession->isLogged()) {
             $values['modifier_id'] = $this->userSession->getId();
         }
-        
+
         $wikiEventJob = new WikiEventJob($this->container);
         $wikiEventJob->executeWithId($paramvalues['id'], self::EVENT_UPDATE);
         // $wikiEventJob = new WikiEventJob($this->container);
