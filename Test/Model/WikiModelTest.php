@@ -266,7 +266,7 @@ class WikiModelTest extends Base
             ->method('findOne')
             ->willReturn(null);
 
-        $this->expectException(\Kanboard\Core\Controller\PageNotFoundException::class);
+        $this->expectException(\Kanboard\Core\ExternalTask\NotFoundException::class);
 
         $this->wikiModel->getWiki();
     }
