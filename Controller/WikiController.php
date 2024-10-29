@@ -254,7 +254,7 @@ class WikiController extends BaseController
 
         // $wikipage= $wikipages->eq('id', $wiki_id);
 
-        // $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
+        // $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
         //     'project' => $project,
         //     'title' => $project['name'],
         //     'wiki_id' => $wiki_id,

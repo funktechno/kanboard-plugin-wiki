@@ -17,8 +17,12 @@
 
         <?php if ($wiki['content']): ?>
             <li>
-                <h4><?=t('Content')?>:</h4>
-                <?=$this->text->markdown($wiki['content'])?>
+                <details>
+                <summary><h4 style="display:inline-block"><?=t('Content')?></h4></summary>
+                    <article class="markdown">
+                        <?=$this->text->markdown($wiki['content'])?>
+                    </article>
+                </details>
             </li>
         <?php endif?>
 

@@ -38,14 +38,12 @@
     <?=t('Date Creation') . ': ' . $this->dt->date($edition['date_creation'])?>
 </div>
 <div class="page-header">
-    <h4>
-        <details>
-        <summary><?=t('Content')?></summary>
-            <article class="markdown">
-                <?=$this->text->markdown($edition['content'])?>
-            </article>
-        </details>
-    </h4>
+    <details>
+    <summary><h4 style="display:inline-block"><?=t('Content')?></h4></summary>
+        <article class="markdown">
+            <?=$this->text->markdown($edition['content'])?>
+        </article>
+    </details>
 </div>
 
 <?php endforeach?>

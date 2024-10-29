@@ -4,6 +4,9 @@
     resize: horizontal;
     overflow: auto;
 }
+.sidebar-container {
+    width: 100%;
+}
 </style>
 
 <div class="sidebar">
