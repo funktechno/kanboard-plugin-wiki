@@ -45,7 +45,7 @@ return array(
     // 'Content' => 'Contenido',
     // 'Date Created' => 'Fecha de creacion',
     // 'Date Modified' => 'Fecha modificada',
-    // '%d Wiki pages' => '%d Páginas Wiki',
+    // 'Wiki pages' => 'Páginas Wiki',
     // 'Search by content' => 'Buscar por contenido',
     // 'Wiki page Title' => 'Título de la página Wiki'',
     // 'There are no editions for this Wiki page saved to restore.' => '',

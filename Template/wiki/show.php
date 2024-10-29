@@ -1,8 +1,17 @@
+<?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
+
 <?php (isset($not_editable)) ?: $not_editable = false;
 ?>
 <?php if (!$not_editable): ?>
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
+
+<style>
+.page-header {
+    clear: both;
+}
+</style>
+
 <div class="page-header">
     <h2><?=t('Wiki overview')?></h2>
     <?php if (!$not_editable): ?>

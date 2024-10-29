@@ -45,7 +45,7 @@ return array(
     'Content' => 'Зміст',
     'Date Created' => 'Дата створення',
     'Date Modified' => 'Дата внесення змін',
-    '%d Wiki pages' => '%d Wiki сторінок',
+    'Wiki pages' => 'Wiki сторінок',
     'Search by content' => 'Пошук за вмістом',
     'Wiki page Title' => 'Заголовок Wiki сторінки',
     'There are no editions for this Wiki page saved to restore.' => 'Немає збережених редакцій цієї Wiki сторінки для відновлення.',
