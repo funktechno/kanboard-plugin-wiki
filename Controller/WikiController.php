@@ -104,7 +104,7 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
             'title' => $project['name'],
-            'wiki_id'=> $wiki_id,
+            'wiki_id'=> $result['selected']['id'],
             'wikipage' => $result['selected'],
             'wikipages' => $result['tree'],
             'editions' => $this->wikiModel->getEditions($wiki_id),
@@ -161,7 +161,7 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
             'title' => $project['name'],
-            'wiki_id' => $wiki_id,
+            'wiki_id' => $result['selected']['id'],
             'wiki' => $result['selected'],
             'not_editable' => true,
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
@@ -187,7 +187,7 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
             'title' => $project['name'],
-            'wiki_id' => $wiki_id,
+            'wiki_id' => $result['selected']['id'],
             'wiki' => $result['selected'],
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),

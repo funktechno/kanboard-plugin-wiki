@@ -44,13 +44,14 @@ class WikiHelper extends Base
      * @param mixed $children
      * @param mixed $parent_id
      * @param mixed $project
+     * @param mixed $selected_wiki_id
      * @param mixed $not_editable
      * @return string
      */
-    public function renderChildren($children, $parent_id, $project, $not_editable){
+    public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable){
         $html = '<ul data-parent-id="'.$parent_id.'">';
         foreach ($children as $item) {
-            $html .= '<li class="wikipage" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
+            $html .= '<li class="wikipage'.(($selected_wiki_id == $item['id']) ? ' active' : '').'" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
             if(!$not_editable){
                 $html .= $this->helper->url->link(
                     t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id'])
@@ -62,7 +63,7 @@ class WikiHelper extends Base
                 );
             }
             if(count($item['children']) > 0){
-                $html .= $this->renderChildren($item['children'], $item['id'], $project, $not_editable);
+                $html .= $this->renderChildren($item['children'], $item['id'], $project, $selected_wiki_id, $not_editable);
             }
             $html .= '</li>';
         }
