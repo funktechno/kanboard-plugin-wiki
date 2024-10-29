@@ -51,15 +51,17 @@ class WikiHelper extends Base
     public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable){
         $html = '<ul data-parent-id="'.$parent_id.'">';
         foreach ($children as $item) {
-            $html .= '<li class="wikipage'.(($selected_wiki_id == $item['id']) ? ' active' : '').'" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
+            $is_active = ($selected_wiki_id == $item['id']) ? ' active' : '';
+            $html .= '<li class="wikipage'.$is_active.'" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
             if(!$not_editable){
                 $html .= $this->helper->url->link(
-                    t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id'])
+                    t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
                 );
                 $html .= $this->helper->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
+                $html .= $this->helper->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
             } else {
                 $html .= $this->helper->url->link(
-                    t($item['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id'])
+                    t($item['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
                 );
             }
             if(count($item['children']) > 0){
