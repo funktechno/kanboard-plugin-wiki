@@ -5,7 +5,7 @@
     overflow: auto;
 }
 .sidebar-container {
-    width: 100%;
+    clear: both;
 }
 </style>
 

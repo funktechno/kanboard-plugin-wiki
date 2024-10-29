@@ -33,7 +33,6 @@ class Plugin extends Base
         // template hooks
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
-        $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
         $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
 

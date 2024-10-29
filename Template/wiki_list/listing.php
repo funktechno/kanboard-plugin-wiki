@@ -1,10 +1,4 @@
-<div class="page-header">
-    <ul>
-        <?= $this->hook->render('template:project-list:menu:before') ?>
-
-        <?= $this->hook->render('template:project-list:menu:after') ?>
-    </ul>
-</div>
+<?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
 
 <div class="margin-bottom">
     <form method="get" action="<?= $this->url->dir() ?>" class="search">
@@ -12,6 +6,8 @@
         <?= $this->form->hidden('action', array('action' => 'index')) ?>
 		<?= $this->form->hidden('plugin', array('plugin' => 'Wiki')) ?>
         <?= $this->form->text('search', $values, array(), array('placeholder="'.t('Search by content').'"')) ?>
+        &nbsp;
+        <button class="btn" type="submit"><?= t('Search by content') ?></button>
     </form>
 </div>
 

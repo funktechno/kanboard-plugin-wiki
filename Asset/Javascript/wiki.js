@@ -1,7 +1,13 @@
 jQuery(document).ready(function () {
-    /*
-       page reorder and nesting support using jquery sorting plugin
-    */
+    //--------------------------------------
+    // hide the KB filters toolbar
+    //--------------------------------------
+    $('.input-addon-field').hide();
+    $('.input-addon-item').hide();
+
+    //--------------------------------------
+    // page reorder and nesting support using jquery sorting plugin
+    //--------------------------------------
     if($("#columns").data("reorder-url")){
         jQuery('#columns').sortable({
             nested: true,

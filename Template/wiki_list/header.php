@@ -1,10 +1,6 @@
 <div class="table-list-header">
     <div class="table-list-header-count">
-        <?php if ($paginator->getTotal() > 1): ?>
-            <?= t('%d Wiki pages', $paginator->getTotal()) ?>
-        <?php else: ?>
-            <?= t('%d Wiki page', $paginator->getTotal()) ?>
-        <?php endif ?>
+        <h2 style="margin:0"><strong><?= t('Wiki pages') . ' : ' . $paginator->getTotal() ?></strong></h2>
     </div>
     <div class="table-list-header-menu">
         <?= $this->render('Wiki:wiki_list/sort_menu', array('paginator' => $paginator)) ?>
