@@ -8,7 +8,7 @@ user-select: none;
 } */
 
 body.dragging, body.dragging * {
-cursor: move !important;
+    cursor: move !important;
 }
   
 .dragged {
@@ -18,51 +18,34 @@ cursor: move !important;
 }
 
 #columns {
-list-style-type: none;
+    list-style-type: none;
 }
 
 .wikipage {
-width: 162px;
-padding-bottom: 5px;
-padding-top: 5px;
-text-align: left;
-/* cursor: move; */
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: left;
 }
 .wikipage header {
-height: 20px;
-width: 150px;
-color: black;
-background-color: #ccc;
-padding: 5px;
-border-bottom: 1px solid #ddd;
-border-radius: 10px;
-border: 2px solid #666666;
+    height: 20px;
+    width: 150px;
+    color: black;
+    background-color: #ccc;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 10px;
+    border: 2px solid #666666;
 }
-
+.wikipage li {
+    line-height: normal !important;
+}
+.wikipage li:last-child {
+    margin-bottom: 0px !important;
+}
 .wikipage.dragElem {
-opacity: 0.4;
+    opacity: 0.4;
 }
 .wikipage.over {
-border: 2px dashed #000;
-border-top: 2px solid blue;
-}
-
-.clearfix::after {
-content: "";
-clear: both;
-display: table;
-}
-.column {
-float: left;
-min-width: 0;
-}
-.list {
-width: 25%;
-}
-.content {
-width: 75%;
-}
-
-.sidebar>ul li:last-child {
-    margin-bottom: 0px;
+    border: 2px dashed #000;
+    border-top: 2px solid blue;
 }
