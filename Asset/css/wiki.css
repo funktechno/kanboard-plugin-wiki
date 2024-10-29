@@ -42,6 +42,9 @@ body.dragging, body.dragging * {
 .wikipage li:last-child {
     margin-bottom: 0px !important;
 }
+.wikipage.active {
+    box-shadow: 0 0 15px #777777 inset;
+}
 .wikipage.dragElem {
     opacity: 0.4;
 }

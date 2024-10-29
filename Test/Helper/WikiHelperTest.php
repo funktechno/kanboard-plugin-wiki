@@ -35,7 +35,7 @@ class WikiHelperTest extends Base
             'id'=> '1',
         );
 
-        $htmlResult = $helper->renderChildren($children, 1, $project, false);
+        $htmlResult = $helper->renderChildren($children, 1, $project, 0, false);
         $this->assertStringContainsString('<ul data-parent-id="1"', $htmlResult, 'htmlResult should contain <ul data-parent-id="1"');
         $this->assertStringContainsString('<li class="wikipage" data-project-id="1" data-page-id="5"', $htmlResult, 'htmlResult should contain <li class="wikipage" data-project-id="1" data-page-id="5"');
     }
