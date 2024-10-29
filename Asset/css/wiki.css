@@ -17,33 +17,30 @@ body.dragging, body.dragging * {
     z-index: 2000;
 }
 
-#columns {
+#wikitree {
     list-style-type: none;
+}
+#wikitree li {
+    line-height: normal !important;
+}
+#wikitree li:last-child {
+    margin-bottom: 0px !important;
+}
+#wikitree .wikilink.active {
+    box-shadow: 0 0 10px #777777 inset;
+}
+
+.wikilink {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .wikipage {
     padding-bottom: 5px;
     padding-top: 5px;
     text-align: left;
-}
-.wikipage header {
-    height: 20px;
-    width: 150px;
-    color: black;
-    background-color: #ccc;
-    padding: 5px;
-    border-bottom: 1px solid #ddd;
-    border-radius: 10px;
-    border: 2px solid #666666;
-}
-.wikipage li {
-    line-height: normal !important;
-}
-.wikipage li:last-child {
-    margin-bottom: 0px !important;
-}
-.wikipage.active {
-    box-shadow: 0 0 15px #777777 inset;
 }
 .wikipage.dragElem {
     opacity: 0.4;
