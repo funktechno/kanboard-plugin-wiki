@@ -95,33 +95,18 @@ class WikiController extends BaseController
 
     public function editions()
     {
-
         $project = $this->getProject();
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-        $wikiPagesResult = array();
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) == t($page['id'])) {
-                $wikipage = $page;
-            }
-            if(!isset($page['parent_id'])){
-                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
-                array_push($wikiPagesResult, $page);
-            }
-        }
-
-        // If the last wikipage was deleted, select the new last wikipage.
-        if (!isset($wikipage)) {
-          $wikipage = end($wikipages);
-        }
+        $result =$this->prepareWikipagesTree($wikipages, $wiki_id);
 
         $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
             'title' => $project['name'],
             'wiki_id'=> $wiki_id,
-            'wikipage' => $wikipage,
-            'wikipages' => $wikiPagesResult,
+            'wikipage' => $result['selected'],
+            'wikipages' => $result['tree'],
             'editions' => $this->wikiModel->getEditions($wiki_id),
         )));
 
@@ -170,47 +155,21 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) == t($page['id'])) {
-                $wikipage = $page;
-                break;
-            }
-        }
-
-        // If the last wikipage was deleted, select the new last wikipage.
-        if (!isset($wikipage)) {
-          $wikipage = end($wikipages);
-        }
+        $result =$this->prepareWikipagesTree($wikipages, $wiki_id);
 
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
             'title' => $project['name'],
             'wiki_id' => $wiki_id,
-            'wiki' => $wikipage,
+            'wiki' => $result['selected'],
             'not_editable' => true,
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
-            'wikipage' => $wikipage,
-            'wikipages' => $wikipages,
+            'wikipage' => $result['selected'],
+            'wikipages' => $result['tree'],
         )));
     }
-
-    function getNestedChildren($parent_id, $items) {
-        $children = [];
-
-        foreach ($items as $item) {
-            if ($item['parent_id'] === $parent_id) {
-                $item['children'] = $this->getNestedChildren($item['id'], $items);
-                array_push($children, $item);
-            }
-        }
-
-        return $children;
-    }
-
 
     /**
      * details for single wiki page
@@ -222,32 +181,18 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-        $wikiPagesResult = array();
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) == t($page['id'])) {
-                $wikipage = $page;
-            }
-            if(!isset($page['parent_id'])){
-                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
-                array_push($wikiPagesResult, $page);
-            }
-        }
-
-        // If the last wikipage was deleted, select the new last wikipage.
-        if (!isset($wikipage)) {
-          $wikipage = end($wikipages);
-        }
+        $result =$this->prepareWikipagesTree($wikipages, $wiki_id);
 
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
             'title' => $project['name'],
             'wiki_id' => $wiki_id,
-            'wiki' => $wikipage,
+            'wiki' => $result['selected'],
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            'wikipage' => $wikipage,
-            'wikipages' => $wikiPagesResult,
+            'wikipage' => $result['selected'],
+            'wikipages' => $result['tree'],
         )));
 
         // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
@@ -286,6 +231,49 @@ class WikiController extends BaseController
     //         'title' => t('Wiki'),
     //     )));
     // }
+
+    private function getNestedChildren($parent_id, $items) {
+        $children = [];
+
+        foreach ($items as $item) {
+            if ($item['parent_id'] === $parent_id) {
+                $item['children'] = $this->getNestedChildren($item['id'], $items);
+                array_push($children, $item);
+            }
+        }
+
+        return $children;
+    }
+
+    private function prepareWikipagesTree($wikipages, $wiki_id) {
+        $treeWikipages = array();
+        $defaultWikipage = null;
+        $selectedWikipage = null;
+
+        foreach ($wikipages as $page) {
+            if (t($wiki_id) == t($page['id'])) {
+                $selectedWikipage = $page;
+            }
+            if(!isset($page['parent_id'])){
+                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
+                array_push($treeWikipages, $page);
+
+                // set the first root page as default
+                if ($page['ordercolumn'] == 0) {
+                   $defaultWikipage = $page;
+                }
+            }
+        }
+
+        if (!isset($defaultWikipage)) {
+          $defaultWikipage = end($wikipages);
+        }
+        if (!isset($selectedWikipage)) {
+          $selectedWikipage = $defaultWikipage;
+        }
+
+        return array('tree' => $treeWikipages, 'selected' => $selectedWikipage);
+    }
 
     /**
      * Confirmation dialog before removing a wiki
