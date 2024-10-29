@@ -6,10 +6,30 @@ jQuery(document).ready(function () {
     $('.input-addon-item').hide();
 
     //--------------------------------------
+    // handle collapse/expand of wikitree branches
+    //--------------------------------------
+    $('.branch').click(function() {
+        const button = $(this).find("a i")[0];
+        const branch = $(this).parent().find("ul")[0];
+        if ($(button).hasClass( 'fa fa-minus-square' )) {
+            $(button).removeClass( 'fa fa-minus-square' );
+            $(button).addClass( 'fa fa-plus-square' );
+            $(branch).hide();
+            return;
+        }
+        if ($(button).hasClass( 'fa fa-plus-square' )) {
+            $(button).removeClass( 'fa fa-plus-square' );
+            $(button).addClass( 'fa fa-minus-square' );
+            $(branch).show();
+            return;
+        }
+    });
+
+    //--------------------------------------
     // page reorder and nesting support using jquery sorting plugin
     //--------------------------------------
-    if($("#columns").data("reorder-url")){
-        jQuery('#columns').sortable({
+    if($("#wikitree").data("reorder-url")){
+        $('#wikitree').sortable({
             nested: true,
             onDrop: function ($item, container, _super) {
             //   console.log("onDrop", $item, container, _super)
@@ -30,7 +50,7 @@ jQuery(document).ready(function () {
 
             $.ajax({
                     cache: false,
-                    url: $("#columns").data("reorder-url"),
+                    url: $("#wikitree").data("reorder-url"),
                     contentType: "application/json",
                     type: "POST",
                     processData: false,
