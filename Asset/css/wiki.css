@@ -1,12 +1,3 @@
-/* [draggable] {
--moz-user-select: none;
--khtml-user-select: none;
--webkit-user-select: none;
-user-select: none;
--khtml-user-drag: element;
--webkit-user-drag: element;
-} */
-
 body.dragging, body.dragging * {
     cursor: move !important;
 }
@@ -19,6 +10,26 @@ body.dragging, body.dragging * {
 
 #wikitree {
     list-style-type: none;
+}
+#wikitree .ident {
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding-right: 3px;
+    padding-left: 3px;
+    cursor: default;
+}
+#wikitree .branch {
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding-right: 3px;
+    padding-left: 3px;
+    cursor: pointer;
 }
 #wikitree li {
     line-height: normal !important;

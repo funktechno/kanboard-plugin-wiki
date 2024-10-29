@@ -53,11 +53,17 @@ class WikiHelper extends Base
         foreach ($children as $item) {
             $is_active = ($selected_wiki_id == $item['id']) ? ' active' : '';
             $html .= '<li class="wikipage'.$is_active.'" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
+            if(count($item['children']) > 0){
+                $html .= '<button class="branch"><a><i class="fa fa-minus-square"></i></a></button>';
+            } else {
+                $html .= '<button class="ident"><a><i class="fa fa-square"></i></a></button>';
+            }
+            $html .= '<button class="ident"></button>';
             if(!$not_editable){
                 $html .= $this->helper->url->link(
                     t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
                 );
-                $html .= $this->helper->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
+                $html .= '<button class="ident"></button>';
                 $html .= $this->helper->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
             } else {
                 $html .= $this->helper->url->link(
