@@ -10,47 +10,39 @@ class Plugin extends Base
 {
     public function initialize()
     {
+        // access map
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiAjaxController', '*', Role::PROJECT_MEMBER);
-        $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
+        $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
 
-        // $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'readonly', 'wiki');
-        // dont think these are even currently used
+        // page routes
         $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'detail', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'editions', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'edit', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/readonly', 'WikiController', 'readonly', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/detail/:wiki_id', 'WikiController', 'detail', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/detail/:wiki_id/readonly', 'WikiController', 'detail_readonly', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/editions/:wiki_id', 'WikiController', 'editions', 'wiki');
+        // $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id', 'WikiFileViewController', 'show', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/image', 'WikiFileViewController', 'image', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/thumbnail', 'WikiFileViewController', 'thumbnail', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/browser', 'WikiFileViewController', 'browser', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/download', 'WikiFileViewController', 'download', 'wiki');
 
-        // show images as list
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'show', 'wiki_file');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'create', 'wiki_file');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'remove', 'wiki_file');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'images', 'wiki_file');
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiFileController', 'files', 'wiki_file');
-
-
-
+        // template hooks
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
-
-        // $this->route->addRoute('/wiki/project/:project_id&:wikipage_id', 'WikiController', 'detail', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
-
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
-
         $this->template->hook->attach('template:project-list:menu:after', 'wiki:wiki_list/menu');
-
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
         $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
 
+        // template overrides
         $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
-
         $this->template->setTemplateOverride('file_viewer/show', 'wiki:file_viewer/show');
 
+        // CSS + JS
         $this->hook->on('template:layout:css', array('template' => 'plugins/Wiki/Asset/css/wiki.css'));
-        // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js'));
-        // $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/wiki.js'));
         $this->hook->on('template:layout:js', array('template' => 'plugins/Wiki/Asset/Javascript/main.js'));
 
 
@@ -59,9 +51,8 @@ class Plugin extends Base
         // $this->layout->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
         // $this->helper->register('wiki', '\Kanboard\Plugin\Wiki\Helper\layout');
 
+        // helpers
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
-
-
     }
 
     public function onStartup()
