@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="file-thumbnail-description">
-                            <span class="tooltip" title='<?= t('Uploaded: %s', $this->dt->datetime($file['date'])).'<br>'.t('Size: %s', $this->text->bytes($file['size'])) ?>'>
+                            <span class="tooltip" title='<?= t('Uploaded: %s', $this->dt->datetime($file['date'])).'&#013;'.t('Size: %s', $this->text->bytes($file['size'])) ?>'>
                                 <i class="fa fa-info-circle"></i>
                             </span>
                         <?php if (! empty($file['user_id'])): ?>
