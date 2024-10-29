@@ -1,5 +1,7 @@
 <div class="table-list-details">
     <ul>
+        <li><?=t('Project')?>: <strong><?=$this->model->projectModel->getById($wiki['project_id'])['name']?></strong></li>
+
         <?php if ($wiki['creator_id'] > 0): ?>
             <li><?=t('Creator')?>: <strong><?=$this->text->e($wiki['creator_name'] ?: $wiki['creator_username'])?></strong></li>
         <?php endif?>
