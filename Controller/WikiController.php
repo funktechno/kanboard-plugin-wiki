@@ -65,11 +65,10 @@ class WikiController extends BaseController
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
-            'no_layout' => true,
             'not_editable' => true,
-            'title' => $project['name'] .= " ". t('Wiki'),
+            'title' => $project['name'],
             'wikipages' => $this->wikiModel->getWikipages($project['id']),
-        ), 'wiki:wiki/sidebar'));
+        )));
     }
 
     /**
@@ -85,9 +84,9 @@ class WikiController extends BaseController
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
-            'title' => $project['name'] .= " ". t('Wiki'),
+            'title' => $project['name'],
             'wikipages' => $this->wikiModel->getWikipages($project['id']),
-        ), 'wiki:wiki/sidebar'));
+        )));
 
         // ,array(
         //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
@@ -106,12 +105,12 @@ class WikiController extends BaseController
 
         // restore button use undo
 
-        $this->response->html($this->helper->layout->project('wiki:wiki/editions', array(
+        $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
-            'title' => t('Wiki Editions'),
+            'title' => $project['name'],
             'wiki_id'=> $wiki_id,
             'editions' => $this->wikiModel->getEditions($wiki_id),
-        ), 'wiki:wiki/sidebar'));
+        )));
 
     }
 
@@ -144,7 +143,7 @@ class WikiController extends BaseController
             'errors' => $errors,
             'wiki_list' => $wiki_list,
             'title' => t('Edit Wikipage'),
-        ), 'wiki:wiki/sidebar'));
+        )));
     }
 
     public function detail_readonly() {
@@ -174,17 +173,16 @@ class WikiController extends BaseController
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
-            'title' => t('Wikipage'),
+            'title' => $project['name'],
             'wiki_id' => $wiki_id,
             'wiki' => $wikipage,
-            'no_layout' => true,
             'not_editable' => true,
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),
             // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
             'wikipage' => $wikipage,
             'wikipages' => $wikipages,
-        ), 'wiki:wiki/sidebar'));
+        )));
     }
 
     function getNestedChildren($parent_id, $items) {
@@ -212,15 +210,12 @@ class WikiController extends BaseController
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $wikiPagesResult = array();
-
         foreach ($wikipages as $page) {
             if (t($wiki_id) == t($page['id'])) {
                 $wikipage = $page;
             }
             if(!isset($page['parent_id'])){
-
                 $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
-
                 array_push($wikiPagesResult, $page);
             }
         }
@@ -233,15 +228,14 @@ class WikiController extends BaseController
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
             'project' => $project,
-            'title' => t('Wikipage'),
+            'title' => $project['name'],
             'wiki_id' => $wiki_id,
             'wiki' => $wikipage,
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
             'wikipage' => $wikipage,
             'wikipages' => $wikiPagesResult,
-        ), 'wiki:wiki/sidebar'));
+        )));
 
         // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
 
@@ -249,12 +243,12 @@ class WikiController extends BaseController
 
         // $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
         //     'project' => $project,
-        //     'title' => t('Wikipage'),
+        //     'title' => $project['name'],
         //     'wiki_id' => $wiki_id,
         //     // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
         //     'wikipage' => $wikipage,
         //     'wikipages' => $wikipages,
-        // ), 'wiki:wiki/sidebar'));
+        // )));
 
         // ,array(
         //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
@@ -277,7 +271,7 @@ class WikiController extends BaseController
     //         'paginator' => $paginator,
     //         'project' => $project,
     //         'title' => t('Wiki'),
-    //     ), 'wiki:wiki/sidebar'));
+    //     )));
     // }
 
     /**
@@ -428,7 +422,7 @@ class WikiController extends BaseController
             'errors' => $errors,
             'project' => $project,
             'title' => t('Wikipage'),
-        ), 'wiki:wiki/sidebar'));
+        )));
     }
 
     /**
