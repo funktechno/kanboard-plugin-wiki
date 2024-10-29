@@ -1,56 +1,52 @@
+<?php
+(isset($not_editable)) ?: $not_editable = false;
+?>
+
+<?php if (!$not_editable): ?>
+    <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
+<?php endif ?>
+
+<section class="sidebar-container">
+
+<?= $this->render('wiki:wiki/sidebar', array(
+    'project' => $project,
+    'wiki_id' => $wiki_id,
+    'wikipages' => $wikipages,
+    'not_editable' => $not_editable,
+)) ?>
+
+<div class="sidebar-content">
 <div class="page-header">
-    <h2><?=t('Wiki page Editions:')?></h2>
-    <br>
-    
-    <?=$this->url->icon('long-arrow-alt-left', t('Back to details'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
-
-
+    <h2><?=t($wikipage['title'])?></h2>
+    <?=$this->url->icon('long-arrow-left', t('Back to details'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
+    <br><br>
+    <h2><?=t('Editions')?>:</h2>
 </div>
 
-<style>
-    .clearfix::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-    .column {
-        float: left;
-        min-width: 0;
-    }
-    .list {
-    width: 25%;
-}
-    .content {
-    width: 75%;
-}
-
-</style>
-<div class="clearfix">
-
-<div class="column ">
 <?php if (!empty($editions)): ?>
 
 <?php foreach ($editions as $edition): ?>
+<hr style="border-top: 1px solid;border-bottom: 1px solid;">
 <div class="page-header">
-    <h2>
+    <h3>
         <?=t('Title') . ': ' . t($edition['title'])?>
         <?=$this->modal->confirm('undo', t(''), 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
-        <br>
+    </h3>
+    <h4>
         <?=t('Edition') . ': ' . t($edition['edition'])?>
-    </h2>
-
-</div>
-<div>
+    </h4>
     <?=t('Date Creation') . ': ' . $this->dt->date($edition['date_creation'])?>
 </div>
 <div class="page-header">
-        <h2><?=t('Content')?></h2>
+    <h4>
+        <details>
+        <summary><?=t('Content')?></summary>
+            <article class="markdown">
+                <?=$this->text->markdown($edition['content'])?>
+            </article>
+        </details>
+    </h4>
 </div>
-
-<article class="markdown">
-    <?=$this->text->markdown($edition['content'])?>
-</article>
-
 
 <?php endforeach?>
 <!-- `edition` INT NOT NULL,
@@ -70,6 +66,9 @@ Modified -->
 <?php else: ?>
     <p class="alert"><?=t('There are no editions for this Wiki page saved to restore.')?></p>
 <?php endif?>
-</div>
 
-<!-- $this->asset->js('plugins/Wiki/Asset/Javascript/WikiChart.js') -->
+</div>
+<!-- end sidebar-content-->
+
+</section>
+<!--end sidebar-container-->

@@ -99,16 +99,29 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
-        // $project = $this->getProject();
-        //
-        // for list use window-restore
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $wikiPagesResult = array();
+        foreach ($wikipages as $page) {
+            if (t($wiki_id) == t($page['id'])) {
+                $wikipage = $page;
+            }
+            if(!isset($page['parent_id'])){
+                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
+                array_push($wikiPagesResult, $page);
+            }
+        }
 
-        // restore button use undo
+        // If the last wikipage was deleted, select the new last wikipage.
+        if (!isset($wikipage)) {
+          $wikipage = end($wikipages);
+        }
 
         $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
             'title' => $project['name'],
             'wiki_id'=> $wiki_id,
+            'wikipage' => $wikipage,
+            'wikipages' => $wikiPagesResult,
             'editions' => $this->wikiModel->getEditions($wiki_id),
         )));
 

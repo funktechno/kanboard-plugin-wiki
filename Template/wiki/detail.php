@@ -1,79 +1,21 @@
-<?php (isset($not_editable)) ?: $not_editable = false;
+<?php
+(isset($not_editable)) ?: $not_editable = false;
 ?>
+
 <?php if (!$not_editable): ?>
-    <?=$this->wikiHelper->js("plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
-    <?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
     <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
-<div class="page-header">
-    <h2>
-    <?php if (!$not_editable): ?>
-        <?= $this->url->link(t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
-    <?php else: ?>
-        <?= $this->url->link(t('Wiki overview'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token'])) ?>
-    <?php endif ?>
-    </h2>
-</div>
 
-<style>
-    .clearfix::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-    .column {
-        float: left;
-        min-width: 0;
-    }
-    .list {
-    width: 25%;
-}
-    .content {
-    width: 75%;
-}
+<section class="sidebar-container">
 
-</style>
-<div class="clearfix">
-<div class="sidebar column list">
-    <?php if (!empty($wikipages)): ?>
-    <ul id="columns" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
+<?= $this->render('wiki:wiki/sidebar', array(
+    'project' => $project,
+    'wiki_id' => $wiki_id,
+    'wikipages' => $wikipages,
+    'not_editable' => $not_editable,
+)) ?>
 
-        <?php foreach ($wikipages as $page): ?>
-            <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-order="<?=$page['ordercolumn']?>" data-page-id="<?=$page['id']?>">
-                <?php if (!$not_editable): ?>
-                    <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
-
-                    <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
-                <?php else: ?>
-                    <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
-                <?php endif ?>
-                 <?php if (count($page['children']) > 0): ?>
-                    <?=$this->wikiHelper->renderChildren($page['children'], $page['id'], $project, $not_editable)?>
-                <?php endif ?>
-            </li>
-
-
-        <?php endforeach?>
-    </ul>
-        <?php else: ?>
-    <ul>
-        <li class="alert alert-info">
-            <?=t('There are no Wiki pages.')?>
-        </li>
-    </ul>
-        <?php endif?>
-        <?php if (!$not_editable): ?>
-    <ul>
-        <li>
-            <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
-        </li>
-    </ul>
-        <?php endif ?>
-
-    </ul>
-</div>
-
-<div class="column content">
+<div class="sidebar-content">
 <div class="page-header">
     <h2><?=t($wikipage['title'])?></h2>
     <?php if(isset($wikipage['parent_id'])): ?>
@@ -87,7 +29,7 @@
         <br>
     <?php endif ?>
     <?php if (!$not_editable): ?>
-        <?=$this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
+        <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
         <br>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
     <?php endif ?>
@@ -139,3 +81,7 @@
 <?php endif ?>
 
 </div>
+<!-- end sidebar-content-->
+
+</section>
+<!--end sidebar-container-->
