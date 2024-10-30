@@ -63,11 +63,15 @@ class WikiController extends BaseController
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $result = $this->prepareWikipagesTree($wikipages);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true);
+
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
             'not_editable' => true,
             'title' => $project['name'],
-            'wikipages' => $this->wikiModel->getWikipages($project['id']),
+            'wikipages' => $wiki_list,
         )));
     }
 
@@ -82,10 +86,14 @@ class WikiController extends BaseController
 
         $project = $this->getProject();
 
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $result = $this->prepareWikipagesTree($wikipages);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true);
+
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
             'title' => $project['name'],
-            'wikipages' => $this->wikiModel->getWikipages($project['id']),
+            'wikipages' => $wiki_list,
         )));
 
         // ,array(
@@ -99,7 +107,7 @@ class WikiController extends BaseController
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-        $result =$this->prepareWikipagesTree($wikipages, $wiki_id);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
 
         $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
@@ -114,7 +122,6 @@ class WikiController extends BaseController
 
     public function edit(array $values = array(), array $errors = array())
     {
-
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $editwiki = $this->wikiModel->getWikipage($wiki_id);
@@ -125,16 +132,9 @@ class WikiController extends BaseController
         // }
 
         $wikipages = $this->wikiModel->getWikipages($editwiki['project_id']);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, 0, $wiki_id);
 
-        $wiki_list = array('' => t('None'));
-
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) != t($page['id'])) {
-                $wiki_list[$page['id']] = $page['title'];
-            }
-        }
-
-        // $values['wikipage']
         $this->response->html($this->helper->layout->app('wiki:wiki/edit', array(
             'wiki_id' => $wiki_id,
             'values' => $editwiki,
@@ -155,7 +155,7 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-        $result =$this->prepareWikipagesTree($wikipages, $wiki_id);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
 
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
@@ -181,7 +181,7 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-        $result =$this->prepareWikipagesTree($wikipages, $wiki_id);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
 
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
@@ -245,13 +245,13 @@ class WikiController extends BaseController
         return $children;
     }
 
-    private function prepareWikipagesTree($wikipages, $wiki_id) {
+    private function prepareWikipagesTree($wikipages, $selected_wiki_id = 0) {
         $treeWikipages = array();
         $defaultWikipage = null;
         $selectedWikipage = null;
 
         foreach ($wikipages as $page) {
-            if (t($wiki_id) == t($page['id'])) {
+            if ($selected_wiki_id == $page['id']) {
                 $selectedWikipage = $page;
             }
             if(!isset($page['parent_id'])){

@@ -13,7 +13,7 @@
     <?= $this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus', 'tabindex="1"')) ?>
     <br>
 
-    <?= $this->form->label(t('is a child of'), 'is a child of') ?>
+    <?= $this->form->label(t('Parent Page'), 'Parent Page') ?>
     <?= $this->form->select('parent_id', $wiki_list, $values, $errors) ?>
 
     <br><br>

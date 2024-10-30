@@ -87,8 +87,30 @@ class WikiHelper extends Base
         return $html;
     }
 
-    // public function doSomething()
-    // {
-    //     return 'foobar';
-    // }
+    /**
+     * generate indented sublist of children
+     * @param mixed $children
+     * @param mixed $parent_id
+     */
+    public function generateIndentedChildren($children, $use_full_pages = false, $parent_id = 0, $exclude_wiki_id = 0, $indent = 0) {
+        $indentedChildren = array();
+        if ($parent_id == 0) {
+            $indentedChildren[''] = t('(root)');
+        }
+        foreach ($children as $item) {
+            if ($exclude_wiki_id != $item['id']) {
+                if ($use_full_pages) {
+                    $item['title'] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
+                    $indentedChildren[$item['id']] = $item;
+                } else {
+                    $indentedChildren[$item['id']] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
+                }
+                if (count($item['children']) > 0) {
+                    $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $item['id'], $exclude_wiki_id, $indent + 1);
+                    $indentedChildren += $nestedChildren;
+                }
+            }
+        }
+        return $indentedChildren;
+    }
 }
