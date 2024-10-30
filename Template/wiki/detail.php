@@ -47,7 +47,7 @@
                 <?php else: ?>
                     <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
                 <?php endif ?>
-                 <?php if (count($page['children']) > 0): ?>
+                 <?php if (isset($page['children']) && count($page['children']) > 0): ?>
                     <?=$this->wikiHelper->renderChildren($page['children'], $page['id'], $project, $not_editable)?>
                 <?php endif ?>
             </li>
