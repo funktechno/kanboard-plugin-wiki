@@ -65,7 +65,7 @@ class WikiController extends BaseController
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages);
-        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
@@ -88,7 +88,7 @@ class WikiController extends BaseController
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages);
-        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
 
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
@@ -156,6 +156,7 @@ class WikiController extends BaseController
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
@@ -166,8 +167,9 @@ class WikiController extends BaseController
             'not_editable' => true,
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            'wikipage' => $result['selected'],
             'wikipages' => $result['tree'],
+            'wikipage' => $result['selected'],
+            'wikipage_sublist' => $wikipage_sublist,
         )));
     }
 
@@ -182,6 +184,7 @@ class WikiController extends BaseController
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
         // use a wiki helper for better side bar TODO:
         $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
@@ -191,8 +194,9 @@ class WikiController extends BaseController
             'wiki' => $result['selected'],
             'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
             'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            'wikipage' => $result['selected'],
             'wikipages' => $result['tree'],
+            'wikipage' => $result['selected'],
+            'wikipage_sublist' => $wikipage_sublist,
         )));
 
         // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
@@ -203,14 +207,9 @@ class WikiController extends BaseController
         //     'project' => $project,
         //     'title' => $project['name'],
         //     'wiki_id' => $wiki_id,
-        //     // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
         //     'wikipage' => $wikipage,
         //     'wikipages' => $wikipages,
         // )));
-
-        // ,array(
-        //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
-        // )
     }
 
     // public function breakdown()

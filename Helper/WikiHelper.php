@@ -105,14 +105,20 @@ class WikiHelper extends Base
         }
         foreach ($children as $item) {
             if ($exclude_wiki_id != $item['id']) {
-                if ($use_full_pages) {
-                    $item['title'] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
-                    $indentedChildren[$item['id']] = $item;
-                } else {
-                    $indentedChildren[$item['id']] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
-                }
-                if (count($item['children']) > 0) {
-                    $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $item['id'], $exclude_wiki_id, $indent + 1);
+                $has_children = isset($item['children']) && (count($item['children']) > 0);
+                if ($parent_id == 0 || $parent_id == $item['parent_id']) {
+                    if ($use_full_pages) {
+                        $item['title'] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
+                        $indentedChildren[$item['id']] = $item;
+                    } else {
+                        $indentedChildren[$item['id']] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
+                    }
+                    if ($has_children) {
+                        $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $item['id'], $exclude_wiki_id, $indent + 1);
+                        $indentedChildren += $nestedChildren;
+                    }
+                } elseif ($has_children) {
+                    $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $parent_id, $exclude_wiki_id, $indent);
                     $indentedChildren += $nestedChildren;
                 }
             }

@@ -33,7 +33,11 @@
         <?php endif ?>
     <?php endif ?>
 </div>
-<ul class="panel">
+
+<div style="float:left">
+<ul class="panel" style="margin:0">
+<details open>
+<summary><h4 style="display:inline-block"><?=t('Details')?></h4></summary>
     <?php if ($wikipage['creator_id'] > 0): ?>
         <li><?=t('Creator')?>: <strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
     <?php endif?>
@@ -43,7 +47,36 @@
     <li><?=t('Editions')?>: <strong><?=$wikipage['editions']?></strong> <?=t('Current Edition')?>: <strong> <?=$wikipage['current_edition']?></strong></li>
     <li><?=t('Date Creation')?>: <strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
     <li><?=t('Date Modification')?>: <strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
+</details>
 </ul>
+</div>
+
+<div style="float:left">&nbsp;&nbsp;&nbsp;</div>
+
+<div class="sidebar" style="float:left;max-width:100%;padding:0">
+<ul class="panel" style="margin:0">
+<details open>
+<summary><h4 style="display:inline-block"><?=t('Subpages')?></h4></summary>
+<?php if (!empty($wikipage_sublist)): ?>
+    <?php foreach ($wikipage_sublist as $subpage_id => $subpage_title): ?>
+        <?php if (!$not_editable): ?>
+            <li>
+            <?=$this->url->link(t($subpage_title), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
+            </li>
+        <?php else: ?>
+            <li>
+            <?=$this->url->link(t($subpage_title), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
+            </li>
+        <?php endif ?>
+    <?php endforeach ?>
+<?php else: ?>
+    <li class="alert alert-info">
+        <?=t('There are no Wiki pages.')?>
+    </li>
+<?php endif?>
+</details>
+</ul>
+</div>
 
 <div class="wikicontent">
 <br>
