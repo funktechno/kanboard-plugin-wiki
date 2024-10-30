@@ -14,6 +14,7 @@ class WikiHelper extends Base
      * @var string
      */
     const WIKITABLE = 'wikipage';
+
     /**
      * Get all Wiki Pages by order for a project
      *
@@ -28,6 +29,7 @@ class WikiHelper extends Base
         // return $this->wikiModel->getWikipages($project['id']);
         // return $this->db->table(self::WIKITABLE)->eq('project_id', $project_id)->desc('order')->findAll();
     }
+
     /**
      * Add a Javascript asset
      *
@@ -39,6 +41,7 @@ class WikiHelper extends Base
     {
         return '<script '.($async ? 'async' : '').' defer type="text/javascript" src="'.$this->helper->url->dir().$filepath.'?'.filemtime($filepath).'"></script>';
     }
+
     /**
      * render wiki page html children recursively
      * @param mixed $children
@@ -48,29 +51,34 @@ class WikiHelper extends Base
      * @param mixed $not_editable
      * @return string
      */
-    public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable){
+    public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable) {
         $html = '<ul data-parent-id="'.$parent_id.'">';
         foreach ($children as $item) {
             $is_active = ($selected_wiki_id == $item['id']) ? ' active' : '';
             $html .= '<li class="wikipage'.$is_active.'" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
             if(count($item['children']) > 0){
-                $html .= '<button class="branch"><a><i class="fa fa-minus-square"></i></a></button>';
+                $html .= '<button class="branch"><a><i class="fa fa-minus-square-o"></i></a></button>';
+                $wikipage_icon = 'folder-o';
             } else {
-                $html .= '<button class="ident"><a><i class="fa fa-square"></i></a></button>';
+                $html .= '<button class="indent"><i class="fa fa-square-o"></i></button>';
+                $wikipage_icon = 'file-word-o';
             }
-            $html .= '<button class="ident"></button>';
+            $html .= '<button class="indent"></button>';
             if(!$not_editable){
-                $html .= $this->helper->url->link(
-                    t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
+                $html .= $this->helper->url->icon(
+                    $wikipage_icon, t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
                 );
-                $html .= '<button class="ident"></button>';
+                $html .= '<button class="indent"></button>';
+                $html .= '<div style="float: right">';
+                $html .= $this->helper->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $item['id']));
                 $html .= $this->helper->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
+                $html .= '</div>';
             } else {
                 $html .= $this->helper->url->link(
                     t($item['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
                 );
             }
-            if(count($item['children']) > 0){
+            if(count($item['children']) > 0) {
                 $html .= $this->renderChildren($item['children'], $item['id'], $project, $selected_wiki_id, $not_editable);
             }
             $html .= '</li>';

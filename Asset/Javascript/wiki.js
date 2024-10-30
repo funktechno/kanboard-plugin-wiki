@@ -8,22 +8,83 @@ jQuery(document).ready(function () {
     //--------------------------------------
     // handle collapse/expand of wikitree branches
     //--------------------------------------
-    $('.branch').click(function() {
-        const button = $(this).find("a i")[0];
-        const branch = $(this).parent().find("ul")[0];
-        if ($(button).hasClass( 'fa fa-minus-square' )) {
-            $(button).removeClass( 'fa fa-minus-square' );
-            $(button).addClass( 'fa fa-plus-square' );
-            $(branch).hide();
-            return;
+    if($("#wikitree").length == 1) {
+        function expandAllWikipagesBranches() {
+            const buttons = $("#wikitree").find(".branch");
+            buttons.each(function () {
+                const button = $(this).find("a i")[0];
+                const branch = $(this).parent().find("ul")[0];
+                $(button).removeClass('fa-plus-square-o');
+                $(button).addClass('fa-minus-square-o');
+                $(branch).show();
+            });
         }
-        if ($(button).hasClass( 'fa fa-plus-square' )) {
-            $(button).removeClass( 'fa fa-plus-square' );
-            $(button).addClass( 'fa fa-minus-square' );
-            $(branch).show();
-            return;
+
+        function collapseAllWikipagesBranches() {
+            const buttons = $("#wikitree").find(".branch");
+            buttons.each(function () {
+                const button = $(this).find("a i")[0];
+                const branch = $(this).parent().find("ul")[0];
+                $(button).removeClass('fa-minus-square-o');
+                $(button).addClass('fa-plus-square-o');
+                $(branch).hide();
+            });
         }
-    });
+
+        function gotoSelectedWikipageBranch() {
+            function expandParentWikipage(el) {
+                const parentUl = el.parent();
+                const parentId = parentUl.attr("data-parent-id");
+                if (parentId == 0) return; // end recursion
+
+                const parentWikipage = parentUl.parent();
+                const button = parentWikipage.find(".branch a i")[0];
+                $(button).removeClass('fa-plus-square-o');
+                $(button).addClass('fa-minus-square-o');
+                parentUl.show();
+
+                expandParentWikipage(parentWikipage);
+            }
+
+            const selected = $("#wikitree").find(".wikipage.active");
+            expandParentWikipage(selected);
+        }
+
+        $('.expandAll').click(function () {
+            expandAllWikipagesBranches();
+        });
+
+        $('.collapseAll').click(function () {
+            collapseAllWikipagesBranches();
+        });
+
+        $('.gotoSelected').click(function () {
+            gotoSelectedWikipageBranch();
+        });
+
+        $('.branch').click(function () {
+            const button = $(this).find("a i")[0];
+            const branch = $(this).parent().find("ul")[0];
+            console.log(branch);
+            if ($(button).hasClass('fa-minus-square-o')) {
+                $(button).removeClass('fa-minus-square-o');
+                $(button).addClass('fa-plus-square-o');
+                $(branch).hide();
+                console.log('hide')
+                return;
+            }
+            if ($(button).hasClass('fa-plus-square-o')) {
+                $(button).removeClass('fa-plus-square-o');
+                $(button).addClass('fa-minus-square-o');
+                $(branch).show();
+                console.log('show')
+                return;
+            }
+        });
+
+        collapseAllWikipagesBranches();
+        gotoSelectedWikipageBranch();
+    }
 
     //--------------------------------------
     // page reorder and nesting support using jquery sorting plugin

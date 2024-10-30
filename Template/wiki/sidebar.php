@@ -27,6 +27,11 @@
 <div class="page-header">
     <br>
     <h2>Wiki <?= t('Content') ?></h2>
+    <div style="float: right">
+        <button class="expandAll"><a><i class="fa fa-plus-square"></i></a></button>
+        <button class="collapseAll"><a><i class="fa fa-minus-square"></i></a></button>
+        <button class="gotoSelected"><a><i class="fa fa-share-square"></i></a></button>
+    </div>
 </div>
 
 <?php if (!empty($wikipages)): ?>

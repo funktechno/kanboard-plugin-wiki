@@ -11,7 +11,7 @@ body.dragging, body.dragging * {
 #wikitree {
     list-style-type: none;
 }
-#wikitree .ident {
+#wikitree .indent, .separator {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
@@ -20,8 +20,9 @@ body.dragging, body.dragging * {
     padding-right: 3px;
     padding-left: 3px;
     cursor: default;
+    color: transparent;
 }
-#wikitree .branch {
+#wikitree .branch, .expandAll, .collapseAll, .gotoSelected {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
