@@ -6,7 +6,7 @@
     <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
 
-<section class="sidebar-container">
+<section class="sidebar-container wikicontent">
 
 <?= $this->render('wiki:wiki/sidebar', array(
     'project' => $project,
@@ -46,7 +46,7 @@
     </details>
 </div>
 
-<?php endforeach?>
+<?php endforeach ?>
 <!-- `edition` INT NOT NULL,
         `title` varchar(255) NOT NULL,
         `content` TEXT,

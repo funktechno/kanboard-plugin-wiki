@@ -8,6 +8,18 @@ body.dragging, body.dragging * {
     z-index: 2000;
 }
 
+.wikicontent {
+    clear: both;
+}
+
+.wikisidebar {
+    height: 100%;
+    resize: horizontal;
+    overflow: auto;
+    max-width: 50% !important;
+    min-width: 384px !important;
+}
+
 #wikitree {
     list-style-type: none;
 }
@@ -22,7 +34,7 @@ body.dragging, body.dragging * {
     cursor: default;
     color: transparent;
 }
-#wikitree .branch, .expandAll, .collapseAll, .gotoSelected {
+#wikitree .branch, #wikitree .action, #wikilist .action, .expandAll, .collapseAll, .gotoSelected {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
@@ -31,15 +43,20 @@ body.dragging, body.dragging * {
     padding-right: 3px;
     padding-left: 3px;
     cursor: pointer;
+    position: relative;
+    z-index: 2;
 }
-#wikitree li {
+#wikitree li, #wikilist li {
     line-height: normal !important;
 }
-#wikitree li:last-child {
+#wikitree li:last-child, #wikilist li:last-child {
     margin-bottom: 0px !important;
 }
 #wikitree .wikilink.active {
     box-shadow: 0 0 10px #777777 inset;
+}
+#wikitree button a .fa, #wikilist button a .fa {
+    color: var(--link-color-primary);
 }
 
 .wikilink {
@@ -47,12 +64,15 @@ body.dragging, body.dragging * {
     padding-bottom: 3px;
     padding-left: 10px;
     padding-right: 10px;
+    white-space: nowrap;
+    z-index: 1;
 }
 
 .wikipage {
     padding-bottom: 5px;
     padding-top: 5px;
     text-align: left;
+    white-space: nowrap;
 }
 .wikipage.dragElem {
     opacity: 0.4;

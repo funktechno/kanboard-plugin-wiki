@@ -6,7 +6,7 @@
     <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
 
-<section class="sidebar-container">
+<section class="sidebar-container wikicontent">
 
 <?= $this->render('wiki:wiki/sidebar', array(
     'project' => $project,
@@ -18,19 +18,19 @@
 <div class="sidebar-content">
 <div class="page-header">
     <h2><?=t($wikipage['title'])?></h2>
-    <?php if(isset($wikipage['parent_id'])): ?>
-        <?php if (!$not_editable): ?>
-            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
-        <?php else: ?>
-            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
-        <?php endif ?>
-        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
-    <?php endif ?>
     <?php if (!$not_editable): ?>
         <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
         <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
         <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+    <?php endif ?>
+    <?php if(isset($wikipage['parent_id'])): ?>
+        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <?php if (!$not_editable): ?>
+            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php else: ?>
+            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php endif ?>
     <?php endif ?>
 </div>
 <ul class="panel">
@@ -45,11 +45,12 @@
     <li><?=t('Date Modification')?>: <strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
 </ul>
 
+<div class="wikicontent">
+<br>
 <?php if (!empty($wikipage['content'])): ?>
     <div class="page-header">
         <h2><?=t('Content')?></h2>
     </div>
-
     <article class="markdown">
         <?=$this->text->markdown($wikipage['content'])?>
     </article>
@@ -78,6 +79,8 @@
     )) ?>
 <?php endif ?>
 <?php endif ?>
+
+</div>
 
 </div>
 <!-- end sidebar-content-->
