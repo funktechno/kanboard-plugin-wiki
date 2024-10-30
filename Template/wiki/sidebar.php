@@ -1,15 +1,4 @@
-<style>
-.sidebar {
-    height: 100%;
-    resize: horizontal;
-    overflow: auto;
-}
-.sidebar-container {
-    clear: both;
-}
-</style>
-
-<div class="sidebar">
+<div class="sidebar wikisidebar">
 
 <?php if (!$not_editable): ?>
     <?=$this->wikiHelper->js("plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
@@ -26,11 +15,11 @@
 
 <div class="page-header">
     <br>
-    <h2>Wiki <?= t('Content') ?></h2>
+    <h2><?= t('Wiki') ?> <?= t('Content') ?></h2>
     <div style="float: right">
+        <button class="gotoSelected"><a><i class="fa fa-share-square"></i></a></button>
         <button class="expandAll"><a><i class="fa fa-plus-square"></i></a></button>
         <button class="collapseAll"><a><i class="fa fa-minus-square"></i></a></button>
-        <button class="gotoSelected"><a><i class="fa fa-share-square"></i></a></button>
     </div>
 </div>
 
