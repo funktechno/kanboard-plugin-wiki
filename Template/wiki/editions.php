@@ -30,7 +30,7 @@
 <div class="page-header">
     <h3>
         <?=t('Title') . ': ' . t($edition['title'])?>
-        <?=$this->modal->confirm('undo', '', 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
+        <?=$this->modal->confirm('history', '', 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
     </h3>
     <h4>
         <?=t('Edition') . ': ' . t($edition['edition'])?>

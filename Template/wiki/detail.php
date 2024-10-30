@@ -19,18 +19,17 @@
 <div class="page-header">
     <h2><?=t($wikipage['title'])?></h2>
     <?php if(isset($wikipage['parent_id'])): ?>
-        <?=$this->form->label(t('is a child of'), 'is a child of')?>
         <?php if (!$not_editable): ?>
-            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
         <?php else: ?>
-            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
         <?php endif ?>
-        <br>
-        <br>
+        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
     <?php endif ?>
     <?php if (!$not_editable): ?>
         <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
-        <br>
+        <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
     <?php endif ?>
 </div>

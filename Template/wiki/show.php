@@ -34,36 +34,47 @@ Created
 Last modifier
 Modified -->
 
-<table class="table-fixed table-stripped" style="width:100%">
-    <tr>
-        <th style="width:10%"><?=t('Title')?></th>
-        <th style="width:5%"><?=t('Id')?></th>
-        <th style="width:5%"><?=t('is a child of')?></th>
-        <th style="width:5%"><?=t('Editions')?></th>
-        <th style="width:5%"><?=t('Current Edition')?></th>
-        <th style="width:9%"><?=t('Creator')?></th>
-        <th style="width:9%"><?=t('Created')?></th>
-        <th style="width:12%"><?=t('Last modifier')?></th>
-        <th style="width:9%"><?=t('Modified')?></th>
+<table class="table-stripped" style="width:100%">
+    <tr style="vertical-align:top">
+        <th></th>
+        <th><?=t('Title')?></th>
+        <th><?=t('Id')?></th>
+        <th><?=t('Parent Page')?></th>
+        <th><?=t('Editions')?></th>
+        <th><?=t('Current Edition')?></th>
+        <th><?=t('Creator')?></th>
+        <th><?=t('Created')?></th>
+        <th><?=t('Last modifier')?></th>
+        <th><?=t('Modified')?></th>
     </tr>
-    <?php foreach ($wikipages as $wikipage): ?>
-    <tr>
-        <td>
+    <?php foreach ($wikipages as $wikipage_id => $wikipage): ?>
+    <?php if ($wikipage_id != ''): ?>
+    <tr class="table-list-row">
+        <td style="white-space:nowrap">
         <?php if (!$not_editable): ?>
-            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-            <?=$this->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+            <?=$this->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage_id))?>
+            <?=$this->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id))?>
+        <?php endif ?>
+        </td>
+        <td style="white-space:nowrap">
+        <?php if (!$not_editable): ?>
+            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id))?>
         <?php else: ?>
-            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['id']))?>
+            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage_id))?>
         <?php endif ?>
         </td>
         <td>
-            <?=$wikipage['id']?>
+            <?=$wikipage_id?>
         </td>
         <td>
-            <?php if (!$not_editable): ?>
-            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+            <?php if (isset($wikipage['parent_id'])): ?>
+                <?php if (!$not_editable): ?>
+                    <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+                <?php else: ?>
+                    <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+                <?php endif ?>
             <?php else: ?>
-                <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+                <?=t('(root)')?>
             <?php endif ?>
         </td>
         <td><?=$wikipage['editions']?></td>
@@ -73,7 +84,8 @@ Modified -->
         <td><?=$this->text->e($wikipage['modifier_name'] ?: $wikipage['modifier_username'])?></td>
         <td><?=$this->dt->date($wikipage['date_modification'])?></td>
     </tr>
-    <?php endforeach?>
+    <?php endif ?>
+    <?php endforeach ?>
 </table>
 
 <?php else: ?>
