@@ -17,18 +17,28 @@ class Plugin extends Base
         $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
 
-        // page routes
-        $this->route->addRoute('/wiki/project/:project_id', 'WikiController', 'show', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/readonly', 'WikiController', 'readonly', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/detail/:wiki_id', 'WikiController', 'detail', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/detail/:wiki_id/readonly', 'WikiController', 'detail_readonly', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/editions/:wiki_id', 'WikiController', 'editions', 'wiki');
-        // $this->route->addRoute('/wiki/project/:project_id/breakdown', 'WikiController', 'breakdown', 'wiki');
-        $this->route->addRoute('/wiki/file/:file_id', 'WikiFileViewController', 'show', 'wiki');
-        $this->route->addRoute('/wiki/file/:file_id/image', 'WikiFileViewController', 'image', 'wiki');
-        $this->route->addRoute('/wiki/file/:file_id/thumbnail', 'WikiFileViewController', 'thumbnail', 'wiki');
-        $this->route->addRoute('/wiki/file/:file_id/browser', 'WikiFileViewController', 'browser', 'wiki');
-        $this->route->addRoute('/wiki/file/:file_id/download', 'WikiFileViewController', 'download', 'wiki');
+        // page routes wiki pages
+        $this->route->addRoute('/wiki/index',                                           'WikiController', 'index', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id',                             'WikiController', 'show', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/readonly',                    'WikiController', 'readonly', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/detail/:wiki_id',             'WikiController', 'detail', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/detail/:wiki_id/readonly',    'WikiController', 'detail_readonly', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/editions/:wiki_id',           'WikiController', 'editions', 'wiki');
+        // $this->route->addRoute('/wiki/project/:project_id/breakdown',                'WikiController', 'breakdown', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/create',                      'WikiController', 'create', 'wiki');
+        $this->route->addRoute('/wiki/edit/:wiki_id',                                   'WikiController', 'edit', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/remove/:wiki_id',             'WikiController', 'confirm', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/restore/:wiki_id',            'WikiController', 'confirm_restore', 'wiki');
+
+        // page routes wiki files
+        $this->route->addRoute('/wiki/file/:project_id/create/:wiki_id',                'WikiFileController', 'create', 'wiki');
+        $this->route->addRoute('/wiki/file/:project_id/screenshot/:wiki_id',            'WikiFileController', 'screenshot', 'wiki');
+        $this->route->addRoute('/wiki/file/:project_id/remove/:wiki_id/:file_id',       'WikiFileController', 'confirm', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id',                                   'WikiFileViewController', 'show', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/image',                             'WikiFileViewController', 'image', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/thumbnail',                         'WikiFileViewController', 'thumbnail', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/browser',                           'WikiFileViewController', 'browser', 'wiki');
+        $this->route->addRoute('/wiki/file/:file_id/download',                          'WikiFileViewController', 'download', 'wiki');
 
         // template hooks
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
