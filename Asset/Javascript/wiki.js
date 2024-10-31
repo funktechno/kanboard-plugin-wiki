@@ -6,6 +6,16 @@ jQuery(document).ready(function () {
     $('.input-addon-item').hide();
 
     //--------------------------------------
+    // override titles for links from their container buttons
+    //--------------------------------------
+    $("#wikitree").find(".action a").each(function () {
+        $(this).attr('title', $(this).parent().attr('title'));
+    });
+    $("#wikilist").find(".action a").each(function () {
+        $(this).attr('title', $(this).parent().attr('title'));
+    });
+
+    //--------------------------------------
     // handle collapse/expand of wikitree branches
     //--------------------------------------
     if($("#wikitree").length == 1) {

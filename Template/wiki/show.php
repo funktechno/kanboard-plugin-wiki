@@ -46,10 +46,10 @@ Modified -->
     <tr class="table-list-row">
         <td style="white-space:nowrap">
         <?php if (!$not_editable): ?>
-            <button class="action">
+            <button class="action" title="<?= t('Edit Page') ?>">
             <?=$this->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage_id))?>
             </button>
-            <button class="action">
+            <button class="action" title="<?= t('Remove Page') ?>">
             <?=$this->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id))?>
             </button>
         <?php endif ?>
