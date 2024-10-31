@@ -17,9 +17,9 @@
     <br>
     <h2><?= t('Wiki') ?> <?= t('Content') ?></h2>
     <div style="float: right">
-        <button class="gotoSelected"><a><i class="fa fa-share-square"></i></a></button>
-        <button class="expandAll"><a><i class="fa fa-plus-square"></i></a></button>
-        <button class="collapseAll"><a><i class="fa fa-minus-square"></i></a></button>
+        <button class="gotoSelected" title="<?= t('Go to Selected Wiki Page') ?>"><a><i class="fa fa-share-square"></i></a></button>
+        <button class="expandAll"title="<?= t('Expand All Wiki Subpages') ?>"><a><i class="fa fa-plus-square"></i></a></button>
+        <button class="collapseAll"title="<?= t('Collapse All Wiki Subpages') ?>"><a><i class="fa fa-minus-square"></i></a></button>
     </div>
 </div>
 
