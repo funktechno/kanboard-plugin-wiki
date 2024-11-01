@@ -53,41 +53,41 @@ class WikiHelper extends Base
      */
     public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable) {
         $html = '<ul data-parent-id="'.$parent_id.'">';
-        foreach ($children as $item) {
-            $is_active = ($selected_wiki_id == $item['id']) ? ' active' : '';
-            $has_children = isset($item['children']) && (count($item['children']) > 0);
-            $html .= '<li class="wikipage'.$is_active.'" data-project-id="'.$project['id'].'" data-page-id="'.$item['id'].'" data-page-order="'.$item['ordercolumn'].'">';
-            if(!$not_editable) {
-                $html .= '<div style="float: right">';
-                $html .= '<button class="action" title="' . t('Edit Page') . '">';
-                $html .= $this->helper->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $item['id']));
-                $html .= '</button>';
-                $html .= '<button class="action" title="' . t('Remove Page') . '">';
-                $html .= $this->helper->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
-                $html .= '</button>';
-                $html .= '</div>';
-            }
-            if($has_children){
-                $html .= '<button class="branch" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-minus-square-o"></i></a></button>';
-                $wikipage_icon = 'folder-o';
-            } else {
-                $html .= '<button class="indent"><i class="fa fa-square-o"></i></button>';
-                $wikipage_icon = 'file-word-o';
-            }
-            $html .= '<button class="indent"></button>';
-            if(!$not_editable) {
-                $html .= $this->helper->url->icon(
-                    $wikipage_icon, t($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
-                );
-            } else {
-                $html .= $this->helper->url->icon(
-                    $wikipage_icon, t($item['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink'.$is_active
-                );
-            }
-            if($has_children) {
+        if (isset($children) && (count($children) > 0)) {
+            foreach ($children as $item) {
+                $is_active = ($selected_wiki_id == $item['id']) ? ' active' : '';
+                $has_children = isset($item['children']) && (count($item['children']) > 0);
+                $html .= '<li class="wikipage' . $is_active . '" data-project-id="' . $project['id'] . '" data-page-id="' . $item['id'] . '" data-page-order="' . $item['ordercolumn'] . '">';
+                if(!$not_editable) {
+                    $html .= '<div style="float: right">';
+                    $html .= '<button class="handle sortable-handle" hidden><a><i class="fa fa-arrows"></i></a></button>';
+                    $html .= '<button class="action" title="' . t('Edit Page') . '">';
+                    $html .= $this->helper->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $item['id']));
+                    $html .= '</button>';
+                    $html .= '<button class="action" title="' . t('Remove Page') . '">';
+                    $html .= $this->helper->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
+                    $html .= '</button>';
+                    $html .= '</div>';
+                }
+                if($has_children){
+                    $html .= '<button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-minus-square-o"></i></a></button>';
+                    $wikipage_icon = 'folder-o';
+                } else {
+                    $html .= '<button class="indent actionBigger"><i class="fa fa-square-o"></i></button>';
+                    $wikipage_icon = 'file-word-o';
+                }
+                if (!$not_editable) {
+                    $html .= $this->helper->url->icon(
+                        $wikipage_icon, $item['title'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_active
+                    );
+                } else {
+                    $html .= $this->helper->url->icon(
+                        $wikipage_icon, $item['title'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_active
+                    );
+                }
                 $html .= $this->renderChildren($item['children'], $item['id'], $project, $selected_wiki_id, $not_editable);
+                $html .= '</li>';
             }
-            $html .= '</li>';
         }
         $html .= '</ul>';
         return $html;
