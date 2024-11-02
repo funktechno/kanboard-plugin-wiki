@@ -55,7 +55,7 @@ class WikiModel extends Base
 
 
     /**
-     * retrieve wikipages by parent id
+     * retrieve wiki pages by parent id
      * @param mixed $project_id
      * @param mixed $parent_id
      * @return mixed
@@ -170,40 +170,51 @@ class WikiModel extends Base
     }
 
     public function reorderPagesByIndex($project_id, $src_wiki_id, $index, $parent_id){
-        // retrieve wiki pages
+        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " index: " . $index . " parent_id: " . $parent_id . " <br>" . PHP_EOL;
+
+        // retrieve src wiki page and wiki pages by parent
+        $wikiPageSrc = $this->getWikipage($src_wiki_id);
         $wikiPages = $this->getWikiPagesByParentId($project_id, $parent_id);
+        // echo "count list: " . count($wikiPages) . " <br>" . PHP_EOL;
+        // print_r($wikiPages);
 
-        // echo json_encode($wikiPages), true;
-
-        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " index: " .
-            $index . " parent_id: " . $parent_id ." count list: " . count($wikiPages) . "<br>";
-        // change order of each in for loop, move matching id to one before target
-        $orderColumn = 0;
-        $oldSourceColumn = 1;
-        $oldParentId = 0;
-        // disable save if list is empty
-        if(empty($wikiPages)){
-            return false;
+        // if the new parent list is empty add src_wiki_id as first subpage
+        if (empty($wikiPages)) {
+            // echo "updating wikipage ". $src_wiki_id ." column to ". $orderColumn . " for parent " . $parent_id . " <br>" . PHP_EOL;
+            return $this->savePagePosition($src_wiki_id, 1, $parent_id);
         }
-        for ($i=0; $i < count($wikiPages); $i++) {
-            $oldOrderColumn = $wikiPages[$i]['ordercolumn'];
-            $id = $wikiPages[$i]['id'];
-            // increment by 1 if index matches
-            if($orderColumn == $index && $id != $src_wiki_id){
-                // add additional order column
-                $orderColumn++;
-            }
-            // echo " id: " . $id . " oldOrderColumn: " . $oldOrderColumn . " orderColumn: " . $orderColumn . "<br>";
 
-            if ($id == $src_wiki_id) {
-                $oldSourceColumn = $oldOrderColumn;
-                $oldParentId = $wikiPages[$i]['parent_id'];
-            } else {
-                if ($oldOrderColumn != $orderColumn) {
-                    // echo "updating ". $id ." column to ". $orderColumn . "<br>";
-                    $result = $this->savePagePosition($id, $orderColumn, $wikiPages[$i]['parent_id'] ?? null);
-                    if(!$result){
-                        // echo "Error: ". $id ." column not updated to ". $orderColumn . "<br>";
+        // determine what needs to change
+        $orderColumn = 1;
+        $changeIndex = 0;
+        $oldIndex = $wikiPageSrc['ordercolumn'];
+        $changeParent = ($parent_id != $wikiPageSrc['parent_id']);
+        if ($changeParent || $index < $oldIndex) {
+            $changeIndex = 1;
+        }
+        if (!$changeParent && $index > $oldIndex) {
+            $changeIndex = -1;
+        }
+        if (!$changeParent && $changeIndex == 0) {
+            return true; // nothing changes !!!
+        }
+
+        // shift the order of affected subpages in the target parent
+        foreach ($wikiPages as $wikipage) {
+            $id = $wikipage['id'];
+            // echo "id: " . $id . " oldIndex: " . $oldIndex . " index: " . $index . " => orderColumn: " . $orderColumn . " <br>" . PHP_EOL;
+            if ($id != $src_wiki_id) {
+                if ($changeIndex > 0 && $orderColumn == $index) {
+                    $orderColumn++;
+                }
+                if ($changeIndex < 0 && $orderColumn - 1 == $oldIndex) {
+                    $orderColumn--;
+                    $changeIndex = 1;
+                }
+
+                if ($orderColumn != $wikipage['ordercolumn']) {
+                    // echo "updating " . $id . " column to " . $orderColumn . " for parent " . ($wikipage['parent_id'] ?? null) . " <br>" . PHP_EOL;
+                    if(!$this->savePagePosition($id, $orderColumn, $wikipage['parent_id'] ?? null)) {
                         return false;
                     }
                 }
@@ -212,63 +223,62 @@ class WikiModel extends Base
         }
 
         // update moved src
-        // echo "oldSourceColumn: " . $oldSourceColumn . " index: " . $index . "<br>";
-        if($oldSourceColumn != $index || $oldParentId != $parent_id){
-            // echo "updating src ". $src_wiki_id . " column to ". $targetColumn -1 . "<br>";
-            $result = $this->savePagePosition($src_wiki_id, $index, $parent_id ?? null);
-            if(!$result){
-                // echo "Error: ". $src_wiki_id ." column not updated to ". $index . "<br>";
-                return false;
-            }
-        }
-
-        return true;
+        // echo "updating src " . $src_wiki_id . " column to " . $index . " <br>" . PHP_EOL;
+        return $this->savePagePosition($src_wiki_id, $index, $parent_id ?? null);
     }
 
     public function reorderPages($project_id, $src_wiki_id, $target_wiki_id){
-        // retrieve wiki pages
-        $wikiPages = $this->getWikipages($project_id);
+        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " target_wiki_id: " . $target_wiki_id . " <br>" . PHP_EOL;
 
-        // echo json_encode($wikiPages), true;
+        // retrieve src/trg wiki pages
+        $wikiPageSrc = $this->getWikipage($src_wiki_id);
+        $wikiPageTrg = $this->getWikipage($target_wiki_id);
 
-        // echo "project_id: " . $project_id . " src_wiki_id: " . $src_wiki_id . " target_wiki_id: " . $target_wiki_id . "<br>";
-        // change order of each in for loop, move matching id to one before target
-        $orderColumn = 1;
-        $targetColumn = 1;
-        $oldSourceColumn = 1;
-        $oldParentId = 0;
-        for ($i=0; $i < count($wikiPages); $i++) {
-            $oldOrderColumn = $wikiPages[$i]['ordercolumn'];
-            $id = $wikiPages[$i]['id'];
+        // ensure both wiki pages are under the same parent
+        if ($wikiPageSrc['parent_id'] != $wikiPageTrg['parent_id']) {
+            return false;
+        }
+
+        // retrieve wiki pages by parent
+        $wikiPages = $this->getWikiPagesByParentId($project_id, $wikiPageSrc['parent_id']);
+        // echo "count list: " . count($wikiPages) . " <br>" . PHP_EOL;
+        // print_r($wikiPages);
+
+        $orderColumn = 0;
+        $targetColumn = 0;
+        $oldColumn = $wikiPageSrc['ordercolumn'];
+        // shift the order of affected subpages
+        foreach ($wikiPages as $wikipage) {
+            $orderColumn++;
+            $id = $wikipage['id'];
             if($id == $target_wiki_id){
-                // add additional order column
+                if ($orderColumn != $wikipage['ordercolumn']) {
+                    // echo "updating " . $id . " column to " . $orderColumn . " <br>" . PHP_EOL;
+                    if(!$this->savePagePosition($id, $orderColumn, $wikiPageSrc['parent_id'] ?? null)) {
+                        return false;
+                    }
+                }
                 $orderColumn++;
                 $targetColumn = $orderColumn;
             }
-            // echo " id: " . $id . " oldOrderColumn: " . $oldOrderColumn . " orderColumn: " . $orderColumn . "<br>";
-
+            // echo "id: " . $id . " oldColumn: " . $oldColumn . " orderColumn: " . $orderColumn . " => targetColumn: " . $targetColumn . " <br>" . PHP_EOL;
             if ($id == $src_wiki_id) {
-                $oldSourceColumn = $oldOrderColumn;
-                $oldParentId = $wikiPages[$i]['parent_id'];
+                $orderColumn--;
+                $targetColumn--;
             } else {
-                if ($oldOrderColumn != $orderColumn) {
-                    // echo "updating ". $id ." column to ". $orderColumn . "<br>";
-                    $result = $this->savePagePosition($id, $orderColumn, $wikiPages[$i]['parent_id']);
-                    if(!$result){
+                if ($orderColumn != $wikipage['ordercolumn']) {
+                    // echo "updating " . $id . " column to " . $orderColumn . " <br>" . PHP_EOL;
+                    if(!$this->savePagePosition($id, $orderColumn, $wikiPageSrc['parent_id'] ?? null)) {
                         return false;
                     }
                 }
             }
-            $orderColumn++;
         }
 
         // update moved src
-        $targetColumn--;
-        // echo "oldSourceColumn: " . $oldSourceColumn . " targetColumn: " . $targetColumn . "<br>";
-        if($oldSourceColumn != $targetColumn){
-            // echo "updating src ". $src_wiki_id . " column to ". $targetColumn -1 . "<br>";
-            $result = $this->savePagePosition($src_wiki_id, $targetColumn, $oldParentId);
-            if(!$result){
+        if ($oldColumn != $targetColumn) {
+            // echo "updating src " . $src_wiki_id . " column to " . $targetColumn . " <br>" . PHP_EOL;
+            if(!$this->savePagePosition($src_wiki_id, $targetColumn, $wikiPageSrc['parent_id'])) {
                 return false;
             }
         }

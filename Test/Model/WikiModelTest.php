@@ -89,7 +89,7 @@ class WikiModelTest extends Base
         // reorder
         $wikimodel->reorderPages($project['id'], 5, 3);
         // expected by id
-        $expectedColumnOrders = [1,2,4,5,3];
+        $expectedColumnOrders = [1,2,5,3,4];
 
         $wikiPages = $wikimodel->getWikipages($project['id']);
         $this->assertEquals(count($expectedColumnOrders), count($wikiPages), 'expected column order count doesn\'t match pages');
@@ -128,7 +128,7 @@ class WikiModelTest extends Base
         // reorder
         $wikimodel->reorderPagesByIndex($project['id'], 4, 2, null);
         // expected by id
-        $expectedColumnOrders = [0,1,3,2];
+        $expectedColumnOrders = [1,4,2,3];
 
         $wikiPages = $wikimodel->getWikiPagesByParentId($project['id'], null);
         $this->assertEquals(count($expectedColumnOrders), count($wikiPages), 'expected column order count doesn\'t match pages');
