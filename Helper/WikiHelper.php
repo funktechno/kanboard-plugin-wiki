@@ -51,7 +51,7 @@ class WikiHelper extends Base
      * @param mixed $not_editable
      * @return string
      */
-    public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable) {
+    public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable, $indent = 0) {
         $html = '<ul' . ($parent_id == 0 ? ' id="wikiroot"' : '').' data-parent-id="'.$parent_id.'">';
         if (isset($children) && (count($children) > 0)) {
             foreach ($children as $item) {
@@ -76,7 +76,7 @@ class WikiHelper extends Base
                     $html .= '<button class="indent actionBigger"><i class="fa fa-square-o"></i></button>';
                     $wikipage_icon = 'file-word-o';
                 }
-                $html .= '<span class="wikibranch">';
+                $html .= '<span class="wikibranch">' . str_repeat('&nbsp;', 2 * $indent);
                 if (!$not_editable) {
                     $html .= $this->helper->url->icon(
                         $wikipage_icon, $item['title'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_active
@@ -87,7 +87,7 @@ class WikiHelper extends Base
                     );
                 }
                 $html .= '</span>';
-                $html .= $this->renderChildren($item['children'], $item['id'], $project, $selected_wiki_id, $not_editable);
+                $html .= $this->renderChildren($item['children'], $item['id'], $project, $selected_wiki_id, $not_editable, $indent + 1);
                 $html .= '</li>';
             }
         }

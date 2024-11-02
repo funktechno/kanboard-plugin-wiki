@@ -295,30 +295,47 @@ class WikiController extends BaseController
     }
 
     /**
-     * Remove a wikipage
+     * Restore a wikipage edition
      *
      * @access public
      */
     public function restore()
     {
-        // $this->checkCSRFParam();
         $project = $this->getProject();
 
         if ($this->wikiModel->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
             $this->flash->success(t('Edition was restored successfully.'));
             $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
-            // $this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))
-
         } else {
             $this->flash->failure(t('Unable to restore this wiki edition.'));
             $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
-
         }
-        // redirect to detail
-        // $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+    }
 
+    /**
+     * Purge a wikipage edition
+     *
+     * @access public
+     */
+    public function purge()
+    {
+        $project = $this->getProject();
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
+        $edition = $this->request->getIntegerParam('edition');
 
-        // $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+        $wikipage = $this->wikiModel->getWikipage($wiki_id);
+        if ($wikipage['current_edition'] == $edition) {
+            $this->flash->failure(t('Your current wiki edition cannot be purged.'));
+            $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+            return;
+        }
+
+        if ($this->wikiModel->purgeEdition($wiki_id, $edition)) {
+            $this->flash->success(t('Edition was purged successfully.'));
+        } else {
+            $this->flash->failure(t('Unable to purge this wiki edition.'));
+        }
+        $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
     }
 
     /**
@@ -331,6 +348,22 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $this->response->html($this->template->render('wiki:wiki/confirm_restore', array(
+            'project' => $project,
+            'wiki_id' => $this->request->getIntegerParam('wiki_id'),
+            'edition' => $this->request->getIntegerParam('edition'),
+        )));
+    }
+
+    /**
+     * Confirmation dialog before purging an edition
+     *
+     * @access public
+     */
+    public function confirm_purge()
+    {
+        $project = $this->getProject();
+
+        $this->response->html($this->template->render('wiki:wiki/confirm_purge', array(
             'project' => $project,
             'wiki_id' => $this->request->getIntegerParam('wiki_id'),
             'edition' => $this->request->getIntegerParam('edition'),
