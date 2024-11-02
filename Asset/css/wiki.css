@@ -5,7 +5,7 @@ body.dragging, body.dragging * {
 .sortable-dragged {
     position: absolute;
     opacity: 0.75;
-    background: rgba(255, 250, 144, 0.15);
+    background: rgba(255, 250, 144, 0.25);
     z-index: 2000 !important;
 }
 
@@ -37,7 +37,7 @@ body.dragging, body.dragging * {
     height: 100%;
     resize: horizontal;
     overflow: auto;
-    max-width: 50% !important;
+    max-width: 75% !important;
     min-width: 384px !important;
 }
 
@@ -46,6 +46,16 @@ body.dragging, body.dragging * {
     padding-top: 5px;
     text-align: left;
     white-space: nowrap;
+    line-height: normal !important;
+}
+
+.wikibranch {
+    width: calc(100% - 24px);
+    display: inline-block;
+}
+.wikibranch:hover {
+    cursor: move;
+    background: rgba(255, 250, 144, 0.25);
 }
 
 .wikilink {
@@ -55,6 +65,9 @@ body.dragging, body.dragging * {
     padding-right: 10px;
     white-space: nowrap;
     z-index: 1;
+}
+.wikilink.active {
+    box-shadow: 0 0 10px #777777 inset;
 }
 
 #wikitree {
@@ -88,14 +101,8 @@ body.dragging, body.dragging * {
     padding-right: 5px !important;
     padding-left: 5px !important;
 }
-#wikitree li, #wikilist li {
-    line-height: normal !important;
-}
 #wikitree li:last-child, #wikilist li:last-child {
     margin-bottom: 0px !important;
-}
-#wikitree .wikilink.active {
-    box-shadow: 0 0 10px #777777 inset;
 }
 #wikitree button a .fa, #wikilist button a .fa {
     color: var(--link-color-primary);
