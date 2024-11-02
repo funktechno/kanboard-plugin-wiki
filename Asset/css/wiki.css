@@ -84,7 +84,7 @@ body.dragging, body.dragging * {
     cursor: default;
     color: transparent;
 }
-#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, .expandAll, .collapseAll, .gotoSelected {
+#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, #wikiedition .action, .expandAll, .collapseAll, .gotoSelected {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
@@ -104,6 +104,6 @@ body.dragging, body.dragging * {
 #wikitree li:last-child, #wikilist li:last-child {
     margin-bottom: 0px !important;
 }
-#wikitree button a .fa, #wikilist button a .fa {
+#wikitree button a .fa, #wikilist button a .fa, #wikiedition button a .fa {
     color: var(--link-color-primary);
 }

@@ -26,15 +26,27 @@ class WikiModel extends Base
     const WIKI_EDITION_TABLE = 'wikipage_editions';
 
     /**
-     * Get all of a Wikipages'edition by edition
+     * Get all of Wikipages' editions by edition
      *
      * @access public
-     * @param  integer   $project_id
+     * @param  integer   $wiki_id
      * @return array
      */
     public function getEditions($wiki_id)
     {
         return $this->db->table(self::WIKI_EDITION_TABLE)->eq('wikipage_id', $wiki_id)->desc('edition')->findAll();
+    }
+
+    /**
+     * Get latest of Wikipages' editions
+     *
+     * @access public
+     * @param  integer   $wiki_id
+     * @return array
+     */
+    public function getLatestEdition($wiki_id)
+    {
+        return $this->db->table(self::WIKI_EDITION_TABLE)->eq('wikipage_id', $wiki_id)->desc('edition')->findOne();
     }
 
     /**
@@ -526,32 +538,40 @@ class WikiModel extends Base
     // , $date = ''
     public function createEdition($values, $wiki_id, $edition, $date='')
     {
-
         $persistEditions = $this->configModel->get('persistEditions');
-
-        if ($persistEditions == 1) {
-
-            $editionvalues = array(
-                'title' => $values['title'],
-                'edition' => $edition,
-                'content' => $values['content'],
-                'date_creation' => $date ?: date('Y-m-d'), // should alway be the last date
-                // 'creator_id' => $this->userSession->getId(),
-                'wikipage_id' => $wiki_id,
-            );
-
-            if ($this->userSession->isLogged()) {
-                $editionvalues['creator_id'] = $this->userSession->getId();
-            }
-
-            // $values['creator_id'] = $this->userSession->getId();
-            //     $values['modifier_id'] = $this->userSession->getId();
-            // date_modification
-
-            return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
-        } else {
-            return null;
+        if ($persistEditions != 1) {
+            return null; // early exit
         }
+
+        $latestEdition = $this->getLatestEdition($wiki_id);
+        $isEditionChanged = empty($latestEdition); // if no previous editions
+        if (!$isEditionChanged) {
+            // check if there are any meaningful changes (e.g. changing parent is NOT meaningful for editions)
+            $isEditionChanged |= ($values['title'] != $latestEdition['title']);
+            $isEditionChanged |= ($values['content'] != $latestEdition['content']);
+        }
+        if (!$isEditionChanged) {
+            return null; // no changes !!!
+        }
+
+        $editionvalues = array(
+            'title' => $values['title'],
+            'edition' => $edition,
+            'content' => $values['content'],
+            'date_creation' => $date ?: date('Y-m-d'), // should always be the last date
+            // 'creator_id' => $this->userSession->getId(),
+            'wikipage_id' => $wiki_id,
+        );
+
+        if ($this->userSession->isLogged()) {
+            $editionvalues['creator_id'] = $this->userSession->getId();
+        }
+
+        // $values['creator_id'] = $this->userSession->getId();
+        //     $values['modifier_id'] = $this->userSession->getId();
+        // date_modification
+
+        return $this->db->table(self::EDITIONTABLE)->persist($editionvalues);
 
         // need to also save to editions
     }
@@ -651,12 +671,10 @@ class WikiModel extends Base
      */
     public function restoreEdition($wiki_id, $edition)
     {
-
         $date = date('Y-m-d');
-        $editionvalues = $this->db->
-            table(self::WIKI_EDITION_TABLE)
-            ->eq('edition', $edition)
+        $editionvalues = $this->db->table(self::WIKI_EDITION_TABLE)
             ->eq('wikipage_id', $wiki_id)
+            ->eq('edition', $edition)
             ->findOne(); // this may possibly not support joins
 
         $values = [
@@ -671,7 +689,22 @@ class WikiModel extends Base
             $values['modifier_id'] = $this->userSession->getId();
         }
 
-        // return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->remove();
         return $this->db->table(self::WIKITABLE)->eq('id', $wiki_id)->update($values);
+    }
+
+    /**
+     * purge a specific edition
+     *
+     * @access public
+     * @param  integer    $wiki_id
+     * @param  integer    $edition
+     * @return boolean
+     */
+    public function purgeEdition($wiki_id, $edition)
+    {
+        return $this->db->table(self::WIKI_EDITION_TABLE)
+            ->eq('wikipage_id', $wiki_id)
+            ->eq('edition', $edition)
+            ->remove();
     }
 }

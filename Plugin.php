@@ -28,7 +28,8 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/project/:project_id/create',                      'WikiController', 'create', 'wiki');
         $this->route->addRoute('/wiki/edit/:wiki_id',                                   'WikiController', 'edit', 'wiki');
         $this->route->addRoute('/wiki/project/:project_id/remove/:wiki_id',             'WikiController', 'confirm', 'wiki');
-        $this->route->addRoute('/wiki/project/:project_id/restore/:wiki_id',            'WikiController', 'confirm_restore', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/restore/:wiki_id/:edition',   'WikiController', 'confirm_restore', 'wiki');
+        $this->route->addRoute('/wiki/project/:project_id/purge/:wiki_id/:edition',     'WikiController', 'confirm_purge', 'wiki');
 
         // page routes wiki files
         $this->route->addRoute('/wiki/file/:project_id/create/:wiki_id',                'WikiFileController', 'create', 'wiki');

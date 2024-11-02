@@ -7,12 +7,12 @@ $is_active = ($wiki_id == 0) ? ' active' : '';
     <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
 
-<div class="sidebar wikisidebar wikicontent">
-
 <?php if (!$not_editable): ?>
     <?=$this->wikiHelper->js("plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
     <?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
 <?php endif ?>
+
+<div class="sidebar wikisidebar wikicontent">
 
 <?php if (!$not_editable): ?>
     <?= $this->url->icon('book', t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>

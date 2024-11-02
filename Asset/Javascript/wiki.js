@@ -23,6 +23,9 @@ jQuery(document).ready(function () {
     $("#wikilist").find(".action a").each(function () {
         $(this).attr('title', $(this).parent().attr('title'));
     });
+    $("#wikiedition").find(".action a").each(function () {
+        $(this).attr('title', $(this).parent().attr('title'));
+    });
 
     //--------------------------------------
     // handle collapse/expand of wikitree branches
