@@ -158,19 +158,28 @@ class WikiController extends BaseController
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
         $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
-        // use a wiki helper for better side bar TODO:
-        $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
-            'project' => $project,
-            'title' => $project['name'],
-            'wiki_id' => $result['selected']['id'],
-            'wiki' => $result['selected'],
-            'not_editable' => true,
-            'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
-            'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            'wikipages' => $result['tree'],
-            'wikipage' => $result['selected'],
-            'wikipage_sublist' => $wikipage_sublist,
-        )));
+        if ($wiki_id != 0) {
+            $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $result['selected']['id'],
+                'wiki' => $result['selected'],
+                'not_editable' => true,
+                'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
+                'images' => $this->wikiFileModel->getAllImages($wiki_id),
+                'wikipages' => $result['tree'],
+                'wikipage' => $result['selected'],
+                'wikipage_sublist' => $wikipage_sublist,
+            )));
+        } else {
+            $this->response->html($this->helper->layout->app('wiki:wiki/sidebar', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $wiki_id,
+                'wikipages' => $result['tree'],
+                'not_editable' => true,
+            )));
+        }
     }
 
     /**
@@ -186,30 +195,26 @@ class WikiController extends BaseController
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
         $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
-        // use a wiki helper for better side bar TODO:
-        $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
-            'project' => $project,
-            'title' => $project['name'],
-            'wiki_id' => $result['selected']['id'],
-            'wiki' => $result['selected'],
-            'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
-            'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            'wikipages' => $result['tree'],
-            'wikipage' => $result['selected'],
-            'wikipage_sublist' => $wikipage_sublist,
-        )));
-
-        // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
-
-        // $wikipage= $wikipages->eq('id', $wiki_id);
-
-        // $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
-        //     'project' => $project,
-        //     'title' => $project['name'],
-        //     'wiki_id' => $wiki_id,
-        //     'wikipage' => $wikipage,
-        //     'wikipages' => $wikipages,
-        // )));
+        if ($wiki_id != 0) {
+            $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $result['selected']['id'],
+                'wiki' => $result['selected'],
+                'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
+                'images' => $this->wikiFileModel->getAllImages($wiki_id),
+                'wikipages' => $result['tree'],
+                'wikipage' => $result['selected'],
+                'wikipage_sublist' => $wikipage_sublist,
+            )));
+        } else {
+            $this->response->html($this->helper->layout->app('wiki:wiki/sidebar', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $wiki_id,
+                'wikipages' => $result['tree'],
+            )));
+        }
     }
 
     // public function breakdown()

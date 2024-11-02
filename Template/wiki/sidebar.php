@@ -1,4 +1,13 @@
-<div class="sidebar wikisidebar">
+<?php
+(isset($not_editable)) ?: $not_editable = false;
+$is_active = ($wiki_id == 0) ? ' active' : '';
+?>
+
+<?php if ($wiki_id == 0 && !$not_editable): ?>
+    <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
+<?php endif ?>
+
+<div class="sidebar wikisidebar wikicontent">
 
 <?php if (!$not_editable): ?>
     <?=$this->wikiHelper->js("plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
@@ -25,17 +34,23 @@
 <br>
 
 <?php if (!empty($wikipages)): ?>
-<ul id="wikitree" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
-<li class="wikipage" data-project-id="<?= $project['id'] ?>" data-page-id="0" data-page-order="0">
-<?=$this->wikiHelper->renderChildren($wikipages, 0, $project, $wiki_id, $not_editable)?>
-</li>
-</ul>
-<?php else: ?>
-<ul>
-    <li class="alert alert-info">
-        <?=t('There are no Wiki pages.')?>
+    <ul id="wikitree" data-selected-wiki-id="<?=$wiki_id?>" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
+    <li class="wikipage<?=$is_active?>" data-project-id="<?= $project['id'] ?>" data-page-id="0" data-page-order="0">
+    <button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-minus-square-o"></i></a></button>
+    <?php if (!$not_editable): ?>
+        <?=$this->helper->url->icon('home', t('(root)'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => 0), false, 'wikilink'.$is_active)?>
+    <?php else: ?>
+        <?=$this->helper->url->icon('home', t('(root)'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => 0), false, 'wikilink'.$is_active)?>
+    <?php endif?>
+    <?=$this->wikiHelper->renderChildren($wikipages, 0, $project, $wiki_id, $not_editable)?>
     </li>
-</ul>
+    </ul>
+<?php else: ?>
+    <ul>
+        <li class="alert alert-info">
+            <?=t('There are no Wiki pages.')?>
+        </li>
+    </ul>
 <?php endif?>
 
 </div>

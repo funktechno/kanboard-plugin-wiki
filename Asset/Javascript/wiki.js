@@ -53,8 +53,8 @@ jQuery(document).ready(function () {
         function gotoSelectedWikipageBranch() {
             function expandParentWikipage(el) {
                 const parentUl = el.parent();
-                const parentId = parentUl.attr("data-parent-id");
-                if (parentId == 0) return; // end recursion
+                const parentId = parentUl.attr("id");
+                if (parentId === "wikiroot") return; // end recursion
 
                 const parentWikipage = parentUl.parent();
                 const button = parentWikipage.find(".branch a i")[0];
@@ -65,8 +65,9 @@ jQuery(document).ready(function () {
                 expandParentWikipage(parentWikipage);
             }
 
-            const selected = $("#wikitree").find(".wikipage.active");
+            const selected = $("#wikiroot").find(".wikipage.active");
             expandParentWikipage(selected);
+            $("#wikiroot").show();
         }
 
         $('.expandAll').click(function () {
@@ -98,25 +99,29 @@ jQuery(document).ready(function () {
             }
         });
 
-        collapseAllWikipagesBranches();
-        gotoSelectedWikipageBranch();
+        // if not root selected, then collapse entire wiki content except for the selected branch
+        if ($("#wikitree").length == 1 && $("#wikitree").data("selected-wiki-id") != 0) {
+            collapseAllWikipagesBranches();
+            gotoSelectedWikipageBranch();
+        }
     }
 
     //--------------------------------------
     // page reorder and nesting support using jquery sorting plugin
     //--------------------------------------
-    if($("#wikitree").length == 1 && $("#wikitree").data("reorder-url")) {
+    if($("#wikiroot").length == 1 && $("#wikitree").length == 1 && $("#wikitree").data("reorder-url")) {
         if (isMobile) {
             $(".sortable-handle").show();
         }
 
         $('#wikitree').sortable({
+        $('#wikiroot').sortable({
             nested: true,
             itemSelector: ".wikipage",
             placeholder: '<li class="sortable-placeholder"></li>',
             placeholderClass: "sortable-placeholder",
             draggedClass: "sortable-dragged",
-            handle: isMobile ? ".sortable-handle" : ".wikilink",
+            handle: isMobile ? ".sortable-handle" : ".wikibranch",
             onDrop: function ($item, container, _super) {
             //   console.log("onDrop", $item, container, _super)
             container.el.removeClass("active");
