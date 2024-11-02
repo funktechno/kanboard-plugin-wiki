@@ -114,7 +114,6 @@ jQuery(document).ready(function () {
             $(".sortable-handle").show();
         }
 
-        $('#wikitree').sortable({
         $('#wikiroot').sortable({
             nested: true,
             itemSelector: ".wikipage",
@@ -123,45 +122,43 @@ jQuery(document).ready(function () {
             draggedClass: "sortable-dragged",
             handle: isMobile ? ".sortable-handle" : ".wikibranch",
             onDrop: function ($item, container, _super) {
-            //   console.log("onDrop", $item, container, _super)
-            container.el.removeClass("active");
-            var srcProperties = {
-                ...$item[0].dataset
-            }
-            var containerProperties = {...container.el[0].dataset}
+                // console.log("onDrop", $item, container, _super)
 
-            let request = {
-                "src_wiki_id": srcProperties["pageId"],
-                "index": $item.index(),
-                "parent_id": containerProperties["parentId"]
-            }
+                const itemProperties = { ...$item[0].dataset }
+                const containerProperties = { ...container.el[0].dataset }
+                // console.log(itemProperties)
+                // console.log(containerProperties)
 
-            // console.log("request", request)
+                const request = {
+                    "src_wiki_id": itemProperties["pageId"],
+                    "index": $item.index() + 1,
+                    "parent_id": containerProperties["parentId"],
+                }
+                // console.log("request", request)
 
-
-            $.ajax({
+                $.ajax({
                     cache: false,
                     url: $("#wikitree").data("reorder-url"),
                     contentType: "application/json",
                     type: "POST",
                     processData: false,
                     data: JSON.stringify(request),
-                    success: function(data) {
-                        // self.refresh(data);
-                        // self.savingInProgress = false;
+                    success: function(/*data*/) {
+                        // alert(data);
+                        location.reload();
                     },
-                    error: function() {
-                        // self.app.hideLoadingIcon();
-                        // self.savingInProgress = false;
+                    error: function(xhr,textStatus,e) {
+                        alert(xhr.responseText);
+                        location.reload();
                     },
                     statusCode: {
                         403: function(data) {
-                            window.alert(data.responseJSON.message);
-                            document.location.reload(true);
+                            alert(data.responseJSON.message);
+                            location.reload();
                         }
                     }
                 });
-            _super($item, container);
+                _super($item, container);
             },
         });
     }
