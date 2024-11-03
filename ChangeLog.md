@@ -16,7 +16,7 @@ And also does the parent dropdown in the Wiki page **Edit** modal.
 * Implemented purging of Wiki **Editions** (alongside the Restore functionality).
 Updating an **Edition** now checks for actual changes
 and if nothing meaningful has changed (title and content) skips creating the edition. 
-Actions like changing the parent shouldn't trigger a new editions to avoid unnecessary multiplication of the data.
+Actions like changing the parent shouldn't trigger new editions to avoid unnecessary multiplication of the data.
 
 ### Improvements:
 * Massive improvements to UI/UX.
@@ -35,12 +35,12 @@ Actions like changing the parent shouldn't trigger a new editions to avoid unnec
 
 ### Bug fixes:
 * Fixed routes for all controller actions in use.
+They used to be copy pasted and were useless as they were all the same.
+Minimalistic possible and sensible notation is proposed.
 * Fixed the bug that a wiki page could assign a parent from its own subtree,
 thus effectively and irreversibly breaking the wiki page hierarchy.
 Now the parent dropdown in the **Edit** modal shows only the possible parent nodes.
-They used to be copy pasted and were useless as they were all the same.
-Minimalistic possible and sensible notation is proposed.
-* Fixed the `jquery-sortable.js` library (which is no supported and maintained for quite a while),
+* Fixed the `jquery-sortable.js` library (which is not supported and maintained for quite a while),
 to work on mobile and to allow correct touch and **drag & drop** elements without sliding the whole page along.
 * Obviously, all the functionality about managing wikipages' `ordercolumn` has been totally revamped to guarantee correct sequential numbers for subpages.
 * Various small bugfixes.
