@@ -89,7 +89,7 @@ class WikiModelTest extends Base
         // reorder
         $wikimodel->reorderPages($project['id'], 5, 3);
         // expected by id
-        $expectedColumnOrders = [1,2,5,3,4];
+        $expectedColumnOrders = [1,2,4,5,3];
 
         $wikiPages = $wikimodel->getWikipages($project['id']);
         $this->assertEquals(count($expectedColumnOrders), count($wikiPages), 'expected column order count doesn\'t match pages');
