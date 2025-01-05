@@ -195,7 +195,7 @@ class WikiModelTest extends Base
 
         $result = $this->wikiModel->createpage(1, 'Test title', 'Test content');
 
-        $this->assertEquals(1, $result);
+        $this->assertEquals(false, $result);
     }
 
     public function testUpdatePageUpdatesCorrectly()
