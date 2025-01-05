@@ -11,6 +11,7 @@
     <?= $this->form->label(t('Title'), 'title') ?>
     <?= $this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus', 'tabindex="1"')) ?>
 
+    <br><br>
     <?= $this->form->label(t('Content'), 'content') ?>
     <?= $this->form->textEditor('content', $values, $errors) ?>
 
