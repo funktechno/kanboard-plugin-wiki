@@ -178,7 +178,7 @@ class WikiModelTest extends Base
         //     ->willReturn($expectedResult);
 
         $result = $this->wikiModel->getEditions($wikiId);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals(json_encode($expectedResult), json_encode($result));
     }
     public function testCreatePageSavesCorrectly()
     {
