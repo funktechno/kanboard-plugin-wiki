@@ -34,7 +34,7 @@ class WikiModelTest extends Base
         $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
 
         // $this->db = $this->createMock(Base::class);
-        $this->wikiModel = new WikiModel($this->containe);
+        $this->wikiModel = new WikiModel($this->container);
         
         // $this->wikiModel = new WikiModel($this->container);
     }
