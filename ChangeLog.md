@@ -1,6 +1,7 @@
 # Changelog
 
 ## Version 0.5.0
+* contributors: @imfx77
 
 ---
 
@@ -34,6 +35,7 @@ Actions like changing the parent shouldn't trigger new editions to avoid unneces
 * Improved this very `ChangeLog`, transforming it into MD. 
 
 ### Bug fixes:
+* Fixed file viewer
 * Fixed routes for all controller actions in use.
 They used to be copy pasted and were useless as they were all the same.
 Minimalistic possible and sensible notation is proposed.
