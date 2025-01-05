@@ -1,5 +1,7 @@
 <div class="table-list-details">
     <ul>
+        <li><?=t('Project')?>: <strong><?=$this->model->projectModel->getById($wiki['project_id'])['name']?></strong></li>
+
         <?php if ($wiki['creator_id'] > 0): ?>
             <li><?=t('Creator')?>: <strong><?=$this->text->e($wiki['creator_name'] ?: $wiki['creator_username'])?></strong></li>
         <?php endif?>
@@ -15,8 +17,12 @@
 
         <?php if ($wiki['content']): ?>
             <li>
-                <h4><?=t('Content')?>:</h4>
-                <?=$this->text->markdown($wiki['content'])?>
+                <details>
+                <summary><h4 style="display:inline-block"><?=t('Content')?></h4></summary>
+                    <article class="markdown">
+                        <?=$this->text->markdown($wiki['content'])?>
+                    </article>
+                </details>
             </li>
         <?php endif?>
 
