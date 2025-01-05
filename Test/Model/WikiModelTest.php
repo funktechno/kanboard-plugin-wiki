@@ -34,7 +34,9 @@ class WikiModelTest extends Base
         $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
 
         // $this->db = $this->createMock(Base::class);
-        // $this->wikiModel = new WikiModel($this->db);
+        $this->wikiModel = new WikiModel($this->containe);
+        
+        // $this->wikiModel = new WikiModel($this->container);
     }
 
     public function testCreation()
@@ -45,16 +47,16 @@ class WikiModelTest extends Base
 
         $project = $projectModel->getById(1);
 
-        $wikimodel = new WikiModel($this->container);
+        // $this->wikiModel = new WikiModel($this->container);
         // create wiki pages
 
         $titleValue = "Security";
         $contentValue = "Some content";
-        $this->assertEquals(1, $wikimodel->createpage($project['id'], $titleValue, $contentValue, '2015-01-01'), 'Failed to a create wiki page on project');
-        $this->assertEquals(2, $wikimodel->createpage($project['id'], "Conventions", 'More content'), 'Failed to an additional create wiki page on project');
+        $this->assertEquals(1, $this->wikiModel->createpage($project['id'], $titleValue, $contentValue, '2015-01-01'), 'Failed to a create wiki page on project');
+        $this->assertEquals(2, $this->wikiModel->createpage($project['id'], "Conventions", 'More content'), 'Failed to an additional create wiki page on project');
 
         // grab editions for first wiki page
-        $editions = $wikimodel->getEditions(1);
+        $editions = $this->wikiModel->getEditions(1);
         $this->assertEmpty($editions);
 
         $values = [
@@ -67,10 +69,10 @@ class WikiModelTest extends Base
 
         $this->userSession = new UserSession($this->container);
         // result is not a consistent 1. is this true or id for new edition?
-        $createEditionResult = $wikimodel->createEdition($values, 1, 1);
-        // $this->assertEquals($wikimodel->createEdition($values, 1, 1), 1, 'Failed to create wiki edition');
+        $createEditionResult = $this->wikiModel->createEdition($values, 1, 1);
+        // $this->assertEquals($this->wikiModel->createEdition($values, 1, 1), 1, 'Failed to create wiki edition');
 
-        $editions = $wikimodel->getEditions(1);
+        $editions = $this->wikiModel->getEditions(1);
         $this->assertNotEmpty($editions, 'Failed to get wiki editions');
 
         $this->assertEquals('Security', $editions[0]['title']);
@@ -85,20 +87,20 @@ class WikiModelTest extends Base
 
         $project = $projectModel->getById(1);
 
-        $wikimodel = new WikiModel($this->container);
+        // $this->wikiModel = new WikiModel($this->container);
 
         // create wiki pages
-        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
+        $this->assertEquals(1, $this->wikiModel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
         for ($i=2; $i <= 5; $i++) { 
-            $this->assertEquals($i, $wikimodel->createpage($project['id'], "Page ". $i, ""), 'Failed to a create wiki page '. $i . ' on project');
+            $this->assertEquals($i, $this->wikiModel->createpage($project['id'], "Page ". $i, ""), 'Failed to a create wiki page '. $i . ' on project');
         }
 
         // reorder
-        $wikimodel->reorderPages($project['id'], 5, 3);
+        $this->wikiModel->reorderPages($project['id'], 5, 3);
         // expected by id
         $expectedColumnOrders = [1,2,4,5,3];
 
-        $wikiPages = $wikimodel->getWikipages($project['id']);
+        $wikiPages = $this->wikiModel->getWikipages($project['id']);
         $this->assertEquals(count($expectedColumnOrders), count($wikiPages), 'expected column order count doesn\'t match pages');
 
         for ($i=0; $i < count($expectedColumnOrders); $i++) { 
@@ -114,18 +116,18 @@ class WikiModelTest extends Base
 
         $project = $projectModel->getById(1);
 
-        $wikimodel = new WikiModel($this->container);
+        // $this->wikiModel = new WikiModel($this->container);
 
         // create wiki pages
-        $this->assertEquals(1, $wikimodel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
+        $this->assertEquals(1, $this->wikiModel->createpage($project['id'], "Home", "", '2015-01-01'), 1, 'Failed to a create wiki page home on project');
         for ($i=2; $i <= 5; $i++) { 
-            $this->assertEquals($i, $wikimodel->createpage($project['id'], "Page ". $i, ""), 'Failed to a create wiki page '. $i . ' on project');
+            $this->assertEquals($i, $this->wikiModel->createpage($project['id'], "Page ". $i, ""), 'Failed to a create wiki page '. $i . ' on project');
         }
 
         // make page 5 a child of home page
-        $wikimodel->updatepage(array('id' => 5, 'parent_id' => 1, 'title' => 'Page 5', 'editions' => 1, 'content' => 'Some content'), 1, '2015-01-01');
+        $this->wikiModel->updatepage(array('id' => 5, 'parent_id' => 1, 'title' => 'Page 5', 'editions' => 1, 'content' => 'Some content'), 1, '2015-01-01');
 
-        $childPage = $wikimodel->getWikipage(5);
+        $childPage = $this->wikiModel->getWikipage(5);
 
         $this->assertEquals(5, $childPage['id']);
         $this->assertEquals(1, $childPage['parent_id']);
@@ -133,11 +135,11 @@ class WikiModelTest extends Base
         $this->assertEquals('Some content', $childPage['content']);
 
         // reorder
-        $wikimodel->reorderPagesByIndex($project['id'], 4, 2, null);
+        $this->wikiModel->reorderPagesByIndex($project['id'], 4, 2, null);
         // expected by id
         $expectedColumnOrders = [1,3,4,2];
 
-        $wikiPages = $wikimodel->getWikiPagesByParentId($project['id'], null);
+        $wikiPages = $this->wikiModel->getWikiPagesByParentId($project['id'], null);
         $this->assertEquals(count($expectedColumnOrders), count($wikiPages), 'expected column order count doesn\'t match pages');
 
         for ($i=0; $i < count($expectedColumnOrders); $i++) { 
