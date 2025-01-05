@@ -49,6 +49,6 @@ return array(
     'Search by content' => 'Suche nach Inhalt',
     'Wiki page Title' => 'Wikiseiten-Titel',
     'There are no editions for this Wiki page saved to restore.' => 'Es sind keine Bearbeitungen zur Wiederherstellung für diese Wiki-Seite  gespeichert.',
-    'There are no Wiki pages that you have access to.' => 'Es gibt keine Wiki-Seiten, auf die Sie Zugriff haben.',
+    'There are no Wiki pages that you have access to.' => 'Es gibt keine Wiki-Seiten, auf die Du Zugriff hast.',
     'There are no Wiki pages for this project.' => 'Es gibt keine Wiki-Seiten für dieses Projekt.'
 );

@@ -43,7 +43,7 @@ return array(
     'Content' => 'Conteúdo',
     'Date Created' => 'Data Criada',
     'Date Modified' => 'Data modificada',
-    '%d Wiki pages' => '%d Páginas Wiki',
+    'Wiki pages' => 'Páginas Wiki',
     'Search by content' => 'Buscar por conteúdo',
     'Wiki page Title' => 'Página do Wiki Título',
     'There are no editions for this Wiki page saved to restore.' => 'Não há edições salvas para restaurar.',
