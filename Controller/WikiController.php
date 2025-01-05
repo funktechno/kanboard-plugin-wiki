@@ -49,7 +49,7 @@ class WikiController extends BaseController
 
         $this->response->html($this->helper->layout->app('wiki:wiki_list/listing', array(
             'paginator'   => $paginator,
-            'title'       => t('Wikis') . ' (' . $paginator->getTotal() . ')',
+            'title'       => t('Wiki pages'),
             'values'      => array('search' => $search),
         )));
     }
@@ -63,13 +63,16 @@ class WikiController extends BaseController
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $result = $this->prepareWikipagesTree($wikipages);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
+
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
-            'no_layout' => true,
             'not_editable' => true,
-            'title' => $project['name'] .= " ". t('Wiki'),
-            'wikipages' => $this->wikiModel->getWikipages($project['id']),
-        ), 'wiki:wiki/sidebar'));
+            'title' => $project['name'],
+            'wikipages' => $wiki_list,
+        )));
     }
 
     /**
@@ -83,11 +86,15 @@ class WikiController extends BaseController
 
         $project = $this->getProject();
 
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $result = $this->prepareWikipagesTree($wikipages);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
+
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
-            'title' => $project['name'] .= " ". t('Wiki'),
-            'wikipages' => $this->wikiModel->getWikipages($project['id']),
-        ), 'wiki:wiki/sidebar'));
+            'title' => $project['name'],
+            'wikipages' => $wiki_list,
+        )));
 
         // ,array(
         //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
@@ -96,28 +103,25 @@ class WikiController extends BaseController
 
     public function editions()
     {
-
         $project = $this->getProject();
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
-        // $project = $this->getProject();
-        //
-        // for list use window-restore
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
 
-        // restore button use undo
-
-        $this->response->html($this->helper->layout->project('wiki:wiki/editions', array(
+        $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
-            'title' => t('Wiki Editions'),
-            'wiki_id'=> $wiki_id,
+            'title' => $project['name'],
+            'wiki_id'=> $result['selected']['id'],
+            'wikipage' => $result['selected'],
+            'wikipages' => $result['tree'],
             'editions' => $this->wikiModel->getEditions($wiki_id),
-        ), 'wiki:wiki/sidebar'));
+        )));
 
     }
 
     public function edit(array $values = array(), array $errors = array())
     {
-
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $editwiki = $this->wikiModel->getWikipage($wiki_id);
@@ -128,23 +132,16 @@ class WikiController extends BaseController
         // }
 
         $wikipages = $this->wikiModel->getWikipages($editwiki['project_id']);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, 0, $wiki_id);
 
-        $wiki_list = array('' => t('None'));
-
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) != t($page['id'])) {
-                $wiki_list[$page['id']] = $page['title'];
-            }
-        }
-
-        // $values['wikipage']
         $this->response->html($this->helper->layout->app('wiki:wiki/edit', array(
             'wiki_id' => $wiki_id,
             'values' => $editwiki,
             'errors' => $errors,
             'wiki_list' => $wiki_list,
             'title' => t('Edit Wikipage'),
-        ), 'wiki:wiki/sidebar'));
+        )));
     }
 
     public function detail_readonly() {
@@ -158,48 +155,32 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) == t($page['id'])) {
-                $wikipage = $page;
-                break;
-            }
+        if ($wiki_id != 0) {
+            $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $result['selected']['id'],
+                'wiki' => $result['selected'],
+                'not_editable' => true,
+                'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
+                'images' => $this->wikiFileModel->getAllImages($wiki_id),
+                'wikipages' => $result['tree'],
+                'wikipage' => $result['selected'],
+                'wikipage_sublist' => $wikipage_sublist,
+            )));
+        } else {
+            $this->response->html($this->helper->layout->app('wiki:wiki/sidebar', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $wiki_id,
+                'wikipages' => $result['tree'],
+                'not_editable' => true,
+            )));
         }
-
-        // If the last wikipage was deleted, select the new last wikipage.
-        if (!isset($wikipage)) {
-          $wikipage = end($wikipages);
-        }
-
-        // use a wiki helper for better side bar TODO:
-        $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
-            'project' => $project,
-            'title' => t('Wikipage'),
-            'wiki_id' => $wiki_id,
-            'wiki' => $wikipage,
-            'no_layout' => true,
-            'not_editable' => true,
-            'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
-            'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
-            'wikipage' => $wikipage,
-            'wikipages' => $wikipages,
-        ), 'wiki:wiki/sidebar'));
     }
-
-    function getNestedChildren($parent_id, $items) {
-        $children = [];
-
-        foreach ($items as $item) {
-            if ($item['parent_id'] === $parent_id) {
-                $item['children'] = $this->getNestedChildren($item['id'], $items);
-                array_push($children, $item);
-            }
-        }
-
-        return $children;
-    }
-
 
     /**
      * details for single wiki page
@@ -211,54 +192,29 @@ class WikiController extends BaseController
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
-        $wikiPagesResult = array();
+        $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
-        foreach ($wikipages as $page) {
-            if (t($wiki_id) == t($page['id'])) {
-                $wikipage = $page;
-            }
-            if(!isset($page['parent_id'])){
-
-                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
-
-                array_push($wikiPagesResult, $page);
-            }
+        if ($wiki_id != 0) {
+            $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $result['selected']['id'],
+                'wiki' => $result['selected'],
+                'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
+                'images' => $this->wikiFileModel->getAllImages($wiki_id),
+                'wikipages' => $result['tree'],
+                'wikipage' => $result['selected'],
+                'wikipage_sublist' => $wikipage_sublist,
+            )));
+        } else {
+            $this->response->html($this->helper->layout->app('wiki:wiki/sidebar', array(
+                'project' => $project,
+                'title' => $project['name'],
+                'wiki_id' => $wiki_id,
+                'wikipages' => $result['tree'],
+            )));
         }
-
-        // If the last wikipage was deleted, select the new last wikipage.
-        if (!isset($wikipage)) {
-          $wikipage = end($wikipages);
-        }
-
-        // use a wiki helper for better side bar TODO:
-        $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
-            'project' => $project,
-            'title' => t('Wikipage'),
-            'wiki_id' => $wiki_id,
-            'wiki' => $wikipage,
-            'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
-            'images' => $this->wikiFileModel->getAllImages($wiki_id),
-            // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
-            'wikipage' => $wikipage,
-            'wikipages' => $wikiPagesResult,
-        ), 'wiki:wiki/sidebar'));
-
-        // $wikipage= $wikipages->select(1)->eq('id', $wiki_id)->findOne();
-
-        // $wikipage= $wikipages->eq('id', $wiki_id);
-
-        // $this->response->html($this->helper->layout->project('wiki:wiki/detail', array(
-        //     'project' => $project,
-        //     'title' => t('Wikipage'),
-        //     'wiki_id' => $wiki_id,
-        //     // 'wikipage' => $this->wikiModel->getWikipage($wiki_id),
-        //     'wikipage' => $wikipage,
-        //     'wikipages' => $wikipages,
-        // ), 'wiki:wiki/sidebar'));
-
-        // ,array(
-        //     'wikipages' => $this->wikiModel->getWikipages($project['id'])
-        // )
     }
 
     // public function breakdown()
@@ -277,8 +233,51 @@ class WikiController extends BaseController
     //         'paginator' => $paginator,
     //         'project' => $project,
     //         'title' => t('Wiki'),
-    //     ), 'wiki:wiki/sidebar'));
+    //     )));
     // }
+
+    private function getNestedChildren($parent_id, $items) {
+        $children = [];
+
+        foreach ($items as $item) {
+            if ($item['parent_id'] === $parent_id) {
+                $item['children'] = $this->getNestedChildren($item['id'], $items);
+                array_push($children, $item);
+            }
+        }
+
+        return $children;
+    }
+
+    private function prepareWikipagesTree($wikipages, $selected_wiki_id = 0) {
+        $treeWikipages = array();
+        $defaultWikipage = null;
+        $selectedWikipage = null;
+
+        foreach ($wikipages as $page) {
+            if ($selected_wiki_id == $page['id']) {
+                $selectedWikipage = $page;
+            }
+            if(!isset($page['parent_id'])){
+                $page['children'] = $this->getNestedChildren($page['id'], $wikipages);
+                array_push($treeWikipages, $page);
+
+                // set the first root page as default
+                if ($page['ordercolumn'] == 0) {
+                   $defaultWikipage = $page;
+                }
+            }
+        }
+
+        if (!isset($defaultWikipage)) {
+          $defaultWikipage = end($wikipages);
+        }
+        if (!isset($selectedWikipage)) {
+          $selectedWikipage = $defaultWikipage;
+        }
+
+        return array('tree' => $treeWikipages, 'selected' => $selectedWikipage);
+    }
 
     /**
      * Confirmation dialog before removing a wiki
@@ -296,30 +295,47 @@ class WikiController extends BaseController
     }
 
     /**
-     * Remove a wikipage
+     * Restore a wikipage edition
      *
      * @access public
      */
     public function restore()
     {
-        // $this->checkCSRFParam();
         $project = $this->getProject();
 
         if ($this->wikiModel->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
             $this->flash->success(t('Edition was restored successfully.'));
             $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
-            // $this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))
-
         } else {
             $this->flash->failure(t('Unable to restore this wiki edition.'));
             $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
-
         }
-        // redirect to detail
-        // $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+    }
 
+    /**
+     * Purge a wikipage edition
+     *
+     * @access public
+     */
+    public function purge()
+    {
+        $project = $this->getProject();
+        $wiki_id = $this->request->getIntegerParam('wiki_id');
+        $edition = $this->request->getIntegerParam('edition');
 
-        // $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+        $wikipage = $this->wikiModel->getWikipage($wiki_id);
+        if ($wikipage['current_edition'] == $edition) {
+            $this->flash->failure(t('Your current wiki edition cannot be purged.'));
+            $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
+            return;
+        }
+
+        if ($this->wikiModel->purgeEdition($wiki_id, $edition)) {
+            $this->flash->success(t('Edition was purged successfully.'));
+        } else {
+            $this->flash->failure(t('Unable to purge this wiki edition.'));
+        }
+        $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
     }
 
     /**
@@ -332,6 +348,22 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $this->response->html($this->template->render('wiki:wiki/confirm_restore', array(
+            'project' => $project,
+            'wiki_id' => $this->request->getIntegerParam('wiki_id'),
+            'edition' => $this->request->getIntegerParam('edition'),
+        )));
+    }
+
+    /**
+     * Confirmation dialog before purging an edition
+     *
+     * @access public
+     */
+    public function confirm_purge()
+    {
+        $project = $this->getProject();
+
+        $this->response->html($this->template->render('wiki:wiki/confirm_purge', array(
             'project' => $project,
             'wiki_id' => $this->request->getIntegerParam('wiki_id'),
             'edition' => $this->request->getIntegerParam('edition'),
@@ -428,7 +460,7 @@ class WikiController extends BaseController
             'errors' => $errors,
             'project' => $project,
             'title' => t('Wikipage'),
-        ), 'wiki:wiki/sidebar'));
+        )));
     }
 
     /**

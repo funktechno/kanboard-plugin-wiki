@@ -1,6 +1,6 @@
 /* ===================================================
  *  jquery-sortable.js v0.9.13
- *  http://johnny.github.com/jquery-sortable/
+ *  https://github.com/johnny/jquery-sortable
  * ===================================================
  *  Copyright (c) 2012 Jonas von Andrian
  *  All rights reserved.
@@ -86,6 +86,8 @@
       // The Placeholder has not been moved yet.
       onDrag: function ($item, position, _super, event) {
         $item.css(position)
+        event.preventDefault()
+        event.stopPropagation()
       },
       // Called after the drag has been started,
       // that is the mouse button is being held down and
@@ -110,6 +112,7 @@
       onMousedown: function ($item, _super, event) {
         if (!event.target.nodeName.match(/^(input|select|textarea)$/i)) {
           event.preventDefault()
+          event.stopPropagation()
           return true
         }
       },
@@ -266,7 +269,7 @@
         if(!this.dragging){
           if(!this.distanceMet(e) || !this.delayMet)
             return
-  
+
           this.options.onDragStart(this.item, this.itemContainer, groupDefaults.onDragStart, e)
           this.item.before(this.placeholder)
           this.dragging = true
@@ -401,10 +404,11 @@
         ) >= this.options.distance)
       },
       getPointer: function(e) {
-        var o = e.originalEvent || e.originalEvent.touches && e.originalEvent.touches[0]
+        var o = e.originalEvent,
+            t = (e.originalEvent.touches && e.originalEvent.touches[0]) || {}
         return {
-          left: e.pageX || o.pageX,
-          top: e.pageY || o.pageY
+          left: e.pageX || o.pageX || t.pageX,
+          top: e.pageY || o.pageY || t.pageY
         }
       },
       setupDelayTimer: function () {
@@ -465,7 +469,6 @@
   
       var itemPath = this.rootGroup.options.itemPath
       this.target = itemPath ? this.el.find(itemPath) : this.el
-  
       this.target.on(eventNames.start, this.handle, $.proxy(this.dragInit, this))
   
       if(this.options.drop)
@@ -495,7 +498,7 @@
         rootGroup = this.rootGroup,
         validTarget = !rootGroup.options.isValidTarget ||
           rootGroup.options.isValidTarget(rootGroup.item, this)
-  
+
         if(!i && validTarget){
           rootGroup.movePlaceholder(this, this.target, "append")
           return true
