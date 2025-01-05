@@ -1,98 +1,43 @@
-<?php (isset($not_editable)) ?: $not_editable = false;
+<?php
+(isset($not_editable)) ?: $not_editable = false;
 ?>
+
 <?php if (!$not_editable): ?>
-    <?=$this->wikiHelper->js("plugins/Wiki/Asset/vendor/jquery-sortable/jquery-sortable.js")?>
-    <?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
     <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
-<div class="page-header">
-    <h2>
-    <?php if (!$not_editable): ?>
-        <?= $this->url->link(t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
-    <?php else: ?>
-        <?= $this->url->link(t('Wiki overview'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token'])) ?>
-    <?php endif ?>
-    </h2>
-</div>
 
-<style>
-    .clearfix::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-    .column {
-        float: left;
-        min-width: 0;
-    }
-    .list {
-    width: 25%;
-}
-    .content {
-    width: 75%;
-}
+<section class="sidebar-container wikicontent">
 
-</style>
-<div class="clearfix">
-<div class="sidebar column list">
-    <?php if (!empty($wikipages)): ?>
-    <ul id="columns" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
+<?= $this->render('wiki:wiki/sidebar', array(
+    'project' => $project,
+    'wiki_id' => $wiki_id,
+    'wikipages' => $wikipages,
+    'not_editable' => $not_editable,
+)) ?>
 
-        <?php foreach ($wikipages as $page): ?>
-            <li class="wikipage" data-project-id="<?=$project['id']?>" data-page-order="<?=$page['ordercolumn']?>" data-page-id="<?=$page['id']?>">
-                <?php if (!$not_editable): ?>
-                    <?=$this->url->link(t($page['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
-
-                    <?=$this->modal->confirm('trash-o', t(''), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $page['id']))?>
-                <?php else: ?>
-                    <?=$this->url->link(t($page['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $page['id']))?>
-                <?php endif ?>
-                 <?php if (count($page['children']) > 0): ?>
-                    <?=$this->wikiHelper->renderChildren($page['children'], $page['id'], $project, $not_editable)?>
-                <?php endif ?>
-            </li>
-
-
-        <?php endforeach?>
-    </ul>
-        <?php else: ?>
-    <ul>
-        <li class="alert alert-info">
-            <?=t('There are no Wiki pages.')?>
-        </li>
-    </ul>
-        <?php endif?>
-        <?php if (!$not_editable): ?>
-    <ul>
-        <li>
-            <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
-        </li>
-    </ul>
-        <?php endif ?>
-
-    </ul>
-</div>
-
-<div class="column content">
+<div class="sidebar-content">
 <div class="page-header">
     <h2><?=t($wikipage['title'])?></h2>
-    <?php if(isset($wikipage['parent_id'])): ?>
-        <?=$this->form->label(t('is a child of'), 'is a child of')?>
-        <?php if (!$not_editable): ?>
-            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
-        <?php else: ?>
-            <?=$this->url->link($wikipage['parent_id'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
-        <?php endif ?>
-        <br>
-        <br>
-    <?php endif ?>
     <?php if (!$not_editable): ?>
-        <?=$this->modal->large('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
-        <br>
+        <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
+        <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
     <?php endif ?>
+    <?php if(isset($wikipage['parent_id'])): ?>
+        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <?php if (!$not_editable): ?>
+            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php else: ?>
+            <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage['parent_id']))?>
+        <?php endif ?>
+    <?php endif ?>
 </div>
-<ul class="panel">
+
+<div style="float:left">
+<ul class="panel" style="margin:0">
+<details open>
+<summary><h4 style="display:inline-block"><?=t('Details')?></h4></summary>
     <?php if ($wikipage['creator_id'] > 0): ?>
         <li><?=t('Creator')?>: <strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
     <?php endif?>
@@ -102,13 +47,43 @@
     <li><?=t('Editions')?>: <strong><?=$wikipage['editions']?></strong> <?=t('Current Edition')?>: <strong> <?=$wikipage['current_edition']?></strong></li>
     <li><?=t('Date Creation')?>: <strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
     <li><?=t('Date Modification')?>: <strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
+</details>
 </ul>
+</div>
 
+<div style="float:left">&nbsp;&nbsp;&nbsp;</div>
+
+<div class="sidebar" style="float:left;max-width:100%;padding:0">
+<ul class="panel" style="margin:0">
+<details open>
+<summary><h4 style="display:inline-block"><?=t('Subpages')?></h4></summary>
+<?php if (!empty($wikipage_sublist)): ?>
+    <?php foreach ($wikipage_sublist as $subpage_id => $subpage_title): ?>
+        <?php if (!$not_editable): ?>
+            <li>
+            <?=$this->url->link(t($subpage_title), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
+            </li>
+        <?php else: ?>
+            <li>
+            <?=$this->url->link(t($subpage_title), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
+            </li>
+        <?php endif ?>
+    <?php endforeach ?>
+<?php else: ?>
+    <li class="alert alert-info">
+        <?=t('There are no Wiki pages.')?>
+    </li>
+<?php endif?>
+</details>
+</ul>
+</div>
+
+<div class="wikicontent">
+<br>
 <?php if (!empty($wikipage['content'])): ?>
     <div class="page-header">
         <h2><?=t('Content')?></h2>
     </div>
-
     <article class="markdown">
         <?=$this->text->markdown($wikipage['content'])?>
     </article>
@@ -139,3 +114,9 @@
 <?php endif ?>
 
 </div>
+
+</div>
+<!-- end sidebar-content-->
+
+</section>
+<!--end sidebar-container-->

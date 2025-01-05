@@ -24,7 +24,7 @@ class WikiAjaxController extends BaseController
         $this->checkReusableGETCSRFParam();
         $project_id = $this->request->getIntegerParam('project_id');
 
-        if (! $project_id || ! $this->request->isAjax()) {
+        if (!$project_id || !$this->request->isAjax()) {
             throw new AccessForbiddenException();
         }
 
@@ -35,7 +35,8 @@ class WikiAjaxController extends BaseController
         }
 
         try {
-            $result = $this->wikiModel->reorderPagesByIndex($project_id, $values['src_wiki_id'], $values['index'], $values['parent_id'] ?? null);
+            $parent_id = (isset($values['parent_id']) && $values['parent_id'] != '' && $values['parent_id'] != '0') ? $values['parent_id'] : null;
+            $result = $this->wikiModel->reorderPagesByIndex($project_id, $values['src_wiki_id'], $values['index'], $parent_id);
 
             if (!$result) {
                 $this->response->status(400);
@@ -55,7 +56,7 @@ class WikiAjaxController extends BaseController
         $this->checkReusableGETCSRFParam();
         $project_id = $this->request->getIntegerParam('project_id');
 
-        if (! $project_id || ! $this->request->isAjax()) {
+        if (!$project_id || !$this->request->isAjax()) {
             throw new AccessForbiddenException();
         }
 
@@ -64,10 +65,6 @@ class WikiAjaxController extends BaseController
         if(!isset($values['src_wiki_id']) || !isset($values['target_wiki_id'])) {
             throw new AccessForbiddenException();
         }
-
-        // if (! $this->helper->projectRole->canMoveTask($project_id, $values['src_column_id'], $values['dst_column_id'])) {
-        //     throw new AccessForbiddenException(e("You don't have the permission to move this task"));
-        // }
 
         try {
             $result = $this->wikiModel->reorderPages($project_id, $values['src_wiki_id'], $values['target_wiki_id']);

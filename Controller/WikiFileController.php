@@ -23,7 +23,7 @@ class WikiFileController extends BaseController
 
         if ($this->request->isPost() && $this->wikiFileModel->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
             $this->flash->success(t('Screenshot uploaded successfully.'));
-            return $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
+            return $this->response->redirect($this->helper->url->to('WikiController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
         }
 
         return $this->response->html($this->template->render('wiki:wiki_file/screenshot', array(
@@ -82,7 +82,7 @@ class WikiFileController extends BaseController
             
             $this->response->redirect($this->helper->url->to('WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $wiki['project_id'], 'wiki_id' => $wiki['id'])), true);
 
-            // $this->response->redirect($this->helper->url->to('WikiViewController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
+            // $this->response->redirect($this->helper->url->to('WikiController', 'show', array('wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'])), true);
         }
     }
 
