@@ -1,10 +1,13 @@
 <?php
 
+
 require_once 'tests/units/Base.php';
 
 use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Wiki\Model\WikiModel;
 use Kanboard\Model\ProjectModel;
+use Kanboard\Core\Controller\PageNotFoundException;
+use Kanboard\Core\Controller\AccessForbiddenException;
 use Kanboard\Core\User\UserSession;
 use Kanboard\Core\Security\AuthenticationManager;
 use Kanboard\Auth\DatabaseAuth;
@@ -15,20 +18,12 @@ class WikiModelTest extends Base
      * @var Plugin
      */
     protected $plugin;
+    private $wikiModel;
+    private $db;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
-        $this->db = $this->createMock(\PicoDb\Database::class);
-        $this->container = $this->createMock(\Psr\Container\ContainerInterface::class);
-        
-        // $this->container
-        //     ->method('get')
-        //     ->willReturnMap([
-        //         [\PicoDb\Database::class, $this->db]
-        //     ]);
-        // $this->plugin = new Plugin($this->container);
 
         $plugin = new Loader($this->container);
         $plugin->scan();
@@ -37,6 +32,9 @@ class WikiModelTest extends Base
         $authManager->register(new DatabaseAuth($this->container));
 
         $_SESSION['user'] = array('id' => 1, 'username' => 'test', 'role' => 'app-admin');
+
+        // $this->db = $this->createMock(Base::class);
+        // $this->wikiModel = new WikiModel($this->db);
     }
 
     public function testCreation()
@@ -147,40 +145,39 @@ class WikiModelTest extends Base
         }
     }
 
-    
-    /*
     public function testGetEditionsReturnsArray()
     {
+        $wikiId = 1;
+        $expectedResult = [
+            ['id' => 1, 'title' => 'My page', 'content' => 'Content of the page', 'edition' => 1]
+        ];
+
         $this->db
             ->expects($this->once())
             ->method('table')
             ->with(WikiModel::WIKI_EDITION_TABLE)
-            ->willReturnSelf();
+            ->willReturn($this->db);
 
         $this->db
+            ->expects($this->once())
             ->method('eq')
-            ->with('wikipage_id', 123)
-            ->willReturnSelf();
+            ->with('wikipage_id', $wikiId)
+            ->willReturn($this->db);
 
         $this->db
+            ->expects($this->once())
             ->method('desc')
             ->with('edition')
-            ->willReturnSelf();
-
-        $expected = [
-            ['id' => 1, 'content' => 'test']
-        ];
+            ->willReturn($this->db);
 
         $this->db
+            ->expects($this->once())
             ->method('findAll')
-            ->willReturn($expected);
+            ->willReturn($expectedResult);
 
-        $result = $this->wikiModel->getEditions(123);
-        
-        $this->assertSame($expected, $result);
+        $result = $this->wikiModel->getEditions($wikiId);
+        $this->assertEquals($expectedResult, $result);
     }
-        */
-
     public function testCreatePageSavesCorrectly()
     {
         $this->db
@@ -270,6 +267,63 @@ class WikiModelTest extends Base
         $this->assertSame($expected, $result);
     }
 
+    public function testGetLatestEditionReturnsArray()
+    {
+        $wikiId = 1;
+        $expectedResult = ['id' => 1, 'title' => 'Page Title', 'edition' => 2];
+
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKI_EDITION_TABLE)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('eq')
+            ->with('wikipage_id', $wikiId)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('desc')
+            ->with('edition')
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('findOne')
+            ->willReturn($expectedResult);
+
+        $result = $this->wikiModel->getLatestEdition($wikiId);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testRemovePageWithNonExistentIdReturnsFalse()
+    {
+        $wikiId = 999;
+
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('eq')
+            ->with('id', $wikiId)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('remove')
+            ->willReturn(false);
+
+        $result = $this->wikiModel->removepage($wikiId);
+        $this->assertFalse($result);
+    }
+
     public function testGetWikipageThrowsPageNotFoundException()
     {
         $this->db
@@ -281,4 +335,59 @@ class WikiModelTest extends Base
         $this->wikiModel->getWiki();
     }
 
+    public function testGetWikiPageThrowsPageNotFoundException2()
+    {
+        $this->expectException(PageNotFoundException::class);
+        $wikiId = 999;
+
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('eq')
+            ->with('id', $wikiId)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('findOne')
+            ->willReturn(null);
+
+        $this->wikiModel->getWikipage($wikiId);
+    }
+
+    public function testCreatePageWithValidData()
+    {
+        $project_id = 1;
+        $title = 'New Page';
+        $content = 'Content';
+        $date = date('Y-m-d');
+        $values = [
+            'project_id' => $project_id,
+            'title' => $title,
+            'content' => $content,
+            'date_creation' => $date,
+            'ordercolumn' => 1
+        ];
+
+        $this->db
+            ->expects($this->once())
+            ->method('table')
+            ->with(WikiModel::WIKITABLE)
+            ->willReturn($this->db);
+
+        $this->db
+            ->expects($this->once())
+            ->method('persist')
+            ->with($values);
+
+        $result = $this->wikiModel->createpage($project_id, $title, $content, $date);
+        $this->assertNotNull($result);
+    }
+
+    // Additional test cases can be defined here for each method
 }
