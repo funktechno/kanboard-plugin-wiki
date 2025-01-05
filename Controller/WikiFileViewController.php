@@ -59,11 +59,13 @@ class WikiFileViewController extends FileViewerController
     {
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
         $filename = $this->wikiFileModel->getThumbnailPath($file['path']);
+        
+        $etag = md5($filename);
 
-        $this->response->withCache(5 * 86400, $file['etag']);
+        $this->response->withCache(5 * 86400, $etag);
         $this->response->withContentType('image/png');
 
-        if ($this->request->getHeader('If-None-Match') === '"'.$file['etag'].'"') {
+        if ($this->request->getHeader('If-None-Match') === '"'.$etag.'"') {
             $this->response->status(304);
         } else {
             $this->response->send();
