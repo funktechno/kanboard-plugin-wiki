@@ -1,5 +1,5 @@
 ### All Submissions:
-
+* Notify authors: @lastlink
 * [ ] Have you updated the ChangeLog with your proposed changes?
 * [ ] Have you checked to ensure there aren't other open [Pull Requests](../../pulls) for the same update/change?
 * pr update to master branch
