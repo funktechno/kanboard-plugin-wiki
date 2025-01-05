@@ -5,8 +5,7 @@
                 <?= $this->app->component('image-slideshow', array(
                     'images' => $images,
                     'image' => $file,
-                    'regex_file_id' => 'FILE_ID',
-                    'regex_etag' => 'ETAG',
+                    'regex' => 'FILE_ID',
                     'url' => array(
                         'image'     => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
                         'thumbnail' => $this->url->to('WikiFileViewController', 'thumbnail', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
