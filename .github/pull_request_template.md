@@ -1,7 +1,7 @@
 ### All Submissions:
 * Notify authors: @lastlink
 * [ ] Have you updated the ChangeLog with your proposed changes?
-* [ ] Have you checked to ensure there aren't other open [Pull Requests](../../pulls) for the same update/change?
+* [ ] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/funktechno/kanboard-plugin-wiki/pulls) for the same update/change?
 * pr update to master branch
   * [ ] Have you updated the getPluginVersion() in Plugin.php?
 ### New Feature Submissions:
