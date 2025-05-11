@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.4.1
+* contributors: @imfx77
+
+---
+
+### Bug fixes:
+* Branching the preview of images attached to a Wiki page due to a change of core API in KB v1.2.38
+
 ## Version 0.4.0
 * contributors: @imfx77
 
