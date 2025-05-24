@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 0.4.2
+
+* contributors: @lastlink
+
+---
+
+### Improvements:
+* Updated docs with notes about markdown format
+
 ## Version 0.4.1
 * contributors: @imfx77
 
