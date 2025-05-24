@@ -86,6 +86,7 @@ This section is available from project settings page: **Project > Wiki**. There 
 
 - Simple wikipages per project
 - Backup of previous versions of wikipages as editions
+- KB uses GFM [GitHub Flavored Markdown](https://github.github.com/gfm/) implemented by the [parsedown lib](https://github.com/erusev/parsedown)
 
 #### Wikilink
 
@@ -136,7 +137,7 @@ Note that you can only restore **saved** editions. So you if you have the global
 
 ### Development
 
-After a change must update the version in Plugin.php and Makefile
+After a change must update the version in Plugin.php
 
 Plugin.php E.g.
 
@@ -147,14 +148,9 @@ public function getPluginVersion()
 }
 ```
 
-Makefile E.g.
-
-```Makefile
-version=0.2.6
-```
-
 To run a new build type `make`. NOTE: this only zips files in the last commit in the branch you are on. If you haven't commited your changes these won't be included in the zip.
   * windows install make `choco install make`
+  * must then run from git bash `make` or wsl
 
 After testing create a new tag in github or via cli. `git tag -a 0.2.6 -m "Translations Updates"`. Then `git push origin --tags` Then upload the new **Wiki-version.zip** produced from `make`. Then do a pull request on https://github.com/kanboard/website for the plugins.json to update the plugin url. The `version` & `download` attributes are important to be correct.
 
