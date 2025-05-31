@@ -63,6 +63,9 @@ class Plugin extends Base
 
         // helpers
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+
+        // Add Markdown extras
+        $this->container['helper']->register('text', '\Kanboard\Plugin\Wiki\Helper\MarkdownHelper');
     }
 
     public function onStartup()
