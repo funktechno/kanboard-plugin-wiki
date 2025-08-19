@@ -15,13 +15,11 @@
     'not_editable' => $not_editable,
 )) ?>
 
-<div class="sidebar-content">
+<div class="sidebar-content" style="margin-left: 1em; padding-left: 1em; border-left: 1px solid black">
 <div class="page-header">
-    <h2><?=t($wikipage['title'])?></h2>
     <?php if (!$not_editable): ?>
         <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
         <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
     <?php endif ?>
     <?php if(isset($wikipage['parent_id'])): ?>
@@ -33,6 +31,42 @@
         <?php endif ?>
     <?php endif ?>
 </div>
+
+<div class="wikicontent">
+    <div class="page-header">
+        <h2><?=t($wikipage['title'])?></h2>
+    </div>
+<?php if (!empty($wikipage['content'])): ?>
+    <article class="markdown">
+        <?=$this->text->markdown($wikipage['content'])?>
+    </article>
+<?php endif?>
+
+<?php if (!$not_editable): ?>
+<div class="page-header" style="margin-top: 5em;">
+    <h2><?=t('Attachments')?></h2>
+</div>
+<ul>
+    <?php
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+    ?>
+    <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
+    <?= $this->modal->medium('camera', t('Add a screenshot'), 'WikiFileController', 'screenshot', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
+</ul>
+
+<?php if (!empty($files) || !empty($images)): ?>
+    <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki, 'project' => $project)) ?>
+    <?= $this->render('wiki:wiki_file/show', array(
+        'wiki' => $wiki,
+        'files' => $files,
+        'images' => $images
+    )) ?>
+<?php endif ?>
+<?php endif ?>
+
+<hr style="margin-top: 2em; margin-bottom: 2em;" />
 
 <div style="float:left">
 <ul class="panel" style="margin:0">
@@ -50,8 +84,6 @@
 </details>
 </ul>
 </div>
-
-<div style="float:left">&nbsp;&nbsp;&nbsp;</div>
 
 <div class="sidebar" style="float:left;max-width:100%;padding:0">
 <ul class="panel" style="margin:0">
@@ -78,40 +110,6 @@
 </ul>
 </div>
 
-<div class="wikicontent">
-<br>
-<?php if (!empty($wikipage['content'])): ?>
-    <div class="page-header">
-        <h2><?=t('Content')?></h2>
-    </div>
-    <article class="markdown">
-        <?=$this->text->markdown($wikipage['content'])?>
-    </article>
-<?php endif?>
-
-<?php if (!$not_editable): ?>
-<div class="page-header">
-        <h2><?=t('Attachments')?></h2>
-</div>
-<ul>
-    <?php
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-    ?>
-    <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
-    <?= $this->modal->medium('camera', t('Add a screenshot'), 'WikiFileController', 'screenshot', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
-</ul>
-
-<?php if (!empty($files) || !empty($images)): ?>
-    <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki, 'project' => $project)) ?>
-    <?= $this->render('wiki:wiki_file/show', array(
-        'wiki' => $wiki,
-        'files' => $files,
-        'images' => $images
-    )) ?>
-<?php endif ?>
-<?php endif ?>
 
 </div>
 
