@@ -25,10 +25,8 @@ class WikiMarkdown extends Markdown
             return $retval;
         }
 
-        echo $href;
         if (!preg_match('!^wiki:(\d+)$!', $href, $matches))
         {
-            echo "Hello";
             return $retval;
         }
 
