@@ -80,6 +80,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: secret
           MARIA_ROOT_PASSWORD: secret
+          MARIADB_USER: root
+          MARIADB_DATABASE: kanboard_unit_test
         ports:
         - 3306:3306
         options: >-
@@ -88,10 +90,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - name: Install MySQL client
-      run: sudo apt-get update && sudo apt-get install -y mysql-client
-    - name: Create test database
-      run: mysql -h 127.0.0.1 -u root -p secret -e "CREATE DATABASE kanboard_unit_test;"
+    # - name: Install MySQL client
+    #   run: sudo apt-get update && sudo apt-get install -y mysql-client
+    # - name: Create test database
+    #   run: mysql -h 127.0.0.1 -u root -p secret -e "CREATE DATABASE kanboard_unit_test;"
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
