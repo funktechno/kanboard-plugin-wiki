@@ -38,7 +38,7 @@ body.dragging, body.dragging * {
     resize: horizontal;
     overflow: auto;
     max-width: 75% !important;
-    min-width: 384px !important;
+    min-width: 180px !important;
 }
 
 .wikipage {
