@@ -9,26 +9,6 @@ jobs:
   Sqlite:
     runs-on: ubuntu-latest
     steps:
-    # - name: Install system dependencies
-    #   run: |
-    #     sudo apt-get update -y
-    #     sudo apt-get install -y \
-    #       php-cli \
-    #       php-mbstring \
-    #       php-sqlite3 \
-    #       php-opcache \
-    #       php-json \
-    #       php-ldap \
-    #       php-gd \
-    #       php-zip \
-    #       php-curl \
-    #       php-xml \
-    #       php-mysql \
-    #       php-pgsql \
-    #       composer \
-    #       npm \
-    #       mariadb-client \
-    #       postgresql-client \
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -45,9 +25,6 @@ jobs:
         path: plugins/Wiki
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
-    - name: List files
-      run: |
-        ls -la
     - name: Unit tests with Sqlite
       run: ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
 
@@ -57,11 +34,12 @@ jobs:
     needs: Sqlite
     services:
       postgres:
-        image: postgres:9.4
+        image: postgres:latest
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
         - 5432:5432
         options: >-
@@ -91,6 +69,7 @@ jobs:
       env:
         DB_HOSTNAME: postgres
         DB_PORT: ${{ job.services.postgres.ports[5432] }}
+        DB_HOSTNAME: localhost
  
   MariaDB:
     runs-on: ubuntu-latest
@@ -101,6 +80,7 @@ jobs:
         image: mariadb:latest
         env:
           MYSQL_ROOT_PASSWORD: secret
+          MARIA_ROOT_PASSWORD: secret
         ports:
         - 3306:3306
         options: >-
@@ -131,3 +111,4 @@ jobs:
         DB_HOSTNAME: mariadb
         DB_PASSWORD: secret
         DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+        DB_HOSTNAME: localhost
