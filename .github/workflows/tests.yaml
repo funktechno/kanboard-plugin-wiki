@@ -26,7 +26,13 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with Sqlite
-      run: ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit --log-junit junit.xml -c tests/units.sqlite.xml plugins/Wiki/Test/
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit.xml
+        check_name: Frontend Test Results
 
   Postgres:
     runs-on: ubuntu-latest
@@ -90,10 +96,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    # - name: Install MySQL client
-    #   run: sudo apt-get update && sudo apt-get install -y mysql-client
-    # - name: Create test database
-    #   run: mysql -h 127.0.0.1 -u root -p secret -e "CREATE DATABASE kanboard_unit_test;"
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
