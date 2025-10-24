@@ -8,8 +8,13 @@ on:
 jobs:
   Sqlite:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
     steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3, json, openssl, curl, zip, gd
+        tools: composer
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
       with:
@@ -25,7 +30,6 @@ jobs:
 
   Postgres:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
     services:
       postgres:
         image: postgres:9.4
@@ -41,6 +45,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, json, openssl, curl, zip, gd
+        tools: composer
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
       with:
@@ -59,7 +69,6 @@ jobs:
  
   MariaDB:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
     services:
       mariadb:
         image: mariadb:latest
@@ -73,6 +82,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, json, openssl, curl, zip, gd
+        tools: composer
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
       with:
