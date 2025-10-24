@@ -12,7 +12,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: '8.4'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3, json, openssl, curl, zip, gd
         tools: composer
     - name: Checkout Kanboard repo
@@ -48,7 +48,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: '8.4'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, json, openssl, curl, zip, gd
         tools: composer
     - name: Checkout Kanboard repo
@@ -85,7 +85,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'
+        php-version: '8.4'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, json, openssl, curl, zip, gd
         tools: composer
     - name: Checkout Kanboard repo
