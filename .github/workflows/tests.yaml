@@ -26,12 +26,16 @@ jobs:
         path: plugins/Wiki
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
+    - name: List files
+      run: |
+        ls -la
     - name: Unit tests with Sqlite
-      run: ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
+      run: cd kanboard && ../vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
 
   Postgres:
     runs-on: ubuntu-latest
     container: kanboard/tests:latest
+    needs: Sqlite
     services:
       postgres:
         image: postgres:9.4
@@ -72,6 +76,7 @@ jobs:
   MariaDB:
     runs-on: ubuntu-latest
     container: kanboard/tests:latest
+    needs: Sqlite
     services:
       mariadb:
         image: mariadb:latest
