@@ -9,6 +9,26 @@ jobs:
   Sqlite:
     runs-on: ubuntu-latest
     steps:
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y \
+          php-cli \
+          php-mbstring \
+          php-sqlite3 \
+          php-opcache \
+          php-json \
+          php-ldap \
+          php-gd \
+          php-zip \
+          php-curl \
+          php-xml \
+          php-mysql \
+          php-pgsql \
+          composer \
+          npm \
+          mariadb-client \
+          postgresql-client \
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -29,11 +49,11 @@ jobs:
       run: |
         ls -la
     - name: Unit tests with Sqlite
-      run: cd kanboard && ../vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
 
   Postgres:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
+    # container: kanboard/tests:latest
     needs: Sqlite
     services:
       postgres:
@@ -74,7 +94,7 @@ jobs:
  
   MariaDB:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
+    # container: kanboard/tests:latest
     needs: Sqlite
     services:
       mariadb:
