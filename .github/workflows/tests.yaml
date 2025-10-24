@@ -91,7 +91,7 @@ jobs:
     - name: Install MySQL client
       run: sudo apt-get update && sudo apt-get install -y mysql-client
     - name: Create test database
-      run: mysql -h localhost -u root -p secret -e "CREATE DATABASE kanboard_unit_test;"
+      run: mysql -h 127.0.0.1 -u root -p secret -e "CREATE DATABASE kanboard_unit_test;"
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
