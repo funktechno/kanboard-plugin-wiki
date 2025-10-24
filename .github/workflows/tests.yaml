@@ -108,7 +108,6 @@ jobs:
     - name: Unit tests with MariaDB
       run: ./vendor/bin/phpunit -c tests/units.mysql.xml plugins/Wiki/Test/
       env:
-        DB_HOSTNAME: mariadb
+        DB_HOSTNAME: localhost
         DB_PASSWORD: secret
         DB_PORT: ${{ job.services.mariadb.ports[3306] }}
-        DB_HOSTNAME: localhost
