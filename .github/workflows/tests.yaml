@@ -8,7 +8,6 @@ on:
 jobs:
   Sqlite:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
