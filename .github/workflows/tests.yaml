@@ -8,6 +8,7 @@ on:
 jobs:
   Sqlite:
     runs-on: ubuntu-latest
+    container: kanboard/tests:latest
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -30,6 +31,7 @@ jobs:
 
   Postgres:
     runs-on: ubuntu-latest
+    container: kanboard/tests:latest
     services:
       postgres:
         image: postgres:9.4
@@ -69,6 +71,7 @@ jobs:
  
   MariaDB:
     runs-on: ubuntu-latest
+    container: kanboard/tests:latest
     services:
       mariadb:
         image: mariadb:latest
