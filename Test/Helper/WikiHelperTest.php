@@ -1,7 +1,7 @@
 <?php
 
 require_once 'tests/units/Base.php';
-
+use KanboardTests\units\Base;
 use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Wiki\Helper\WikiHelper;
 

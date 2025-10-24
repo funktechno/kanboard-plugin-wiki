@@ -1,7 +1,7 @@
 <?php
 
 require_once 'tests/units/Base.php';
-
+use KanboardTests\units\Base;
 use Kanboard\Plugin\Wiki\Plugin;
 
 class PluginTest extends Base
