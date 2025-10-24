@@ -67,9 +67,8 @@ jobs:
     - name: Unit tests with Postgres
       run: ./vendor/bin/phpunit -c tests/units.postgres.xml plugins/Wiki/Test/
       env:
-        DB_HOSTNAME: postgres
-        DB_PORT: ${{ job.services.postgres.ports[5432] }}
         DB_HOSTNAME: localhost
+        DB_PORT: ${{ job.services.postgres.ports[5432] }}
  
   MariaDB:
     runs-on: ubuntu-latest
