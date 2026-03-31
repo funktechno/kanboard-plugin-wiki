@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Controller\FileViewerController;
+use Kanboard\Core\Controller\AccessForbiddenException;
 use Kanboard\Core\ObjectStorage\ObjectStorageException;
 
 class WikiFileViewController extends FileViewerController
@@ -15,6 +16,17 @@ class WikiFileViewController extends FileViewerController
     public function show()
     {
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+
+        // Check if wiki public access is enabled in plugin settings
+        $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+        $project = $this->projectModel->getById($wikipage['project_id']);
+
+        if (!empty($project)) {
+            $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+            if (!$project['is_public'] || !$enableWikiPublicAccess) {
+                throw AccessForbiddenException::getInstance()->withoutLayout();
+            }
+        }
 
         $this->response->html($this->template->render('file_viewer/show', array(
             'file' => $file,
@@ -36,6 +48,18 @@ class WikiFileViewController extends FileViewerController
     public function image()
     {
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+
+        // Check if wiki public access is enabled in plugin settings
+        $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+        $project = $this->projectModel->getById($wikipage['project_id']);
+
+        if (!empty($project)) {
+            $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+            if (!$project['is_public'] || !$enableWikiPublicAccess) {
+                throw AccessForbiddenException::getInstance()->withoutLayout();
+            }
+        }
+
         $this->renderFileWithCache($file, $this->helper->file->getImageMimeType($file['name']));
     }
 
@@ -47,6 +71,18 @@ class WikiFileViewController extends FileViewerController
     public function browser()
     {
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+
+        // Check if wiki public access is enabled in plugin settings
+        $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+        $project = $this->projectModel->getById($wikipage['project_id']);
+
+        if (!empty($project)) {
+            $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+            if (!$project['is_public'] || !$enableWikiPublicAccess) {
+                throw AccessForbiddenException::getInstance()->withoutLayout();
+            }
+        }
+
         $this->renderFileWithCache($file, $this->helper->file->getBrowserViewType($file['name']));
     }
 
@@ -58,6 +94,18 @@ class WikiFileViewController extends FileViewerController
     public function thumbnail()
     {
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+
+        // Check if wiki public access is enabled in plugin settings
+        $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+        $project = $this->projectModel->getById($wikipage['project_id']);
+
+        if (!empty($project)) {
+            $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+            if (!$project['is_public'] || !$enableWikiPublicAccess) {
+                throw AccessForbiddenException::getInstance()->withoutLayout();
+            }
+        }
+
         $filename = $this->wikiFileModel->getThumbnailPath($file['path']);
         
         $etag = md5($filename);
@@ -92,6 +140,18 @@ class WikiFileViewController extends FileViewerController
     {
         try {
             $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+
+            // Check if wiki public access is enabled in plugin settings
+            $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+            $project = $this->projectModel->getById($wikipage['project_id']);
+
+            if (!empty($project)) {
+                $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+                if (!$project['is_public'] || !$enableWikiPublicAccess) {
+                    throw AccessForbiddenException::getInstance()->withoutLayout();
+                }
+            }
+
             $this->response->withFileDownload($file['name']);
             $this->response->send();
             $this->objectStorage->output($file['path']);
