@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## Version 0.4.2
 
-* contributors: @nczz
+* contributors: @lastlink, @nczz
 
 ---
 
@@ -10,19 +10,10 @@
 * Added project-scoped Wiki page JSON-RPC procedures for page, revision, and attachment access.
 
 ### Improvements:
+* Updated docs with notes about markdown format.
 * Hardened direct wiki page and attachment access checks so IDs are resolved to project ownership before use.
 * Added additive database indexes for Wiki page API listing and lookup paths.
 * Declared Kanboard `>=1.2.46` compatibility to match the PHP 8.1+ runtime required by the API implementation.
-
-
-## Version 0.4.2
-
-* contributors: @lastlink
-
----
-
-### Improvements:
-* Updated docs with notes about markdown format
 
 ## Version 0.4.1
 * contributors: @imfx77
