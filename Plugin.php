@@ -77,17 +77,15 @@ class Plugin extends Base
 
     private function registerWikiApi()
     {
-        foreach (array(
+        $readMethods = array(
             'getWikiPages',
             'getWikiPage',
             'searchWikiPages',
             'getWikiPageRevisions',
             'getWikiPageFiles',
             'downloadWikiPageFile',
-        ) as $method) {
-            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_VIEWER);
-        }
-        foreach (array(
+        );
+        $writeMethods = array(
             'createWikiPage',
             'updateWikiPage',
             'archiveWikiPage',
@@ -95,10 +93,16 @@ class Plugin extends Base
             'restoreWikiPageRevision',
             'createWikiPageFile',
             'removeWikiPageFile',
-        ) as $method) {
-            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_MEMBER);
+        );
+        $procedure = new WikiPageProcedure($this->container);
+        foreach ($readMethods as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_VIEWER);
+            $this->api->getProcedureHandler()->withClassAndMethod($method, $procedure, $method);
         }
-        $this->api->getProcedureHandler()->withObject(new WikiPageProcedure($this->container));
+        foreach ($writeMethods as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_MEMBER);
+            $this->api->getProcedureHandler()->withClassAndMethod($method, $procedure, $method);
+        }
     }
 
     public function onStartup()
@@ -147,6 +151,6 @@ class Plugin extends Base
 
     public function getCompatibleVersion()
     {
-        return '>=1.0.37';
+        return '>=1.2.46';
     }
 }

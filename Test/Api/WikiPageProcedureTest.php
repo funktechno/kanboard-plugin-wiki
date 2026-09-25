@@ -82,4 +82,25 @@ class WikiPageProcedureTest extends Base
         $this->assertTrue($revisions['ok']);
         $this->assertEquals(1, $revisions['data']['pagination']['total']);
     }
+
+    public function testJsonRpcRegistrationExposesOnlyPublicWikiProcedures()
+    {
+        $this->assertEquals(1, $this->projectModel->create(array('name' => 'Dispatch Project')));
+
+        $this->container['api'] = new \JsonRPC\Server('{}');
+        $plugin = new \Kanboard\Plugin\Wiki\Plugin($this->container);
+        $plugin->initialize();
+        $handler = $this->container['api']->getProcedureHandler();
+        $listed = $handler->executeProcedure('getWikiPages', array('project_id' => 1));
+
+        $this->assertTrue($listed['ok']);
+
+        $this->expectException('BadFunctionCallException');
+        $handler->executeProcedure('changeArchiveState', array(
+            'pageId' => 1,
+            'expectedRevision' => 1,
+            'archived' => true,
+            'method' => 'getWikiPage',
+        ));
+    }
 }

@@ -20,7 +20,7 @@ class WikiFileController extends BaseController
      */
     public function screenshot()
     {
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
 
         if ($this->request->isPost() && $this->wikiFileModel->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
             $this->flash->success(t('Screenshot uploaded successfully.'));
@@ -39,7 +39,7 @@ class WikiFileController extends BaseController
      */
     public function create()
     {
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
 
         // $this->hourlyRate->getAllByProject($records[0]['project_id']);
         // $this->wikiFileModel->getAllByProject($records[0]['project_id']);
@@ -59,7 +59,7 @@ class WikiFileController extends BaseController
      */
     public function save()
     {
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
 
         $result = $this->wikiFileModel->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
 
@@ -88,7 +88,7 @@ class WikiFileController extends BaseController
     public function remove()
     {
         $this->checkCSRFParam();
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
 
         if (! empty($file) && $file['wikipage_id'] == $wiki['id'] && $this->wikiFileModel->remove($file['id'])) {
@@ -107,7 +107,7 @@ class WikiFileController extends BaseController
      */
     public function confirm()
     {
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
         if (empty($file) || (int) $file['wikipage_id'] !== (int) $wiki['id']) {
             throw new AccessForbiddenException();
@@ -118,5 +118,16 @@ class WikiFileController extends BaseController
             'wiki' => $wiki,
             'file' => $file,
         )));
+    }
+
+    private function getAuthorizedWiki($action)
+    {
+        $wiki = $this->wikiModel->getWiki();
+
+        if (! $this->helper->user->hasProjectAccess('WikiFileController', $action, (int) $wiki['project_id'])) {
+            throw new AccessForbiddenException();
+        }
+
+        return $wiki;
     }
 }
