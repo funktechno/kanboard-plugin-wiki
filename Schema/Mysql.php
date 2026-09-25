@@ -4,7 +4,44 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 10;
+const VERSION = 11;
+
+function version_11(PDO $pdo)
+{
+    mysql_create_index_if_not_exists(
+        $pdo,
+        'wikipage',
+        'idx_wikipage_project_active_parent_order',
+        'CREATE INDEX idx_wikipage_project_active_parent_order
+            ON wikipage (project_id, is_active, parent_id, ordercolumn)'
+    );
+    mysql_create_index_if_not_exists(
+        $pdo,
+        'wikipage_editions',
+        'idx_wikipage_editions_page_revision',
+        'CREATE INDEX idx_wikipage_editions_page_revision
+            ON wikipage_editions (wikipage_id, edition)'
+    );
+    mysql_create_index_if_not_exists(
+        $pdo,
+        'wikipage_has_files',
+        'idx_wikipage_files_page',
+        'CREATE INDEX idx_wikipage_files_page
+            ON wikipage_has_files (wikipage_id)'
+    );
+}
+
+function mysql_create_index_if_not_exists(PDO $pdo, $table, $index, $sql)
+{
+    $statement = $pdo->prepare(
+        'SELECT COUNT(1) FROM information_schema.statistics
+        WHERE table_schema = DATABASE() AND table_name = ? AND index_name = ?'
+    );
+    $statement->execute(array($table, $index));
+    if ((int) $statement->fetchColumn() === 0) {
+        $pdo->exec($sql);
+    }
+}
 
 function version_10(PDO $pdo)
 {

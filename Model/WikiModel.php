@@ -98,6 +98,7 @@ class WikiModel extends Base
                 ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
                 ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
                 ->eq('project_id', $project_id)
+                ->eq(self::WIKITABLE . '.is_active', 1)
                 ->eq('parent_id', $parent_id)
                 ->asc('ordercolumn')
                 ->findAll();
@@ -126,6 +127,7 @@ class WikiModel extends Base
                 ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
                 ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
                 ->eq('project_id', $project_id)
+                ->eq(self::WIKITABLE . '.is_active', 1)
                 ->isNull('parent_id')
                 ->asc('ordercolumn')
                 ->findAll();
@@ -170,6 +172,7 @@ class WikiModel extends Base
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
+            ->eq(self::WIKITABLE . '.is_active', 1)
             ->asc('parent_id')
             ->asc('ordercolumn')
             ->findAll();
@@ -186,6 +189,16 @@ class WikiModel extends Base
 
         // retrieve src wiki page and wiki pages by parent
         $wikiPageSrc = $this->getWikipage($src_wiki_id);
+        if (empty($wikiPageSrc) || (int) $wikiPageSrc['project_id'] !== (int) $project_id) {
+            return false;
+        }
+        if ($parent_id !== null) {
+            $parentPage = $this->getWikipage($parent_id);
+            if (empty($parentPage) || (int) $parentPage['project_id'] !== (int) $project_id) {
+                return false;
+            }
+        }
+
         $wikiPages = $this->getWikiPagesByParentId($project_id, $parent_id);
         // echo "count list: " . count($wikiPages) . " <br>" . PHP_EOL;
         // print_r($wikiPages);
@@ -245,6 +258,15 @@ class WikiModel extends Base
         // retrieve src/trg wiki pages
         $wikiPageSrc = $this->getWikipage($src_wiki_id);
         $wikiPageTrg = $this->getWikipage($target_wiki_id);
+        if (
+            empty($wikiPageSrc) ||
+            empty($wikiPageTrg) ||
+            (int) $wikiPageSrc['project_id'] !== (int) $project_id ||
+            (int) $wikiPageTrg['project_id'] !== (int) $project_id
+        ) {
+            return false;
+        }
+
 
         // ensure both wiki pages are under the same parent
         if ($wikiPageSrc['parent_id'] != $wikiPageTrg['parent_id']) {
@@ -356,7 +378,8 @@ class WikiModel extends Base
             )
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
-            ->in(self::WIKITABLE.'.project_id', $projectIds);
+            ->in(self::WIKITABLE.'.project_id', $projectIds)
+            ->eq(self::WIKITABLE.'.is_active', 1);
     }
 
     /**

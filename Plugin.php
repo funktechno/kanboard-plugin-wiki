@@ -5,6 +5,7 @@ namespace Kanboard\Plugin\Wiki;
 use Kanboard\Core\Plugin\Base;
 use Kanboard\Core\Security\Role;
 use Kanboard\Core\Translator;
+use Kanboard\Plugin\Wiki\Api\Procedure\WikiPageProcedure;
 
 class Plugin extends Base
 {
@@ -14,8 +15,17 @@ class Plugin extends Base
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiAjaxController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
-        $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
+        $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_VIEWER);
+        $this->projectAccessMap->add(
+            'WikiController',
+            array('show', 'detail', 'editions', 'readonly', 'detail_readonly'),
+            Role::PROJECT_VIEWER
+        );
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
+
+        if ($this->container->offsetExists('api') && $this->container->offsetExists('apiProjectAccessMap')) {
+            $this->registerWikiApi();
+        }
 
         // page routes wiki pages
         $this->route->addRoute('/wiki/index',                                           'WikiController', 'index', 'wiki');
@@ -65,6 +75,36 @@ class Plugin extends Base
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
     }
 
+    private function registerWikiApi()
+    {
+        $readMethods = array(
+            'getWikiPages',
+            'getWikiPage',
+            'searchWikiPages',
+            'getWikiPageRevisions',
+            'getWikiPageFiles',
+            'downloadWikiPageFile',
+        );
+        $writeMethods = array(
+            'createWikiPage',
+            'updateWikiPage',
+            'archiveWikiPage',
+            'restoreWikiPage',
+            'restoreWikiPageRevision',
+            'createWikiPageFile',
+            'removeWikiPageFile',
+        );
+        $procedure = new WikiPageProcedure($this->container);
+        foreach ($readMethods as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_VIEWER);
+            $this->api->getProcedureHandler()->withClassAndMethod($method, $procedure, $method);
+        }
+        foreach ($writeMethods as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_MEMBER);
+            $this->api->getProcedureHandler()->withClassAndMethod($method, $procedure, $method);
+        }
+    }
+
     public function onStartup()
     {
         Translator::load($this->languageModel->getCurrentLanguage(), __DIR__ . '/Locale');
@@ -78,7 +118,8 @@ class Plugin extends Base
             ],
             'Plugin\Wiki\Model' => array(
                 'WikiModel',
-                'WikiFileModel'
+                'WikiFileModel',
+                'WikiPageModel'
             ),
         );
     }
@@ -110,6 +151,6 @@ class Plugin extends Base
 
     public function getCompatibleVersion()
     {
-        return '>=1.0.37';
+        return '>=1.2.46';
     }
 }
