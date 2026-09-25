@@ -23,7 +23,9 @@ class Plugin extends Base
         );
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
 
-        $this->registerWikiApi();
+        if ($this->container->offsetExists('api') && $this->container->offsetExists('apiProjectAccessMap')) {
+            $this->registerWikiApi();
+        }
 
         // page routes wiki pages
         $this->route->addRoute('/wiki/index',                                           'WikiController', 'index', 'wiki');

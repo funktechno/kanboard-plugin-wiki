@@ -8,7 +8,6 @@ use Kanboard\Plugin\Wiki\Model\WikiModel;
 use Kanboard\Model\ProjectModel;
 use Kanboard\Core\Controller\PageNotFoundException;
 use Kanboard\Core\Controller\AccessForbiddenException;
-use Kanboard\Core\User\UserSession;
 use Kanboard\Core\Security\AuthenticationManager;
 use Kanboard\Auth\DatabaseAuth;
 
@@ -67,7 +66,6 @@ class WikiModelTest extends Base
         // create wiki page edition
         $this->assertTrue($this->container['userSession']->isLogged(), 'Failed to login');
 
-        $this->userSession = new UserSession($this->container);
         // result is not a consistent 1. is this true or id for new edition?
         $createEditionResult = $this->wikiModel->createEdition($values, 1, 1);
         // $this->assertEquals($this->wikiModel->createEdition($values, 1, 1), 1, 'Failed to create wiki edition');

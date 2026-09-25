@@ -88,6 +88,46 @@ This section is available from project settings page: **Project > Wiki**. There 
 - Backup of previous versions of wikipages as editions
 - KB uses GFM [GitHub Flavored Markdown](https://github.github.com/gfm/) implemented by the [parsedown lib](https://github.com/erusev/parsedown)
 
+
+### JSON-RPC API
+
+The plugin exposes project-scoped Wiki page procedures through Kanboard's `/jsonrpc.php` endpoint.
+Use a Kanboard user API token with HTTP Basic Auth (`username:api_token`) or Kanboard's application API token according to the standard Kanboard JSON-RPC rules.
+Do not store real API keys in source code, documentation, logs, or issue reports.
+
+Read procedures require project viewer access:
+
+- `getWikiPages(project_id, filters = {})`
+- `getWikiPage(page_id)`
+- `searchWikiPages(project_id, query, limit = 20, offset = 0)`
+- `getWikiPageRevisions(page_id, limit = 20, offset = 0)`
+- `getWikiPageFiles(page_id)`
+- `downloadWikiPageFile(file_id)`
+
+Write procedures require project member access:
+
+- `createWikiPage(project_id, page)`
+- `updateWikiPage(page_id, expected_revision, patch)`
+- `archiveWikiPage(page_id, expected_revision)`
+- `restoreWikiPage(page_id, expected_revision)`
+- `restoreWikiPageRevision(page_id, expected_revision, revision)`
+- `createWikiPageFile(page_id, name, blob)`
+- `removeWikiPageFile(file_id)`
+
+Example:
+
+```bash
+curl -sS https://kanboard.example.test/jsonrpc.php \
+  -u 'KANBOARD_USERNAME:KANBOARD_USER_API_TOKEN' \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","method":"getWikiPages","id":1,"params":{"project_id":5}}'
+```
+
+Successful business responses use `{"ok":true,"data":...}`.
+Validation and revision failures use `{"ok":false,"error":{"code":"...","message":"...","details":{...}}}`.
+API writes require the caller to pass the current `revision`; stale writes return `revision_conflict` with `currentRevision`.
+Page and file IDs are resolved server-side to their project before authorization, and file download responses do not expose object-storage paths.
+
 #### Wikilink
 
 Find the wiki button for a project in the menu dropdown.
@@ -120,7 +160,7 @@ Note that you can only restore **saved** editions. So you if you have the global
   - use html template render properly to list wiki pages
     - still having difficulty getting template helper working, manually added for each page
 - [x] get rid of additional old budget plugin code
-- [] kanboard rest api support - by request
+- [x] kanboard JSON-RPC API support
 - [] translations, maybe buttons, won't be translating "Wiki" for most languages
   - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13), [#12](https://github.com/kanboard/kanboard/issues/12), [#10](https://github.com/kanboard/kanboard/issues/10)
 - [] active, archived wikipages?
