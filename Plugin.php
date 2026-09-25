@@ -5,6 +5,7 @@ namespace Kanboard\Plugin\Wiki;
 use Kanboard\Core\Plugin\Base;
 use Kanboard\Core\Security\Role;
 use Kanboard\Core\Translator;
+use Kanboard\Plugin\Wiki\Api\Procedure\WikiPageProcedure;
 
 class Plugin extends Base
 {
@@ -21,6 +22,8 @@ class Plugin extends Base
             Role::PROJECT_VIEWER
         );
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
+
+        $this->registerWikiApi();
 
         // page routes wiki pages
         $this->route->addRoute('/wiki/index',                                           'WikiController', 'index', 'wiki');
@@ -68,6 +71,32 @@ class Plugin extends Base
 
         // helpers
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+    }
+
+    private function registerWikiApi()
+    {
+        foreach (array(
+            'getWikiPages',
+            'getWikiPage',
+            'searchWikiPages',
+            'getWikiPageRevisions',
+            'getWikiPageFiles',
+            'downloadWikiPageFile',
+        ) as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_VIEWER);
+        }
+        foreach (array(
+            'createWikiPage',
+            'updateWikiPage',
+            'archiveWikiPage',
+            'restoreWikiPage',
+            'restoreWikiPageRevision',
+            'createWikiPageFile',
+            'removeWikiPageFile',
+        ) as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_MEMBER);
+        }
+        $this->api->getProcedureHandler()->withObject(new WikiPageProcedure($this->container));
     }
 
     public function onStartup()
