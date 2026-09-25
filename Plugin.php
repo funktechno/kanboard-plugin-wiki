@@ -83,7 +83,8 @@ class Plugin extends Base
             ],
             'Plugin\Wiki\Model' => array(
                 'WikiModel',
-                'WikiFileModel'
+                'WikiFileModel',
+                'WikiPageModel'
             ),
         );
     }
