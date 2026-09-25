@@ -14,7 +14,12 @@ class Plugin extends Base
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiAjaxController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
-        $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
+        $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_VIEWER);
+        $this->projectAccessMap->add(
+            'WikiController',
+            array('show', 'detail', 'editions', 'readonly', 'detail_readonly'),
+            Role::PROJECT_VIEWER
+        );
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
 
         // page routes wiki pages

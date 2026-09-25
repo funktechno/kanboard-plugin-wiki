@@ -36,6 +36,11 @@ class WikiAjaxController extends BaseController
 
         try {
             $parent_id = (isset($values['parent_id']) && $values['parent_id'] != '' && $values['parent_id'] != '0') ? $values['parent_id'] : null;
+            $this->assertProjectPage((int) $values['src_wiki_id'], $project_id);
+            if ($parent_id !== null) {
+                $this->assertProjectPage((int) $parent_id, $project_id);
+            }
+
             $result = $this->wikiModel->reorderPagesByIndex($project_id, $values['src_wiki_id'], $values['index'], $parent_id);
 
             if (!$result) {
@@ -67,6 +72,9 @@ class WikiAjaxController extends BaseController
         }
 
         try {
+            $this->assertProjectPage((int) $values['src_wiki_id'], $project_id);
+            $this->assertProjectPage((int) $values['target_wiki_id'], $project_id);
+
             $result = $this->wikiModel->reorderPages($project_id, $values['src_wiki_id'], $values['target_wiki_id']);
 
             if (!$result) {
@@ -78,5 +86,13 @@ class WikiAjaxController extends BaseController
             $this->response->html('<div class="alert alert-error">'.$e->getMessage().'</div>');
         }
     }
+    private function assertProjectPage($pageId, $projectId)
+    {
+        $page = $this->wikiModel->getWikipage($pageId);
+        if (empty($page) || (int) $page['project_id'] !== (int) $projectId) {
+            throw new AccessForbiddenException();
+        }
+    }
+
     
 }
