@@ -52,12 +52,12 @@ class WikiHelper extends Base
      * @return string
      */
     public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable, $indent = 0) {
-        $html = '<ul' . ($parent_id == 0 ? ' id="wikiroot"' : '').' data-parent-id="'.$parent_id.'">';
+        $html = '<ul class="hideMe"' . ($parent_id == 0 ? ' id="wikiroot"' : '').' data-parent-id="'.$parent_id.'">';
         if (isset($children) && (count($children) > 0)) {
             foreach ($children as $item) {
-                $is_active = ($selected_wiki_id == $item['id']) ? ' active' : '';
+                $is_selected = ($selected_wiki_id == $item['id']) ? ' selected' : '';
                 $has_children = isset($item['children']) && (count($item['children']) > 0);
-                $html .= '<li class="wikipage' . $is_active . '" data-project-id="' . $project['id'] . '" data-page-id="' . $item['id'] . '" data-page-order="' . $item['ordercolumn'] . '">';
+                $html .= '<li class="wikipage' . $is_selected . '" data-project-id="' . $project['id'] . '" data-page-id="' . $item['id'] . '" data-page-order="' . $item['ordercolumn'] . '">';
                 if(!$not_editable) {
                     $html .= '<div style="float: right">';
                     $html .= '<button class="handle sortable-handle" hidden><a><i class="fa fa-arrows"></i></a></button>';
@@ -69,21 +69,22 @@ class WikiHelper extends Base
                     $html .= '</button>';
                     $html .= '</div>';
                 }
+                $html .= str_repeat('&nbsp;', 2 * ($indent + 1));
                 if($has_children){
-                    $html .= '<button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-minus-square-o"></i></a></button>';
+                    $html .= '<button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-plus-square-o"></i></a></button>';
                     $wikipage_icon = 'folder-o';
                 } else {
-                    $html .= '<button class="indent actionBigger"><i class="fa fa-square-o"></i></button>';
+                    $html .= '<button class="indent actionBigger"><a><i class="fa fa-square-o"></i></a></button>';
                     $wikipage_icon = 'file-word-o';
                 }
-                $html .= '<span class="wikibranch">' . str_repeat('&nbsp;', 2 * $indent);
+                $html .= '<span class="wikibranch">';
                 if (!$not_editable) {
                     $html .= $this->helper->url->icon(
-                        $wikipage_icon, $item['title'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_active
+                        $wikipage_icon, $item['title'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_selected
                     );
                 } else {
                     $html .= $this->helper->url->icon(
-                        $wikipage_icon, $item['title'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_active
+                        $wikipage_icon, $item['title'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_selected
                     );
                 }
                 $html .= '</span>';
@@ -100,7 +101,7 @@ class WikiHelper extends Base
      * @param mixed $children
      * @param mixed $parent_id
      */
-    public function generateIndentedChildren($children, $use_full_pages = false, $parent_id = 0, $exclude_wiki_id = 0, $indent = 0) {
+    public function generateIndentedChildren($children, $use_full_pages = false, $parent_id = 0, $exclude_wiki_id = 0, $indent = 0, $only_immediate_subchildren = false) {
         $indentedChildren = array();
         if ($parent_id == 0) {
             $indentedChildren[''] = t('(root)');
@@ -116,11 +117,11 @@ class WikiHelper extends Base
                         $indentedChildren[$item['id']] = str_repeat('&nbsp;', ($indent + 1) * 4) . ' ' . $item['title'];
                     }
                     if ($has_children) {
-                        $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $item['id'], $exclude_wiki_id, $indent + 1);
+                        $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $only_immediate_subchildren ? $parent_id : $item['id'], $exclude_wiki_id, $indent + 1, $only_immediate_subchildren);
                         $indentedChildren += $nestedChildren;
                     }
                 } elseif ($has_children) {
-                    $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $parent_id, $exclude_wiki_id, $indent);
+                    $nestedChildren = $this->generateIndentedChildren($item['children'], $use_full_pages, $parent_id, $exclude_wiki_id, $indent, $only_immediate_subchildren);
                     $indentedChildren += $nestedChildren;
                 }
             }
