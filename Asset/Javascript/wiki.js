@@ -198,6 +198,7 @@ jQuery(document).ready(function () {
             placeholder: '<li class="sortable-placeholder"></li>',
             placeholderClass: "sortable-placeholder",
             draggedClass: "sortable-dragged",
+            distance: 10,
             handle: isMobile ? ".sortable-handle" : ".wikibranch",
             onDrop: function ($item, container, _super) {
                 // console.log("onDrop", $item, container, _super)
