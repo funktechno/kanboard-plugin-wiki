@@ -26,23 +26,23 @@ class WikiController extends BaseController
         // echo json_encode($projectIds);
         // exit();
 
-        // $query = $this->projectModel->getQueryByProjectIds($projectIds);
         $query = $this->wikiModel->getQueryByProjectIds($projectIds);
-
 
         // echo json_encode($query->findAll());
         // exit();
-        // $wikipages = $this->wikiModel->getWikipages($project['id']);
 
         $search = $this->request->getStringParam('search');
 
         if ($search !== '') {
+            $query->beginOr();
+            $query->ilike('wikipage.title', '%' . $search . '%');
             $query->ilike('wikipage.content', '%' . $search . '%');
+            $query->closeOr();
         }
 
         $paginator = $this->paginator
-            ->setUrl('WikiController', 'index', array('plugin' => 'wiki'))
-            ->setMax(20)
+            ->setUrl('WikiController', 'index', array('plugin' => 'wiki', 'search' => $search))
+            ->setMax(10)
             ->setOrder('title')
             ->setQuery($query)
             ->calculate();
