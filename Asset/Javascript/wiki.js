@@ -20,6 +20,12 @@ jQuery(document).ready(function () {
     }
 
     //--------------------------------------
+    // hide the KB board selector (for Search Wiki Pages ONLY)
+    //--------------------------------------
+    if($("#wikisearch").length == 1) {
+        $('.board-selector-container').remove();
+    }
+    //--------------------------------------
     // hide the KB filters toolbar
     //--------------------------------------
     $('.filter-box').remove();
