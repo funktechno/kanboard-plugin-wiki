@@ -41,6 +41,9 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/file/:file_id/browser',                           'WikiFileViewController', 'browser', 'wiki');
         $this->route->addRoute('/wiki/file/:file_id/download',                          'WikiFileViewController', 'download', 'wiki');
 
+        // page routes wiki settings
+        $this->route->addRoute('settings/wiki',                                         'ConfigController', 'show', 'wiki');
+
         // template hooks
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
