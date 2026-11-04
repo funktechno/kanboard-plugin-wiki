@@ -4,7 +4,7 @@
     <form method="get" action="<?= $this->url->dir() ?>" class="search">
         <?= $this->form->hidden('controller', array('controller' => 'WikiController')) ?>
         <?= $this->form->hidden('action', array('action' => 'index')) ?>
-		<?= $this->form->hidden('plugin', array('plugin' => 'Wiki')) ?>
+		<?= $this->form->hidden('plugin', array('plugin' => 'wiki')) ?>
         <?= $this->form->text('search', $values, array(), array('placeholder="'.t('Search by content').'"')) ?>
         &nbsp;
         <button class="btn" type="submit"><?= t('Search by content') ?></button>

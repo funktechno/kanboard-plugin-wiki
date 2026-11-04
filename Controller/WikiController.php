@@ -41,7 +41,7 @@ class WikiController extends BaseController
         }
 
         $paginator = $this->paginator
-            ->setUrl('WikiController', 'index', array('plugin' => 'Wiki'))
+            ->setUrl('WikiController', 'index', array('plugin' => 'wiki'))
             ->setMax(20)
             ->setOrder('title')
             ->setQuery($query)
