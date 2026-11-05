@@ -49,7 +49,7 @@ class WikiController extends BaseController
 
         $this->response->html($this->helper->layout->app('wiki:wiki_search/listing', array(
             'paginator'   => $paginator,
-            'title'       => t('Wiki pages'),
+            'title'       => t('Wiki Pages'),
             'values'      => array('search' => $search),
         )));
     }

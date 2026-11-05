@@ -40,11 +40,11 @@ $is_selected = ($wiki_id == 0) ? ' selected' : '';
 
     <div style="clear: both">
 <?php if (!$not_editable): ?>
-    <?= $this->url->icon('book', t('Wiki overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
+    <?= $this->url->icon('book', t('Wiki Overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
     <button class="separator">&nbsp;&nbsp;</button>
     <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
 <?php else: ?>
-    <?= $this->url->icon('book', t('Wiki overview'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token'])) ?>
+    <?= $this->url->icon('book', t('Wiki Overview'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token'])) ?>
 <?php endif ?>
     </div>
 </div>
