@@ -8,7 +8,7 @@
 <section class="sidebar-container wikicontent">
 
 <div class="page-header wikicontent" style="width:100%">
-    <h2><?=t('Wiki overview')?></h2>
+    <h2><?=t('Wiki Overview')?></h2>
     <?php if (!$not_editable): ?>
         <?=$this->url->icon('book', t('Wiki').' '.t('Content'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => -1))?>
         <button class="separator">&nbsp;&nbsp;</button>
