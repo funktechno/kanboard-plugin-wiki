@@ -121,7 +121,7 @@ body.dragging, body.dragging * {
     padding-right: 1px;
     padding-left: 1px;
 }
-#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, #wikiedition .action, .expandAll, .collapseAll, .gotoSelected {
+#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, #wikiedition .action, .expandAll, .collapseAll, .gotoSelected, .readme {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
