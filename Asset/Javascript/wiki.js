@@ -148,18 +148,6 @@ jQuery(document).ready(function () {
             saveWikiTreeState();
         }
 
-        $('.expandAll').click(function () {
-            expandAllWikipagesBranches();
-        });
-
-        $('.collapseAll').click(function () {
-            collapseAllWikipagesBranches();
-        });
-
-        $('.gotoSelected').click(function () {
-            gotoSelectedWikipageBranch();
-        });
-
         $('#wikitree .branch').click(function () {
             const button = $(this).find("a i")[0];
             const branch = $(this).parent().find("ul")[0];
@@ -188,6 +176,25 @@ jQuery(document).ready(function () {
         if ($("#wikitree").length == 1 && $("#wikitree").data("selected-wiki-id") != 0) {
             gotoSelectedWikipageBranch();
         }
+
+        // handles of the tree view top buttons
+        $('.expandAll').click(function () {
+            expandAllWikipagesBranches();
+        });
+
+        $('.collapseAll').click(function () {
+            collapseAllWikipagesBranches();
+        });
+
+        $('.gotoSelected').click(function () {
+            gotoSelectedWikipageBranch();
+        });
+
+        $('.readme').click(function () {
+            // redirect to GitHub README (in a new tab!)
+            const blank = window.open('https://github.com/funktechno/kanboard-plugin-wiki/blob/master/README.md', '_blank');
+            if (blank) blank.focus();
+        });
     }
 
     //--------------------------------------
