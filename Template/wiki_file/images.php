@@ -43,8 +43,15 @@
                             </ul>
                         </div>
                     </div>
+                    <?php
+                        $tooltip = t('Id') . ': ' . $file['id'] . '&#013;';
+                        $tooltip .= t('Filename') . ': ' . $this->text->e($file['name']) . '&#013;';
+                        $tooltip .= t('Creator') . ': ' . $this->text->e($file['user_name'] ?: $file['username']) . '&#013;';
+                        $tooltip .= t('Date') . ': ' . $this->dt->datetime($file['date']) . '&#013;';
+                        $tooltip .= t('Size') . ': ' . $this->text->bytes($file['size']);
+                    ?>
                     <div class="file-thumbnail-description">
-                            <span class="tooltip" title='<?= t('Uploaded: %s', $this->dt->datetime($file['date'])).'&#013;'.t('Size: %s', $this->text->bytes($file['size'])) ?>'>
+                            <span class="tooltip" title='<?= $tooltip ?>'>
                                 <i class="fa fa-info-circle"></i>
                             </span>
                         <?php if (! empty($file['user_id'])): ?>
