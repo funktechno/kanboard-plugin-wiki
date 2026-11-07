@@ -5,7 +5,6 @@ namespace Kanboard\Plugin\Wiki\Helper;
 use Kanboard\Core\Base;
 use Kanboard\Model\Wiki;
 
-
 class WikiHelper extends Base
 {
     /**
