@@ -18,4 +18,4 @@ _Note: The `/plugins` folder is case-sensitive._
 
 ---
 
-Read the full [**Changelog**](changelog.md "See changes") or view the [**README**](README.md "View README")
+Read the full [**ChangeLog**](ChangeLog.md "See changes") or view the [**README**](README.md "View README")
