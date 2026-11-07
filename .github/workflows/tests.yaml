@@ -82,10 +82,10 @@ jobs:
     needs: Sqlite
     services:
       mariadb:
-        image: mariadb:latest
+        image: mariadb:11.4
         env:
           MYSQL_ROOT_PASSWORD: secret
-          MARIA_ROOT_PASSWORD: secret
+          MARIADB_ROOT_PASSWORD: secret
           MARIADB_USER: root
           MARIADB_DATABASE: kanboard_unit_test
         ports:
@@ -117,5 +117,5 @@ jobs:
       env:
         DB_HOSTNAME: 127.0.0.1
         DB_PASSWORD: secret
-        DB_USER: root
+        DB_USERNAME: root
         DB_PORT: ${{ job.services.mariadb.ports[3306] }}

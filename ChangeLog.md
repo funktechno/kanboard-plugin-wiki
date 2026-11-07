@@ -2,12 +2,13 @@
 
 ## Version 0.4.2
 
-* contributors: @lastlink
+* contributors: @lastlink, @nczz
 
 ---
 
 ### Improvements:
 * Updated docs with notes about markdown format
+* Added Traditional Chinese (`zh_TW`) translations for the Wiki plugin.
 
 ## Version 0.4.1
 * contributors: @imfx77
