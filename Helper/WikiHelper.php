@@ -30,13 +30,13 @@ class WikiHelper extends Base
      * @return string
      */
     public function renderChildren($children, $parent_id, $project, $selected_wiki_id, $not_editable, $indent = 0) {
-        $html = '<ul class="hideMe"' . ($parent_id == 0 ? ' id="wikiroot"' : '').' data-parent-id="'.$parent_id.'">';
+        $html = '<ul data-parent-id="' . $parent_id . '" class="hideMe"' . ($parent_id == 0 ? ' id="wikiroot"' : '') . '>';
         if (isset($children) && (count($children) > 0)) {
             foreach ($children as $item) {
                 $is_selected = ($selected_wiki_id == $item['id']) ? ' selected' : '';
                 $has_children = isset($item['children']) && (count($item['children']) > 0);
                 $html .= '<li class="wikipage' . $is_selected . '" data-project-id="' . $project['id'] . '" data-page-id="' . $item['id'] . '" data-page-order="' . $item['ordercolumn'] . '">';
-                if(!$not_editable) {
+                if (!$not_editable) {
                     $html .= '<div style="float: right">';
                     $html .= '<button class="handle sortable-handle" hidden><a><i class="fa fa-arrows"></i></a></button>';
                     $html .= '<button class="action" title="' . t('Edit Page') . '">';
@@ -48,7 +48,7 @@ class WikiHelper extends Base
                     $html .= '</div>';
                 }
                 $html .= str_repeat('&nbsp;', 2 * ($indent + 1));
-                if($has_children){
+                if ($has_children){
                     $html .= '<button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-plus-square-o"></i></a></button>';
                     $wikipage_icon = 'folder-o';
                 } else {
@@ -71,6 +71,7 @@ class WikiHelper extends Base
             }
         }
         $html .= '</ul>';
+
         return $html;
     }
 
