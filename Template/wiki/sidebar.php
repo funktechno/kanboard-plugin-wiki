@@ -34,9 +34,9 @@ $is_selected = ($wiki_id == 0) ? ' selected' : '';
     &nbsp;
     <div style="float: right">
         <button class="gotoSelected actionBigger" title="<?= t('Go to Selected Wiki Page') ?>"><a><i class="fa fa-share-square"></i></a></button>
-        <button class="expandAll actionBigger"title="<?= t('Expand All Wiki Subpages') ?>"><a><i class="fa fa-plus-square"></i></a></button>
-        <button class="collapseAll actionBigger"title="<?= t('Collapse All Wiki Subpages') ?>"><a><i class="fa fa-minus-square"></i></a></button>
-        <button class="readme actionBigger"title="<?= t('View README') ?>"><a><i class="fa fa-question-circle"></i></a></button>
+        <button class="expandAll actionBigger" title="<?= t('Expand All Wiki Subpages') ?>"><a><i class="fa fa-plus-square"></i></a></button>
+        <button class="collapseAll actionBigger" title="<?= t('Collapse All Wiki Subpages') ?>"><a><i class="fa fa-minus-square"></i></a></button>
+        <button class="readme actionBigger" title="README ⇗"><a><i class="fa fa-question-circle"></i></a></button>
     </div>
 
     <div style="clear: both">
