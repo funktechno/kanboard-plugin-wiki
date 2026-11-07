@@ -63,6 +63,12 @@ class WikiController extends BaseController
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
+        // Check if wiki public access is enabled in plugin settings
+        $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+        if (!$project['is_public'] || !$enableWikiPublicAccess) {
+            throw AccessForbiddenException::getInstance()->withoutLayout();
+        }
+
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages);
         $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
@@ -152,6 +158,13 @@ class WikiController extends BaseController
         if (empty($project)) {
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
+
+        // Check if wiki public access is enabled in plugin settings
+        $enableWikiPublicAccess = $this->configModel->get('enable_wiki_public_access', 0);
+        if (!$project['is_public'] || !$enableWikiPublicAccess) {
+            throw AccessForbiddenException::getInstance()->withoutLayout();
+        }
+
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
