@@ -1,5 +1,24 @@
 # Changelog
 
+## Version 0.5.0
+
+* contributors: @imfx77
+
+---
+
+### Improvements:
+* Explicit fixes for quite some styles in order to ensure visual consistency and adequate behavior using various KB themes (this also fixes issue #121)
+* Added description info to page titles
+* Adjustments for wiki links in the system dropdown menu, project header and dropdown menu
+* Adjustment for drag & drop sensitivity in the wiki tree to avoid accidental reordering of wiki pages
+* Fixed generation of wiki page subpages list
+* Improved file and image attachments info 
+
+### New Features:
+* Implemented caching of the last selected wiki page and the wiki tree expansion in the session so that its state can be restored
+* Filtering and sorting functionality for Search Wiki Pages now work seamlessly together
+* A general update of the README, and added a help button pointing to the online README
+
 ## Version 0.4.2
 
 * contributors: @lastlink
