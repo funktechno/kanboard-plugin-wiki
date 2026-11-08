@@ -9,10 +9,27 @@ jQuery(document).ready(function () {
     }
 
     //--------------------------------------
+    // obtain the base app dir from the hidden element
+    //--------------------------------------
+    let baseAppDir = "";
+    const baseAppDirField = $("#_Wiki_BaseAppDir_");
+    if (baseAppDirField.length === 1) {
+        // console.log(baseAppDirField.html());
+        baseAppDir = baseAppDirField.html();
+        baseAppDirField.remove();
+    }
+
+    //--------------------------------------
+    // hide the KB board selector (for Search Wiki Pages ONLY)
+    //--------------------------------------
+    if($("#wikisearch").length == 1) {
+        $('.board-selector-container').remove();
+    }
+    //--------------------------------------
     // hide the KB filters toolbar
     //--------------------------------------
-    $('.input-addon-field').hide();
-    $('.input-addon-item').hide();
+    $('.filter-box').remove();
+    $('.filter-box-component').addClass( 'containerFloatClear' );
 
     //--------------------------------------
     // override titles for links from their container buttons
@@ -30,16 +47,54 @@ jQuery(document).ready(function () {
     //--------------------------------------
     // handle collapse/expand of wikitree branches
     //--------------------------------------
+
+    //--------------------------------------
+    // obtain the base app dir from the hidden element
+    //--------------------------------------
+    let expandedWikiBranches = new Set();
+    const wikiExpandedBranchesField = $("#_Wiki_ExpandedBranches_");
+    if (wikiExpandedBranchesField.length === 1) {
+        // console.log(wikiExpandedBranchesField.html());
+        expandedWikiBranches = new Set( JSON.parse(wikiExpandedBranchesField.html()) );
+        // console.log(expandedWikiBranches);
+        wikiExpandedBranchesField.remove();
+    }
+
+    function saveWikiTreeState() {
+        // console.log(expandedWikiBranches);
+        // console.log(encodeURIComponent(JSON.stringify([...expandedWikiBranches] )));
+
+        // don't cache ajax or content won't be fresh
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: baseAppDir
+                + '?controller=WikiController&action=wikitree&plugin=wiki'
+                + '&wiki_tree=' + encodeURIComponent(JSON.stringify([...expandedWikiBranches] )),
+            success: function(response) {
+                // const wiki_tree = JSON.parse(response);
+                // console.log(wiki_tree);
+            },
+            error: function(xhr,textStatus,e) {
+                alert('saveWikiTreeState');
+                alert(e);
+            }
+        });
+    }
+
     if($("#wikitree").length == 1) {
         function expandAllWikipagesBranches() {
             const buttons = $("#wikitree").find(".branch");
             buttons.each(function () {
                 const button = $(this).find("a i")[0];
                 const branch = $(this).parent().find("ul")[0];
+                const wiki_id = parseInt($(branch).attr('data-parent-id'));
                 $(button).removeClass('fa-plus-square-o');
                 $(button).addClass('fa-minus-square-o');
-                $(branch).show();
+                $(branch).removeClass('hideMe');
+                expandedWikiBranches.add(wiki_id);
             });
+            saveWikiTreeState();
         }
 
         function collapseAllWikipagesBranches() {
@@ -47,9 +102,25 @@ jQuery(document).ready(function () {
             buttons.each(function () {
                 const button = $(this).find("a i")[0];
                 const branch = $(this).parent().find("ul")[0];
+                const wiki_id = parseInt($(branch).attr('data-parent-id'));
                 $(button).removeClass('fa-minus-square-o');
                 $(button).addClass('fa-plus-square-o');
-                $(branch).hide();
+                $(branch).addClass('hideMe');
+                expandedWikiBranches.delete(wiki_id);
+            });
+            saveWikiTreeState();
+        }
+
+        function restoreExpandedWikiBranches() {
+            $(".wikipage").each(function() {
+                const branch_id = parseInt($(this).attr('data-page-id'));
+                const button = $(this).find(".branch a i")[0];
+                const branch = $(this).find("ul")[0];
+                if (expandedWikiBranches.has(branch_id)) {
+                    $(button).removeClass('fa-plus-square-o');
+                    $(button).addClass('fa-minus-square-o');
+                    $(branch).removeClass('hideMe');
+                }
             });
         }
 
@@ -57,22 +128,56 @@ jQuery(document).ready(function () {
             function expandParentWikipage(el) {
                 const parentUl = el.parent();
                 const parentId = parentUl.attr("id");
-                if (parentId === "wikiroot") return; // end recursion
 
                 const parentWikipage = parentUl.parent();
                 const button = parentWikipage.find(".branch a i")[0];
+                const branch = parentWikipage.find("ul")[0];
+                const wiki_id = parseInt($(branch).attr('data-parent-id'));
                 $(button).removeClass('fa-plus-square-o');
                 $(button).addClass('fa-minus-square-o');
-                parentUl.show();
+                parentUl.removeClass('hideMe');
+                expandedWikiBranches.add(wiki_id);
 
+                if (parentId === "wikiroot") return; // end recursion
                 expandParentWikipage(parentWikipage);
             }
 
-            const selected = $("#wikiroot").find(".wikipage.active");
+            const selected = $("#wikiroot").find(".wikipage.selected");
             expandParentWikipage(selected);
-            $("#wikiroot").show();
+
+            saveWikiTreeState();
         }
 
+        $('#wikitree .branch').click(function () {
+            const button = $(this).find("a i")[0];
+            const branch = $(this).parent().find("ul")[0];
+            const wiki_id = parseInt($(branch).attr('data-parent-id'));
+
+            if ($(button).hasClass('fa-minus-square-o')) {
+                $(button).removeClass('fa-minus-square-o');
+                $(button).addClass('fa-plus-square-o');
+                $(branch).addClass('hideMe');
+                expandedWikiBranches.delete(wiki_id);
+                saveWikiTreeState();
+                return;
+            }
+            if ($(button).hasClass('fa-plus-square-o')) {
+                $(button).removeClass('fa-plus-square-o');
+                $(button).addClass('fa-minus-square-o');
+                $(branch).removeClass('hideMe');
+                expandedWikiBranches.add(wiki_id);
+                saveWikiTreeState();
+                return;
+            }
+        });
+
+        // restore expanded branches and then go to the selected branch
+        restoreExpandedWikiBranches();
+        if ($("#wikitree").length == 1 && $("#wikitree").data("selected-wiki-id") != 0) {
+            gotoSelectedWikipageBranch();
+        }
+
+        // handles of the tree view top buttons
         $('.expandAll').click(function () {
             expandAllWikipagesBranches();
         });
@@ -85,28 +190,11 @@ jQuery(document).ready(function () {
             gotoSelectedWikipageBranch();
         });
 
-        $('#wikitree .branch').click(function () {
-            const button = $(this).find("a i")[0];
-            const branch = $(this).parent().find("ul")[0];
-            if ($(button).hasClass('fa-minus-square-o')) {
-                $(button).removeClass('fa-minus-square-o');
-                $(button).addClass('fa-plus-square-o');
-                $(branch).hide();
-                return;
-            }
-            if ($(button).hasClass('fa-plus-square-o')) {
-                $(button).removeClass('fa-plus-square-o');
-                $(button).addClass('fa-minus-square-o');
-                $(branch).show();
-                return;
-            }
+        $('.readme').click(function () {
+            // redirect to GitHub README (in a new tab!)
+            const blank = window.open('https://github.com/funktechno/kanboard-plugin-wiki/blob/dev/README.md', '_blank');
+            if (blank) blank.focus();
         });
-
-        // if not root selected, then collapse entire wiki content except for the selected branch
-        if ($("#wikitree").length == 1 && $("#wikitree").data("selected-wiki-id") != 0) {
-            collapseAllWikipagesBranches();
-            gotoSelectedWikipageBranch();
-        }
     }
 
     //--------------------------------------
@@ -123,6 +211,7 @@ jQuery(document).ready(function () {
             placeholder: '<li class="sortable-placeholder"></li>',
             placeholderClass: "sortable-placeholder",
             draggedClass: "sortable-dragged",
+            distance: 10,
             handle: isMobile ? ".sortable-handle" : ".wikibranch",
             onDrop: function ($item, container, _super) {
                 // console.log("onDrop", $item, container, _super)

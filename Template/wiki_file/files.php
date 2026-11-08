@@ -1,6 +1,7 @@
 <?php if (! empty($files)): ?>
     <table class="table-striped table-scrolling">
         <tr>
+            <th><?= t('Id') ?></th>
             <th><?= t('Filename') ?></th>
             <th><?= t('Creator') ?></th>
             <th><?= t('Date') ?></th>
@@ -8,6 +9,9 @@
         </tr>
         <?php foreach ($files as $file): ?>
             <tr>
+                <td>
+                    <?= $file['id'] ?>
+                </td>
                 <td>
                     <i class="fa <?= $this->file->icon($file['name']) ?> fa-fw"></i>
                     <div class="dropdown">

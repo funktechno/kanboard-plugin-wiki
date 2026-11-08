@@ -23,7 +23,7 @@ return array(
     'Unable to remove this wiki page.' => 'Impossibile rimuovere questo limite al bilancio.',
     'Remaining' => 'Restanti',
     'Currency rates are used to calculate project wiki.' => 'I tassi di cambio sono utilizzati per calcolare i bilanci dei progetti',
-    'Wiki overview' => 'Panoramica wiki',
+    'Wiki Overview' => 'Panoramica wiki',
     'Created' => 'Creato',
     'Last modifier' => 'Último a modificare',
     'Modified' => 'Modificato',

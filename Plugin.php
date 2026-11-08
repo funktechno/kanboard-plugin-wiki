@@ -41,6 +41,9 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/file/:file_id/browser',                           'WikiFileViewController', 'browser', 'wiki');
         $this->route->addRoute('/wiki/file/:file_id/download',                          'WikiFileViewController', 'download', 'wiki');
 
+        // page routes wiki settings
+        $this->route->addRoute('settings/wiki',                                         'ConfigController', 'show', 'wiki');
+
         // template hooks
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
@@ -67,7 +70,16 @@ class Plugin extends Base
 
     public function onStartup()
     {
-        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__ . '/Locale');
+        // initialize translator, default locale en_US
+        $path = __DIR__ . '/Locale';
+        $language = $this->languageModel->getCurrentLanguage();
+        $filename = implode(DIRECTORY_SEPARATOR, array($path, $language, 'translations.php'));
+
+        if (file_exists($filename)) {
+            Translator::load($language, $path);
+        } else {
+            Translator::load('en_US', $path);
+        }
     }
 
     public function getClasses()
@@ -100,7 +112,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.4.1';
+        return '0.5.0';
     }
 
     public function getPluginHomepage()

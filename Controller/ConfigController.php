@@ -38,6 +38,6 @@ class ConfigController extends \Kanboard\Controller\ConfigController
             $this->flash->failure(t('Unable to save your settings.'));
         }
 
-        $this->response->redirect($this->helper->url->to('ConfigController', 'show', array('plugin' => 'Wiki')));
+        $this->response->redirect($this->helper->url->to('ConfigController', 'show', array('plugin' => 'wiki')));
     }
 }

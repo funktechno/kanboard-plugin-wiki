@@ -15,8 +15,8 @@
     'not_editable' => $not_editable,
 )) ?>
 
-<div class="sidebar-content">
-<div class="page-header">
+<div class="sidebar-content" style="margin:0">
+<div class="page-header" style="margin:0">
     <h2><?=t($wikipage['title'])?></h2>
     <?php if (!$not_editable): ?>
         <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
@@ -51,20 +51,20 @@
 </ul>
 </div>
 
-<div style="float:left">&nbsp;&nbsp;&nbsp;</div>
+<div style="float:left">&nbsp;</div>
 
-<div class="sidebar" style="float:left;max-width:100%;padding:0">
-<ul class="panel" style="margin:0">
+<div class="sidebar panel" style="float:left;margin:0;width:auto;max-width:25%;">
+<ul id="subpages">
 <details open>
 <summary><h4 style="display:inline-block"><?=t('Subpages')?></h4></summary>
 <?php if (!empty($wikipage_sublist)): ?>
     <?php foreach ($wikipage_sublist as $subpage_id => $subpage_title): ?>
         <?php if (!$not_editable): ?>
-            <li>
+            <li class="wikilink">&nbsp;
             <?=$this->url->link(t($subpage_title), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
             </li>
         <?php else: ?>
-            <li>
+            <li class="wikilink">&nbsp;
             <?=$this->url->link(t($subpage_title), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
             </li>
         <?php endif ?>
@@ -78,7 +78,7 @@
 </ul>
 </div>
 
-<div class="wikicontent">
+<div class="wikicontent" style="clear:both">
 <br>
 <?php if (!empty($wikipage['content'])): ?>
     <div class="page-header">

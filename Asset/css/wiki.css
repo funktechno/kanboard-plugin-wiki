@@ -2,6 +2,35 @@ body.dragging, body.dragging * {
     cursor: move !important;
 }
 
+.hideMe {
+    display:none !important;
+}
+
+.blurMe {
+    filter: blur(15px);
+}
+
+.containerNoWrap {
+    white-space: nowrap;
+}
+
+.containerFloatLeft {
+    float: left;
+}
+
+.containerFloatRight {
+    float: right;
+}
+
+.containerFloatClear {
+    clear: both !important;
+}
+
+.containerCenter {
+    margin: auto;
+    width: fit-content;
+}
+
 .sortable-dragged {
     position: absolute;
     opacity: 0.75;
@@ -32,14 +61,16 @@ body.dragging, body.dragging * {
 .wikicontent {
     clear: both;
 }
-
 .wikisidebar {
-    height: 100%;
-    resize: horizontal;
-    overflow: auto;
+    width: auto !important;
     max-width: 75% !important;
     min-width: 384px !important;
+    overflow-x: auto;
+    height: 100%;
+    overflow-y: hidden;
+    margin: 0 !important;
 }
+
 
 .wikipage {
     padding-bottom: 5px;
@@ -59,32 +90,38 @@ body.dragging, body.dragging * {
 }
 
 .wikilink {
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
     white-space: nowrap;
     z-index: 1;
 }
-.wikilink.active {
+.wikilink.selected {
     box-shadow: 0 0 10px #777777 inset;
+    font-weight: bold;
 }
 
 #wikitree {
     list-style-type: none;
 }
-#wikitree .indent, .separator {
+#wikitree .indent, #wikitree .indent .fa, .separator {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
     border: 0;
     background: transparent;
-    padding-right: 3px;
-    padding-left: 3px;
-    cursor: default;
     color: transparent;
+    padding-right: 1px;
+    padding-left: 1px;
+    cursor: default;
 }
-#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, #wikiedition .action, .expandAll, .collapseAll, .gotoSelected {
+#wikitree button a .fa, #wikilist button a .fa, #wikiedition button a .fa {
+    color: var(--link-color-primary);
+    padding-right: 1px;
+    padding-left: 1px;
+}
+#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, #wikiedition .action, .expandAll, .collapseAll, .gotoSelected, .readme {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
@@ -101,9 +138,25 @@ body.dragging, body.dragging * {
     padding-right: 5px !important;
     padding-left: 5px !important;
 }
-#wikitree li:last-child, #wikilist li:last-child {
-    margin-bottom: 0px !important;
+#wikitree, #wikitree ul, #wikitree li, #wikitree li.active, #wikitree li:last-child,
+#wikilist, #wikilist ul, #wikilist li, #wikilist li.active, #wikilist li:last-child,
+#subpages, #subpages ul, #subpages li, #subpages li.active, #subpages li:last-child {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
+    border-left: 3px solid !important;
+    border-left-color: transparent !important;
 }
-#wikitree button a .fa, #wikilist button a .fa, #wikiedition button a .fa {
-    color: var(--link-color-primary);
+#wikitree li:hover, #subpages li:hover {
+    border-left-color: var(--link-color-primary) !important;
+}
+#wikitree::before, #wikitree ul::before, #wikitree li::before,
+#wikilist::before, #wikilist ul::before, #wikilist li::before,
+#subpages::before, #subpages ul::before, #subpages li::before {
+    content: "";
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
