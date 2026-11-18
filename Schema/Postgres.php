@@ -4,7 +4,17 @@ namespace Kanboard\Plugin\Wiki\Schema;
 
 use PDO;
 
-const VERSION = 4;
+const VERSION = 5;
+
+function version_5(PDO $pdo)
+{
+    $pdo->exec('CREATE INDEX IF NOT EXISTS idx_wikipage_project_active_parent_order
+        ON wikipage (project_id, is_active, parent_id, ordercolumn)');
+    $pdo->exec('CREATE INDEX IF NOT EXISTS idx_wikipage_editions_page_revision
+        ON wikipage_editions (wikipage_id, edition)');
+    $pdo->exec('CREATE INDEX IF NOT EXISTS idx_wikipage_files_page
+        ON wikipage_has_files (wikipage_id)');
+}
 
 function version_4(PDO $pdo)
 {
