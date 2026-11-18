@@ -342,6 +342,37 @@ A preview of each page's content **[3]** is available within collapsable section
 
 </details>
 
+<details>
+<summary><strong>Testing</strong></summary>
+
+All commands run from the plugin folder, only need Docker, and work as written in Bash, Git Bash and PowerShell.
+
+**Unit tests** (same as the SQLite job in `.github/workflows/tests.yaml`):
+
+```bash
+docker run --rm --mount "type=bind,source=${PWD},target=/plugin,readonly" composer:2 sh -c '
+  git clone -q --depth 1 -b v1.2.57 https://github.com/kanboard/kanboard /k && cd /k &&
+  mkdir -p plugins/Wiki && cp -r /plugin/. plugins/Wiki/ &&
+  composer install -q --no-progress --ignore-platform-reqs &&
+  ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/'
+```
+
+If it fails with `Could not resolve host: github.com`, Docker cannot use your DNS server. Add `--dns 1.1.1.1` after `docker run --rm`.
+
+**Local Kanboard with the plugin** at http://localhost:8080 (default login `admin` / `admin`):
+
+```bash
+docker run -d --name kanboard-wiki -p 8080:80 --mount "type=bind,source=${PWD},target=/var/www/app/plugins/Wiki" kanboard/kanboard:v1.2.57
+```
+
+Stop it and delete its data:
+
+```bash
+docker rm -f -v kanboard-wiki
+```
+
+</details>
+
 <p align="right">[<a href="#user-content-readme-bottom">&#8595; Bottom</a>] [<a href="#user-content-readme-top">&#8593; Top</a>]</p>
 
 ---
