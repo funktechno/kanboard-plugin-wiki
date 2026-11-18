@@ -57,6 +57,57 @@ class WikiModel extends Base
     const WIKITABLE = 'wikipage';
 
     /**
+     * Public projects show their wiki through the public link (default on, the behavior before the setting existed)
+     *
+     * @return bool
+     */
+    public function isPublicWikiEnabled()
+    {
+        return $this->configModel->get('wiki_public_access', 1) == 1;
+    }
+
+    /**
+     * Public wiki pages show their attachments (default off: it exposes files that were not shared before)
+     *
+     * @return bool
+     */
+    public function isPublicAttachmentsEnabled()
+    {
+        return $this->isPublicWikiEnabled() && $this->configModel->get('wiki_public_attachments', 0) == 1;
+    }
+
+    /**
+     * Active pages of the given projects whose id starts with $search, for the wiki: autocomplete
+     *
+     * @param  integer[] $project_ids
+     * @param  string    $search
+     * @param  integer   $limit
+     * @return array
+     */
+    public function getSuggestions(array $project_ids, $search = '', $limit = 25)
+    {
+        if (empty($project_ids)) {
+            return array();
+        }
+
+        $pages = $this->db->table(self::WIKITABLE)
+            ->columns(self::WIKITABLE . '.id', self::WIKITABLE . '.title', 'projects.name AS project_name')
+            ->join('projects', 'id', 'project_id')
+            ->in(self::WIKITABLE . '.project_id', $project_ids)
+            ->eq(self::WIKITABLE . '.is_active', 1)
+            ->asc('projects.name')
+            ->asc(self::WIKITABLE . '.title')
+            ->findAll();
+
+        $search = trim((string) $search);
+        $pages = array_filter($pages, function ($page) use ($search) {
+            return $search === '' || strpos((string) $page['id'], $search) === 0;
+        });
+
+        return array_slice(array_values($pages), 0, $limit);
+    }
+
+    /**
      * Events
      *
      * @var string
