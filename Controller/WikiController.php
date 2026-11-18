@@ -4,7 +4,6 @@ namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Controller\BaseController;
 use Kanboard\Core\Controller\AccessForbiddenException;
-use Kanboard\Core\Controller\PageNotFoundException;
 
 /**
  * Wiki
@@ -14,6 +13,44 @@ use Kanboard\Core\Controller\PageNotFoundException;
  */
 class WikiController extends BaseController
 {
+    /**
+     * Get a wiki page, only if it belongs to the given project
+     *
+     * @access private
+     * @param  integer $wiki_id
+     * @param  integer $project_id
+     * @return array
+     */
+    private function getProjectWikipage($wiki_id, $project_id)
+    {
+        $wikipage = $this->wikiModel->getWikipage($wiki_id);
+
+        if (empty($wikipage) || $wikipage['project_id'] != $project_id) {
+            throw new AccessForbiddenException();
+        }
+
+        return $wikipage;
+    }
+
+    /**
+     * Get a wiki page, only if the user has access to its project.
+     * For actions that do not have the project_id in the URL.
+     *
+     * @access private
+     * @param  integer $wiki_id
+     * @return array
+     */
+    private function getAuthorizedWikipage($wiki_id)
+    {
+        $wikipage = $this->wikiModel->getWikipage($wiki_id);
+
+        if (empty($wikipage) || ! $this->helper->user->hasProjectAccess('WikiController', 'edit', $wikipage['project_id'])) {
+            throw new AccessForbiddenException();
+        }
+
+        return $wikipage;
+    }
+
     /**
      * list for wikipages a user has access to
      */
@@ -27,30 +64,30 @@ class WikiController extends BaseController
         // echo json_encode($projectIds);
         // exit();
 
-        // $query = $this->projectModel->getQueryByProjectIds($projectIds);
         $query = $this->wikiModel->getQueryByProjectIds($projectIds);
-
 
         // echo json_encode($query->findAll());
         // exit();
-        // $wikipages = $this->wikiModel->getWikipages($project['id']);
 
         $search = $this->request->getStringParam('search');
 
         if ($search !== '') {
+            $query->beginOr();
+            $query->ilike('wikipage.title', '%' . $search . '%');
             $query->ilike('wikipage.content', '%' . $search . '%');
+            $query->closeOr();
         }
 
         $paginator = $this->paginator
-            ->setUrl('WikiController', 'index', array('plugin' => 'Wiki'))
-            ->setMax(20)
+            ->setUrl('WikiController', 'index', array('plugin' => 'wiki', 'search' => $search))
+            ->setMax(10)
             ->setOrder('title')
             ->setQuery($query)
             ->calculate();
 
-        $this->response->html($this->helper->layout->app('wiki:wiki_list/listing', array(
+        $this->response->html($this->helper->layout->app('wiki:wiki_search/listing', array(
             'paginator'   => $paginator,
-            'title'       => t('Wiki pages'),
+            'title'       => t('Wiki Pages'),
             'values'      => array('search' => $search),
         )));
     }
@@ -72,6 +109,7 @@ class WikiController extends BaseController
             'project' => $project,
             'not_editable' => true,
             'title' => $project['name'],
+            'description' => $this->helper->projectHeader->getDescription($project),
             'wikipages' => $wiki_list,
         )));
     }
@@ -94,6 +132,7 @@ class WikiController extends BaseController
         $this->response->html($this->helper->layout->app('wiki:wiki/show', array(
             'project' => $project,
             'title' => $project['name'],
+            'description' => $this->helper->projectHeader->getDescription($project),
             'wikipages' => $wiki_list,
         )));
 
@@ -107,13 +146,14 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $wiki_id = $this->request->getIntegerParam('wiki_id');
-        $this->getProjectPage($wiki_id, (int) $project['id']);
+        $this->getProjectWikipage($wiki_id, $project['id']);
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
 
         $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
             'title' => $project['name'],
+            'description' => $this->helper->projectHeader->getDescription($project),
             'wiki_id'=> $result['selected']['id'],
             'wikipage' => $result['selected'],
             'wikipages' => $result['tree'],
@@ -126,7 +166,7 @@ class WikiController extends BaseController
     {
         $wiki_id = $this->request->getIntegerParam('wiki_id');
 
-        $editwiki = $this->getAuthorizedPage($wiki_id, __FUNCTION__);
+        $editwiki = $this->getAuthorizedWikipage($wiki_id);
 
         // if (empty($values)) {
         //     $values['date_creation'] = date('Y-m-d');
@@ -154,20 +194,36 @@ class WikiController extends BaseController
         if (empty($project)) {
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
-        $wiki_id = $this->request->getIntegerParam('wiki_id');
-        if ($wiki_id !== 0) {
-            $this->getProjectPage($wiki_id, (int) $project['id']);
+
+        $wiki_id = $this->request->getIntegerParam('wiki_id', -1);
+        if ($wiki_id >= 0) {
+            $_SESSION["last_wiki_id"] = $wiki_id; // cache last selected wiki page
+        } else if (array_key_exists("last_wiki_id", $_SESSION) && $_SESSION["last_wiki_id"]) {
+            $wiki_id = $_SESSION["last_wiki_id"]; // restore last selected page
+        } else {
+            $wiki_id = 0; // redirect to (root) page
         }
 
+        if ($wiki_id != 0) {
+            $wikipage = $this->wikiModel->getWikipage($wiki_id);
+
+            if (empty($wikipage) || $wikipage['project_id'] != $project['id']) {
+                if ($this->request->getIntegerParam('wiki_id', -1) >= 0) {
+                    throw new AccessForbiddenException();
+                }
+
+                $wiki_id = 0; // the cached page is from another project, show the root
+            }
+        }
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
-        $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
         if ($wiki_id != 0) {
             $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
                 'project' => $project,
                 'title' => $project['name'],
+                'description' => $this->helper->projectHeader->getDescription($project),
                 'wiki_id' => $result['selected']['id'],
                 'wiki' => $result['selected'],
                 'not_editable' => true,
@@ -175,12 +231,13 @@ class WikiController extends BaseController
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
                 'wikipage' => $result['selected'],
-                'wikipage_sublist' => $wikipage_sublist,
+                'wikipage_sublist' => $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1, true),
             )));
         } else {
             $this->response->html($this->helper->layout->app('wiki:wiki/sidebar', array(
                 'project' => $project,
                 'title' => $project['name'],
+                'description' => $this->helper->projectHeader->getDescription($project),
                 'wiki_id' => $wiki_id,
                 'wikipages' => $result['tree'],
                 'not_editable' => true,
@@ -195,32 +252,48 @@ class WikiController extends BaseController
     {
         $project = $this->getProject();
 
-        $wiki_id = $this->request->getIntegerParam('wiki_id');
-        if ($wiki_id !== 0) {
-            $this->getProjectPage($wiki_id, (int) $project['id']);
+        $wiki_id = $this->request->getIntegerParam('wiki_id', -1);
+        if ($wiki_id >= 0) {
+            $_SESSION["last_wiki_id"] = $wiki_id; // cache last selected wiki page
+        } else if (array_key_exists("last_wiki_id", $_SESSION) && $_SESSION["last_wiki_id"]) {
+            $wiki_id = $_SESSION["last_wiki_id"]; // restore last selected page
+        } else {
+            $wiki_id = 0; // redirect to (root) page
         }
 
+        if ($wiki_id != 0) {
+            $wikipage = $this->wikiModel->getWikipage($wiki_id);
+
+            if (empty($wikipage) || $wikipage['project_id'] != $project['id']) {
+                if ($this->request->getIntegerParam('wiki_id', -1) >= 0) {
+                    throw new AccessForbiddenException();
+                }
+
+                $wiki_id = 0; // the cached page is from another project, show the root
+            }
+        }
 
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
-        $wikipage_sublist = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1);
 
         if ($wiki_id != 0) {
             $this->response->html($this->helper->layout->app('wiki:wiki/detail', array(
                 'project' => $project,
                 'title' => $project['name'],
+                'description' => $this->helper->projectHeader->getDescription($project),
                 'wiki_id' => $result['selected']['id'],
                 'wiki' => $result['selected'],
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
                 'wikipage' => $result['selected'],
-                'wikipage_sublist' => $wikipage_sublist,
+                'wikipage_sublist' => $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1, true),
             )));
         } else {
             $this->response->html($this->helper->layout->app('wiki:wiki/sidebar', array(
                 'project' => $project,
                 'title' => $project['name'],
+                'description' => $this->helper->projectHeader->getDescription($project),
                 'wiki_id' => $wiki_id,
                 'wikipages' => $result['tree'],
             )));
@@ -243,6 +316,7 @@ class WikiController extends BaseController
     //         'paginator' => $paginator,
     //         'project' => $project,
     //         'title' => t('Wiki'),
+    //         'description' => $this->helper->projectHeader->getDescription($project),
     //     )));
     // }
 
@@ -290,6 +364,19 @@ class WikiController extends BaseController
     }
 
     /**
+     * Store wiki tree expanded branches in session
+     *
+     * @access public
+     */
+    public function wikitree()
+    {
+        $expandedWikiBranches = json_decode($this->request->getStringParam('wiki_tree'));
+        $_SESSION["wiki_tree"] = $expandedWikiBranches;
+
+        echo(json_encode( $_SESSION["wiki_tree"] ));
+    }
+
+    /**
      * Confirmation dialog before removing a wiki
      *
      * @access public
@@ -297,8 +384,7 @@ class WikiController extends BaseController
     public function confirm()
     {
         $project = $this->getProject();
-        $this->getProjectPage($this->request->getIntegerParam('wiki_id'), (int) $project['id']);
-
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         $this->response->html($this->template->render('wiki:wiki/remove', array(
             'project' => $project,
@@ -313,9 +399,9 @@ class WikiController extends BaseController
      */
     public function restore()
     {
+        $this->checkCSRFParam();
         $project = $this->getProject();
-        $this->getProjectPage($this->request->getIntegerParam('wiki_id'), (int) $project['id']);
-
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         if ($this->wikiModel->restoreEdition($this->request->getIntegerParam('wiki_id'), $this->request->getIntegerParam('edition'))) {
             $this->flash->success(t('Edition was restored successfully.'));
@@ -333,11 +419,12 @@ class WikiController extends BaseController
      */
     public function purge()
     {
+        $this->checkCSRFParam();
         $project = $this->getProject();
         $wiki_id = $this->request->getIntegerParam('wiki_id');
         $edition = $this->request->getIntegerParam('edition');
 
-        $wikipage = $this->getProjectPage($wiki_id, (int) $project['id']);
+        $wikipage = $this->getProjectWikipage($wiki_id, $project['id']);
         if ($wikipage['current_edition'] == $edition) {
             $this->flash->failure(t('Your current wiki edition cannot be purged.'));
             $this->response->redirect($this->helper->url->to('WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $this->request->getIntegerParam('wiki_id'))), true);
@@ -360,8 +447,7 @@ class WikiController extends BaseController
     public function confirm_restore()
     {
         $project = $this->getProject();
-        $this->getProjectPage($this->request->getIntegerParam('wiki_id'), (int) $project['id']);
-
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         $this->response->html($this->template->render('wiki:wiki/confirm_restore', array(
             'project' => $project,
@@ -378,8 +464,7 @@ class WikiController extends BaseController
     public function confirm_purge()
     {
         $project = $this->getProject();
-        $this->getProjectPage($this->request->getIntegerParam('wiki_id'), (int) $project['id']);
-
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         $this->response->html($this->template->render('wiki:wiki/confirm_purge', array(
             'project' => $project,
@@ -398,14 +483,14 @@ class WikiController extends BaseController
         $project = $this->getProject();
 
         $values = $this->request->getValues();
+        $values['project_id'] = $project['id'];
         list($valid, $errors) = $this->wikiModel->validatePageCreation($values);
 
         if ($valid) {
 
             $newDate = date('Y-m-d');
 
-            $values['project_id'] = $project['id'];
-            $wiki_id = $this->wikiModel->createpage($project['id'], $values['title'], $values['content'], $newDate);
+            $wiki_id = $this->wikiModel->createpage($values['project_id'], $values['title'], $values['content'], $newDate);
             if ($wiki_id > 0) {
 
                 $this->wikiModel->createEdition($values, $wiki_id, 1, $newDate);
@@ -440,11 +525,15 @@ class WikiController extends BaseController
         // $project = $this->getProject();
 
         $values = $this->request->getValues();
+        $wikipage = $this->getAuthorizedWikipage(isset($values['id']) ? $values['id'] : 0);
+
+        if (! empty($values['parent_id'])) {
+            $this->getProjectWikipage($values['parent_id'], $wikipage['project_id']);
+        }
+
         list($valid, $errors) = $this->wikiModel->validatePageUpdate($values);
 
         if ($valid) {
-            $this->getAuthorizedPage((int) $values['id'], __FUNCTION__);
-
 
             $newDate = date('Y-m-d');
             $editions = $values['editions'] + 1;
@@ -494,8 +583,7 @@ class WikiController extends BaseController
         $this->checkCSRFParam();
         $project = $this->getProject();
         $wiki_id = $this->request->getIntegerParam('wiki_id');
-        $this->getProjectPage($wiki_id, (int) $project['id']);
-
+        $this->getProjectWikipage($wiki_id, $project['id']);
 
         // First delete all associated files, then delete the page itself.
         if ($this->wikiFileModel->removeAll($wiki_id) && $this->wikiModel->removepage($wiki_id)) {
@@ -506,30 +594,6 @@ class WikiController extends BaseController
 
         // FIXME This works only if there are remaining pages.
         $this->response->redirect($this->helper->url->to('WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])), true);
-    }
-
-    private function getProjectPage($pageId, $projectId)
-    {
-        $page = $this->wikiModel->getWikipage($pageId);
-        if (empty($page) || (int) $page['project_id'] !== (int) $projectId) {
-            throw new AccessForbiddenException();
-        }
-
-        return $page;
-    }
-
-    private function getAuthorizedPage($pageId, $action)
-    {
-        $page = $this->wikiModel->getWikipage($pageId);
-        if (empty($page)) {
-            throw new PageNotFoundException();
-        }
-
-        if (! $this->helper->user->hasProjectAccess('WikiController', $action, (int) $page['project_id'])) {
-            throw new AccessForbiddenException();
-        }
-
-        return $page;
     }
 
 }

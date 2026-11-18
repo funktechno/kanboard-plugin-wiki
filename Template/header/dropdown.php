@@ -1,5 +1,1 @@
-<?php ?>
-    <li>
-        <?= $this->url->icon('book', t('Wiki'), 'WikiController', 'index', array('plugin' => 'wiki')) ?>
-    </li>
-<?php ?>
+<li><?= $this->url->icon('book', t('Wiki Pages'), 'WikiController', 'index', array('plugin' => 'wiki')) ?></li>
