@@ -13,7 +13,7 @@
         <?=$this->url->icon('book', t('Wiki').' '.t('Content'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => -1))?>
         <button class="separator">&nbsp;&nbsp;</button>
         <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
-        <?php if ($project['is_public']): ?>
+        <?php if ($project['is_public'] && $this->app->config('wiki_public_access', 1) == 1): ?>
             <br>
             <?= $this->url->icon('share-alt', t('Public link'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token']), false, '', '', true) ?>
         <?php endif ?>

@@ -14,6 +14,8 @@ class ConfigController extends \Kanboard\Controller\ConfigController
         $values = [];
             // 'title' => $editionvalues['title'],
         $values['persistEditions'] =$this->configModel->get('persistEditions');
+        $values['wiki_public_access'] = $this->wikiModel->isPublicWikiEnabled() ? 1 : 0;
+        $values['wiki_public_attachments'] = $this->wikiModel->isPublicAttachmentsEnabled() ? 1 : 0;
 
         // persistEditions
         // public function get($name, $default_value = '')
@@ -28,8 +30,10 @@ class ConfigController extends \Kanboard\Controller\ConfigController
     {
         $values =  $this->request->getValues();
 
-        if (!isset($values['persistEditions'])) {
-          $values['persistEditions'] = 0;
+        foreach (array('persistEditions', 'wiki_public_access', 'wiki_public_attachments') as $checkbox) {
+            if (! isset($values[$checkbox])) {
+                $values[$checkbox] = 0;
+            }
         }
 
         if ($this->configModel->save($values)) {

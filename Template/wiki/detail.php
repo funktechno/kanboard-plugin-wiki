@@ -85,7 +85,7 @@
         <h2><?=t('Content')?></h2>
     </div>
     <article class="markdown">
-        <?=$this->text->markdown($wikipage['content'])?>
+        <?=$this->text->markdown($wikipage['content'], $not_editable)?>
     </article>
 <?php endif?>
 
@@ -94,11 +94,6 @@
         <h2><?=t('Attachments')?></h2>
 </div>
 <ul>
-    <?php
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-    ?>
     <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
     <?= $this->modal->medium('camera', t('Add a screenshot'), 'WikiFileController', 'screenshot', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
 </ul>
@@ -111,6 +106,16 @@
         'images' => $images
     )) ?>
 <?php endif ?>
+<?php elseif (! empty($public_token) && (! empty($files) || ! empty($images))): ?>
+<div class="page-header">
+        <h2><?=t('Attachments')?></h2>
+</div>
+    <?= $this->render('wiki:wiki_file/show', array(
+        'wiki' => $wiki,
+        'files' => $files,
+        'images' => $images,
+        'public_token' => $public_token,
+    )) ?>
 <?php endif ?>
 
 </div>

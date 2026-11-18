@@ -22,6 +22,7 @@ class Plugin extends Base
             Role::PROJECT_VIEWER
         );
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
+        $this->applicationAccessMap->add('WikiPublicFileController', array('image', 'thumbnail', 'browser', 'download'), Role::APP_PUBLIC);
 
         if ($this->container->offsetExists('api') && $this->container->offsetExists('apiProjectAccessMap')) {
             $this->registerWikiApi();
@@ -50,6 +51,10 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/file/:file_id/thumbnail',                         'WikiFileViewController', 'thumbnail', 'wiki');
         $this->route->addRoute('/wiki/file/:file_id/browser',                           'WikiFileViewController', 'browser', 'wiki');
         $this->route->addRoute('/wiki/file/:file_id/download',                          'WikiFileViewController', 'download', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/image',               'WikiPublicFileController', 'image', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/thumbnail',           'WikiPublicFileController', 'thumbnail', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/browser',             'WikiPublicFileController', 'browser', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/download',            'WikiPublicFileController', 'download', 'wiki');
 
         // page routes wiki settings
         $this->route->addRoute('settings/wiki',                                         'ConfigController', 'show', 'wiki');
@@ -59,6 +64,7 @@ class Plugin extends Base
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
         $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
+        $this->template->hook->attach('template:layout:head', 'wiki:layout/head');
 
         // template overrides
         $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
@@ -76,6 +82,8 @@ class Plugin extends Base
 
         // helpers
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        // markdown with wiki:<id> and wiki-file:<id> references, everywhere Kanboard renders markdown
+        $this->helper->register('text', '\Kanboard\Plugin\Wiki\Helper\WikiTextHelper');
     }
 
     private function registerWikiApi()

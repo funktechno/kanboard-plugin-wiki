@@ -90,6 +90,24 @@ class WikiAjaxController extends BaseController
     }
 
     /**
+     * Suggestions for the wiki: trigger of the markdown editor, in the format of Kanboard's suggest menu
+     */
+    public function suggest()
+    {
+        $project_ids = $this->projectPermissionModel->getActiveProjectIds($this->userSession->getId());
+        $result = array();
+
+        foreach ($this->wikiModel->getSuggestions($project_ids, $this->request->getStringParam('search')) as $page) {
+            $result[] = array(
+                'value' => (string) $page['id'],
+                'html' => 'wiki:' . $page['id'] . ' ' . $this->helper->text->e($page['title']) . ' <small>' . $this->helper->text->e($page['project_name']) . '</small>',
+            );
+        }
+
+        $this->response->json($result);
+    }
+
+    /**
      * The wiki page must belong to the given project
      */
     private function checkWikiProject($wiki_id, $project_id)
