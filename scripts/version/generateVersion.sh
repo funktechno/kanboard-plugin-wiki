@@ -27,7 +27,7 @@ fi
 if [ -n "$EXACT_TAG" ]; then
   VERSION="${EXACT_TAG#v}"
 else
-  VERSION="$MAJOR_MINOR_PATCH-$COMMIT_COUNT"
+  VERSION="$MAJOR_MINOR_PATCH"
   apply_version_rules "$GIT_BRANCH"
 fi
 

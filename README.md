@@ -418,7 +418,7 @@ The version comes from git tags, using the same rules locally and in CI (see `sc
 
 * a commit with a release tag such as `0.5.0` is that version
 * `dev` and `master` are the newest tag plus the number of merges since it, e.g. `0.5.3`
-* any other branch is `dev`'s version plus its commits ahead of `dev`, e.g. `0.5.3-2`
+* any other branch is `dev`'s version with its commits ahead of `dev` added to the patch, e.g. `0.5.3` + 2 commits is `0.5.5`
 
 Print it locally. Bash / Git Bash:
 

@@ -30,7 +30,7 @@ try {
         $version = $exactTag -replace '^v', ''
     } elseif ($branch -in 'dev', 'main', 'master') {
         $line = Get-ReleaseLineVersion 'HEAD'
-        $version = if ($line) { $line } else { "$majorMinorPatch-$commitCount" }
+        $version = if ($line) { $line } else { $majorMinorPatch }
     } else {
         $target = if ($env:VERSION_TARGET) { $env:VERSION_TARGET } elseif ($env:GITHUB_BASE_REF) { $env:GITHUB_BASE_REF } else { 'dev' }
         $targetRef = $null
@@ -40,11 +40,12 @@ try {
         }
         $base = if ($targetRef) { Get-ReleaseLineVersion $targetRef } else { $null }
         if ($base) {
-            $version = "$base-$([int](git rev-list --count --no-merges "$targetRef..HEAD"))"
+            $ahead = [int](git rev-list --count --no-merges "$targetRef..HEAD")
         } else {
-            $version = "$majorMinorPatch-$commitCount"
+            $base = $majorMinorPatch; $ahead = $commitCount
         }
-        $version = $version -replace '-0$', ''
+        $parts = $base.Split('.')
+        $version = "$($parts[0]).$($parts[1]).$([int]$parts[2] + $ahead)"
     }
 
     Write-Host "branch=$branch latest_tag=$(if ($latestTag) { $latestTag } else { 'none' }) exact_tag=$(if ($exactTag) { $exactTag } else { 'none' }) version=$version"
