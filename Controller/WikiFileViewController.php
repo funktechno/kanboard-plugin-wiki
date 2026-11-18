@@ -10,13 +10,36 @@ use Kanboard\Core\ObjectStorage\ObjectStorageException;
 class WikiFileViewController extends FileViewerController
 {
     /**
+     * Get the requested file, only if the user has access to its project
+     *
+     * @access private
+     * @return array
+     */
+    private function getWikiFile()
+    {
+        $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+
+        if (empty($file)) {
+            throw new PageNotFoundException();
+        }
+
+        $project_id = $this->wikiFileModel->getProjectId($file['id']);
+
+        if (! $this->helper->user->hasProjectAccess('WikiFileViewController', 'show', $project_id)) {
+            throw new AccessForbiddenException();
+        }
+
+        return $file;
+    }
+
+    /**
      * Show file content in a popover
      *
      * @access public
      */
     public function show()
     {
-        $file = $this->getAuthorizedFile(__FUNCTION__);
+        $file = $this->getWikiFile();
 
         $this->response->html($this->template->render('file_viewer/show', array(
             'file' => $file,
@@ -37,7 +60,7 @@ class WikiFileViewController extends FileViewerController
      */
     public function image()
     {
-        $file = $this->getAuthorizedFile(__FUNCTION__);
+        $file = $this->getWikiFile();
         $this->renderFileWithCache($file, $this->helper->file->getImageMimeType($file['name']));
     }
 
@@ -48,7 +71,7 @@ class WikiFileViewController extends FileViewerController
      */
     public function browser()
     {
-        $file = $this->getAuthorizedFile(__FUNCTION__);
+        $file = $this->getWikiFile();
         $this->renderFileWithCache($file, $this->helper->file->getBrowserViewType($file['name']));
     }
 
@@ -59,7 +82,7 @@ class WikiFileViewController extends FileViewerController
      */
     public function thumbnail()
     {
-        $file = $this->getAuthorizedFile(__FUNCTION__);
+        $file = $this->getWikiFile();
         $filename = $this->wikiFileModel->getThumbnailPath($file['path']);
         
         $etag = md5($filename);
@@ -93,31 +116,12 @@ class WikiFileViewController extends FileViewerController
     public function download()
     {
         try {
-            $file = $this->getAuthorizedFile(__FUNCTION__);
+            $file = $this->getWikiFile();
             $this->response->withFileDownload($file['name']);
             $this->response->send();
             $this->objectStorage->output($file['path']);
         } catch (ObjectStorageException $e) {
             $this->logger->error($e->getMessage());
         }
-    }
-
-    private function getAuthorizedFile($action)
-    {
-        $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
-        if (empty($file)) {
-            throw new PageNotFoundException();
-        }
-
-        $page = $this->wikiModel->getWikipage((int) $file['wikipage_id']);
-        if (empty($page)) {
-            throw new PageNotFoundException();
-        }
-
-        if (! $this->helper->user->hasProjectAccess('WikiFileViewController', $action, (int) $page['project_id'])) {
-            throw new AccessForbiddenException();
-        }
-
-        return $file;
     }
 }

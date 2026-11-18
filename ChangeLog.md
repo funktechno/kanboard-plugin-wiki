@@ -1,8 +1,8 @@
 # Changelog
 
-## Version 0.4.2
+## Unreleased
 
-* contributors: @lastlink, @nczz
+* contributors: @nczz
 
 ---
 
@@ -10,10 +10,42 @@
 * Added project-scoped Wiki page JSON-RPC procedures for page, revision, and attachment access.
 
 ### Improvements:
-* Updated docs with notes about markdown format.
-* Hardened direct wiki page and attachment access checks so IDs are resolved to project ownership before use.
 * Added additive database indexes for Wiki page API listing and lookup paths.
 * Declared Kanboard `>=1.2.46` compatibility to match the PHP 8.1+ runtime required by the API implementation.
+
+## Version 0.5.0
+
+* contributors: @imfx77, @lastlink
+
+---
+
+### Security:
+* Wiki pages and attachments are now only reachable by users with access to the owning project
+* Text file preview escapes the file content (issue #125)
+* Restoring and purging an edition now require a CSRF token
+
+### Improvements:
+* Explicit fixes for quite some styles in order to ensure visual consistency and adequate behavior using various KB themes (this also fixes issue #121)
+* Added description info to page titles
+* Adjustments for wiki links in the system dropdown menu, project header and dropdown menu
+* Adjustment for drag & drop sensitivity in the wiki tree to avoid accidental reordering of wiki pages
+* Fixed generation of wiki page subpages list
+* Improved file and image attachments info 
+
+### New Features:
+* Implemented caching of the last selected wiki page and the wiki tree expansion in the session so that its state can be restored
+* Filtering and sorting functionality for Search Wiki Pages now work seamlessly together
+* A general update of the README, and added a help button pointing to the online README
+
+## Version 0.4.2
+
+* contributors: @lastlink, @nczz
+
+---
+
+### Improvements:
+* Updated docs with notes about markdown format
+* Added Traditional Chinese (`zh_TW`) translations for the Wiki plugin.
 
 ## Version 0.4.1
 * contributors: @imfx77
