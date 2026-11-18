@@ -1,16 +1,19 @@
 <?=$this->wikiHelper->js("plugins/Wiki/Asset/Javascript/wiki.js")?>
 
-<?php (isset($not_editable)) ?: $not_editable = false;
-?>
+<?php (isset($not_editable)) ?: $not_editable = false; ?>
 <?php if (!$not_editable): ?>
 <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
 <?php endif ?>
 
-<div class="page-header wikicontent">
-    <h2><?=t('Wiki overview')?></h2>
+<section class="sidebar-container wikicontent">
+
+<div class="page-header wikicontent" style="width:100%">
+    <h2><?=t('Wiki Overview')?></h2>
     <?php if (!$not_editable): ?>
+        <?=$this->url->icon('book', t('Wiki').' '.t('Content'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => -1))?>
+        <button class="separator">&nbsp;&nbsp;</button>
         <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
-        <?php if ($project['is_public']): ?>
+        <?php if ($project['is_public'] && $this->app->config('wiki_public_access', 1) == 1): ?>
             <br>
             <?= $this->url->icon('share-alt', t('Public link'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token']), false, '', '', true) ?>
         <?php endif ?>
@@ -18,6 +21,8 @@
         <?= $this->url->link(t('Board'), 'BoardViewController', 'readonly', array('token' => $project['token']), false, '', '', true) ?>
     <?php endif ?>
 </div>
+
+</section>
 
 <?php if (!empty($wikipages)): ?>
 

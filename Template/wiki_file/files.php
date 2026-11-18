@@ -1,6 +1,12 @@
 <?php if (! empty($files)): ?>
+    <?php
+        $public_token = isset($public_token) ? $public_token : '';
+        $viewer = $public_token ? 'WikiPublicFileController' : 'WikiFileViewController';
+        $viewer_params = $public_token ? array('plugin' => 'wiki', 'token' => $public_token) : array('plugin' => 'wiki');
+    ?>
     <table class="table-striped table-scrolling">
         <tr>
+            <th><?= t('Id') ?></th>
             <th><?= t('Filename') ?></th>
             <th><?= t('Creator') ?></th>
             <th><?= t('Date') ?></th>
@@ -9,24 +15,27 @@
         <?php foreach ($files as $file): ?>
             <tr>
                 <td>
+                    <?= $file['id'] ?>
+                </td>
+                <td>
                     <i class="fa <?= $this->file->icon($file['name']) ?> fa-fw"></i>
                     <div class="dropdown">
                         <a href="#" class="dropdown-menu dropdown-menu-link-text"><?= $this->text->e($file['name']) ?> <i class="fa fa-caret-down"></i></a>
                         <ul>
-                            <?php if ($this->file->getPreviewType($file['name']) !== null): ?>
+                            <?php if (! $public_token && $this->file->getPreviewType($file['name']) !== null): ?>
                                 <li>
                                     <?= $this->modal->large('eye', t('View file'), 'WikiFileViewController', 'show', array('plugin' => 'wiki', 'file_id' => $file['id'])) ?>
                                 </li>
                             <?php elseif ($this->file->getBrowserViewType($file['name']) !== null): ?>
                                 <li>
                                     <i class="fa fa-eye fa-fw"></i>
-                                    <?= $this->url->link(t('View file'), 'WikiFileViewController', 'browser', array('plugin' => 'wiki', 'file_id' => $file['id']), false, '', '', true) ?>
+                                    <?= $this->url->link(t('View file'), $viewer, 'browser', $viewer_params + array('file_id' => $file['id']), false, '', '', true) ?>
                                 </li>
                             <?php endif ?>
                             <li>
-                                <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => $file['id'])) ?>
+                                <?= $this->url->icon('download', t('Download'), $viewer, 'download', $viewer_params + array('file_id' => $file['id'])) ?>
                             </li>
-                            <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
+                            <?php if (! $public_token && $this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                 <li>
                                     <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiFileController', 'confirm', array('plugin' => 'wiki', 'wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
                                 </li>

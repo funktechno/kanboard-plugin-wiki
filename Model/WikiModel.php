@@ -57,6 +57,57 @@ class WikiModel extends Base
     const WIKITABLE = 'wikipage';
 
     /**
+     * Public projects show their wiki through the public link (default on, the behavior before the setting existed)
+     *
+     * @return bool
+     */
+    public function isPublicWikiEnabled()
+    {
+        return $this->configModel->get('wiki_public_access', 1) == 1;
+    }
+
+    /**
+     * Public wiki pages show their attachments (default off: it exposes files that were not shared before)
+     *
+     * @return bool
+     */
+    public function isPublicAttachmentsEnabled()
+    {
+        return $this->isPublicWikiEnabled() && $this->configModel->get('wiki_public_attachments', 0) == 1;
+    }
+
+    /**
+     * Active pages of the given projects whose id starts with $search, for the wiki: autocomplete
+     *
+     * @param  integer[] $project_ids
+     * @param  string    $search
+     * @param  integer   $limit
+     * @return array
+     */
+    public function getSuggestions(array $project_ids, $search = '', $limit = 25)
+    {
+        if (empty($project_ids)) {
+            return array();
+        }
+
+        $pages = $this->db->table(self::WIKITABLE)
+            ->columns(self::WIKITABLE . '.id', self::WIKITABLE . '.title', 'projects.name AS project_name')
+            ->join('projects', 'id', 'project_id')
+            ->in(self::WIKITABLE . '.project_id', $project_ids)
+            ->eq(self::WIKITABLE . '.is_active', 1)
+            ->asc('projects.name')
+            ->asc(self::WIKITABLE . '.title')
+            ->findAll();
+
+        $search = trim((string) $search);
+        $pages = array_filter($pages, function ($page) use ($search) {
+            return $search === '' || strpos((string) $page['id'], $search) === 0;
+        });
+
+        return array_slice(array_values($pages), 0, $limit);
+    }
+
+    /**
      * Events
      *
      * @var string
@@ -98,6 +149,7 @@ class WikiModel extends Base
                 ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
                 ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
                 ->eq('project_id', $project_id)
+                ->eq(self::WIKITABLE . '.is_active', 1)
                 ->eq('parent_id', $parent_id)
                 ->asc('ordercolumn')
                 ->findAll();
@@ -126,6 +178,7 @@ class WikiModel extends Base
                 ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
                 ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
                 ->eq('project_id', $project_id)
+                ->eq(self::WIKITABLE . '.is_active', 1)
                 ->isNull('parent_id')
                 ->asc('ordercolumn')
                 ->findAll();
@@ -170,6 +223,7 @@ class WikiModel extends Base
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->eq('project_id', $project_id)
+            ->eq(self::WIKITABLE . '.is_active', 1)
             ->asc('parent_id')
             ->asc('ordercolumn')
             ->findAll();
@@ -186,6 +240,16 @@ class WikiModel extends Base
 
         // retrieve src wiki page and wiki pages by parent
         $wikiPageSrc = $this->getWikipage($src_wiki_id);
+        if (empty($wikiPageSrc) || (int) $wikiPageSrc['project_id'] !== (int) $project_id) {
+            return false;
+        }
+        if ($parent_id !== null) {
+            $parentPage = $this->getWikipage($parent_id);
+            if (empty($parentPage) || (int) $parentPage['project_id'] !== (int) $project_id) {
+                return false;
+            }
+        }
+
         $wikiPages = $this->getWikiPagesByParentId($project_id, $parent_id);
         // echo "count list: " . count($wikiPages) . " <br>" . PHP_EOL;
         // print_r($wikiPages);
@@ -245,6 +309,15 @@ class WikiModel extends Base
         // retrieve src/trg wiki pages
         $wikiPageSrc = $this->getWikipage($src_wiki_id);
         $wikiPageTrg = $this->getWikipage($target_wiki_id);
+        if (
+            empty($wikiPageSrc) ||
+            empty($wikiPageTrg) ||
+            (int) $wikiPageSrc['project_id'] !== (int) $project_id ||
+            (int) $wikiPageTrg['project_id'] !== (int) $project_id
+        ) {
+            return false;
+        }
+
 
         // ensure both wiki pages are under the same parent
         if ($wikiPageSrc['parent_id'] != $wikiPageTrg['parent_id']) {
@@ -356,7 +429,8 @@ class WikiModel extends Base
             )
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
-            ->in(self::WIKITABLE.'.project_id', $projectIds);
+            ->in(self::WIKITABLE.'.project_id', $projectIds)
+            ->eq(self::WIKITABLE.'.is_active', 1);
     }
 
     /**
@@ -415,7 +489,7 @@ class WikiModel extends Base
             throw new PageNotFoundException();
         }
 
-        if ($project_id !== 0 && $project_id != $wikipage['project_id']) {
+        if ($project_id != $wikipage['project_id']) {
             throw new AccessForbiddenException();
         }
 

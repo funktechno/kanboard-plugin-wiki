@@ -1,5 +1,59 @@
 # Changelog
 
+## Unreleased
+
+* contributors: @nczz, @lastlink (ideas from @GSTbyMM #118 and @arturog #115)
+
+---
+
+### New Features:
+* Added project-scoped Wiki page JSON-RPC procedures for page, revision, and attachment access.
+* Link to wiki pages from any markdown with `wiki:<id>` or `[text](wiki:<id>)`, and to attachments with `[text](wiki-file:<id>)` / `![alt](wiki-file:<id>)`, shown only to users who may open them.
+* `wiki:` autocomplete in the markdown editor, listing the pages the user can open.
+* Setting to turn off the wiki of public projects, and an opt-in setting to show attachments on public wiki pages (served only with the project's public token).
+
+### Security:
+* Public wiki pages render links in public mode (task links use the public token, user mentions are not linked).
+* Removed forced `display_errors` output from the wiki page template.
+
+### Improvements:
+* Added additive database indexes for Wiki page API listing and lookup paths.
+* Declared Kanboard `>=1.2.46` compatibility to match the PHP 8.1+ runtime required by the API implementation.
+
+## Version 0.5.0
+
+* contributors: @imfx77, @lastlink
+
+---
+
+### Security:
+* Wiki pages and attachments are now only reachable by users with access to the owning project
+* Text file preview escapes the file content (issue #125)
+* Restoring and purging an edition now require a CSRF token
+
+### Improvements:
+* Explicit fixes for quite some styles in order to ensure visual consistency and adequate behavior using various KB themes (this also fixes issue #121)
+* Added description info to page titles
+* Adjustments for wiki links in the system dropdown menu, project header and dropdown menu
+* Adjustment for drag & drop sensitivity in the wiki tree to avoid accidental reordering of wiki pages
+* Fixed generation of wiki page subpages list
+* Improved file and image attachments info 
+
+### New Features:
+* Implemented caching of the last selected wiki page and the wiki tree expansion in the session so that its state can be restored
+* Filtering and sorting functionality for Search Wiki Pages now work seamlessly together
+* A general update of the README, and added a help button pointing to the online README
+
+## Version 0.4.2
+
+* contributors: @lastlink, @nczz
+
+---
+
+### Improvements:
+* Updated docs with notes about markdown format
+* Added Traditional Chinese (`zh_TW`) translations for the Wiki plugin.
+
 ## Version 0.4.1
 * contributors: @imfx77
 

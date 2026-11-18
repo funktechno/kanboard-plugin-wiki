@@ -76,8 +76,40 @@ class WikiFileModel extends FileModel
         return $this->db
             ->table(self::TABLE)
             ->eq(self::TABLE.'.id', $file_id)
-            ->join(Wiki::WIKITABLE, 'id', 'wiki_id')
-            ->findOneColumn(Wiki::WIKITABLE . '.project_id') ?: 0;
+            ->join(WikiModel::WIKITABLE, 'id', 'wikipage_id')
+            ->findOneColumn(WikiModel::WIKITABLE . '.project_id') ?: 0;
+    }
+
+    /**
+     * Get a file for a public wiki page, or null when it may not be shown there.
+     * The token must belong to a public project that owns the file's (active) page,
+     * and public wiki attachments must be enabled.
+     *
+     * @access public
+     * @param  integer $file_id
+     * @param  string  $token   Public project token
+     * @return array|null
+     */
+    public function getPublicFile($file_id, $token)
+    {
+        if (empty($token) || ! $this->wikiModel->isPublicAttachmentsEnabled()) {
+            return null;
+        }
+
+        $project = $this->projectModel->getByToken($token);
+        $file = $this->getById($file_id);
+
+        if (empty($project) || empty($file)) {
+            return null;
+        }
+
+        $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+
+        if (empty($wikipage) || empty($wikipage['is_active']) || $wikipage['project_id'] != $project['id']) {
+            return null;
+        }
+
+        return $file;
     }
 
     /**

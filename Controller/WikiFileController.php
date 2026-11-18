@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\Wiki\Controller;
 
 use Kanboard\Controller\BaseController;
+use Kanboard\Core\Controller\AccessForbiddenException;
 
 /**
  * Wiki File Controller
@@ -19,7 +20,7 @@ class WikiFileController extends BaseController
      */
     public function screenshot()
     {
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
 
         if ($this->request->isPost() && $this->wikiFileModel->uploadScreenshot($wiki['id'], $this->request->getValue('screenshot')) !== false) {
             $this->flash->success(t('Screenshot uploaded successfully.'));
@@ -38,10 +39,7 @@ class WikiFileController extends BaseController
      */
     public function create()
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
 
         // $this->hourlyRate->getAllByProject($records[0]['project_id']);
         // $this->wikiFileModel->getAllByProject($records[0]['project_id']);
@@ -61,12 +59,8 @@ class WikiFileController extends BaseController
      */
     public function save()
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
 
-        $wiki = $this->wikiModel->getWiki();
-        
         $result = $this->wikiFileModel->uploadFiles($wiki['id'], $this->request->getFileInfo('files'));
 
         if ($this->request->isAjax()) {
@@ -94,10 +88,10 @@ class WikiFileController extends BaseController
     public function remove()
     {
         $this->checkCSRFParam();
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
 
-        if ($file['wikipage_id'] == $wiki['id'] && $this->wikiFileModel->remove($file['id'])) {
+        if (! empty($file) && $file['wikipage_id'] == $wiki['id'] && $this->wikiFileModel->remove($file['id'])) {
             $this->flash->success(t('File removed successfully.'));
         } else {
             $this->flash->failure(t('Unable to remove this file.'));
@@ -113,12 +107,27 @@ class WikiFileController extends BaseController
      */
     public function confirm()
     {
-        $wiki = $this->wikiModel->getWiki();
+        $wiki = $this->getAuthorizedWiki(__FUNCTION__);
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
+        if (empty($file) || (int) $file['wikipage_id'] !== (int) $wiki['id']) {
+            throw new AccessForbiddenException();
+        }
+
 
         $this->response->html($this->template->render('wiki:wiki_file/remove', array(
             'wiki' => $wiki,
             'file' => $file,
         )));
+    }
+
+    private function getAuthorizedWiki($action)
+    {
+        $wiki = $this->wikiModel->getWiki();
+
+        if (! $this->helper->user->hasProjectAccess('WikiFileController', $action, (int) $wiki['project_id'])) {
+            throw new AccessForbiddenException();
+        }
+
+        return $wiki;
     }
 }

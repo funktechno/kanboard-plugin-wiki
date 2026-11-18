@@ -36,6 +36,10 @@ class WikiAjaxController extends BaseController
 
         try {
             $parent_id = (isset($values['parent_id']) && $values['parent_id'] != '' && $values['parent_id'] != '0') ? $values['parent_id'] : null;
+            $this->checkWikiProject($values['src_wiki_id'], $project_id);
+            if ($parent_id !== null) {
+                $this->checkWikiProject($parent_id, $project_id);
+            }
             $result = $this->wikiModel->reorderPagesByIndex($project_id, $values['src_wiki_id'], $values['index'], $parent_id);
 
             if (!$result) {
@@ -43,6 +47,8 @@ class WikiAjaxController extends BaseController
             } else {
                 $this->response->status(200);
             }
+        } catch (AccessForbiddenException $e) {
+            throw $e;
         } catch (Exception $e) {
             $this->response->html('<div class="alert alert-error">'.$e->getMessage().'</div>');
         }
@@ -67,6 +73,8 @@ class WikiAjaxController extends BaseController
         }
 
         try {
+            $this->checkWikiProject($values['src_wiki_id'], $project_id);
+            $this->checkWikiProject($values['target_wiki_id'], $project_id);
             $result = $this->wikiModel->reorderPages($project_id, $values['src_wiki_id'], $values['target_wiki_id']);
 
             if (!$result) {
@@ -74,9 +82,40 @@ class WikiAjaxController extends BaseController
             } else {
                 $this->response->status(200);
             }
+        } catch (AccessForbiddenException $e) {
+            throw $e;
         } catch (Exception $e) {
             $this->response->html('<div class="alert alert-error">'.$e->getMessage().'</div>');
         }
     }
-    
+
+    /**
+     * Suggestions for the wiki: trigger of the markdown editor, in the format of Kanboard's suggest menu
+     */
+    public function suggest()
+    {
+        $project_ids = $this->projectPermissionModel->getActiveProjectIds($this->userSession->getId());
+        $result = array();
+
+        foreach ($this->wikiModel->getSuggestions($project_ids, $this->request->getStringParam('search')) as $page) {
+            $result[] = array(
+                'value' => (string) $page['id'],
+                'html' => 'wiki:' . $page['id'] . ' ' . $this->helper->text->e($page['title']) . ' <small>' . $this->helper->text->e($page['project_name']) . '</small>',
+            );
+        }
+
+        $this->response->json($result);
+    }
+
+    /**
+     * The wiki page must belong to the given project
+     */
+    private function checkWikiProject($wiki_id, $project_id)
+    {
+        $wikipage = $this->wikiModel->getWikipage($wiki_id);
+
+        if (empty($wikipage) || $wikipage['project_id'] != $project_id) {
+            throw new AccessForbiddenException();
+        }
+    }
 }

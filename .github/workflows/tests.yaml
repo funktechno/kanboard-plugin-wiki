@@ -8,8 +8,13 @@ on:
 jobs:
   Sqlite:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
     steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3, json, openssl, curl, zip, gd
+        tools: composer
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
       with:
@@ -18,21 +23,34 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: plugins/Wiki
+        fetch-depth: 0 # full history and tags, for the version
+    - name: Calculate version
+      run: |
+        VERSION=$(bash plugins/Wiki/scripts/version/generateVersion.sh)
+        echo "### Version \`$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with Sqlite
-      run: ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit --log-junit junit.xml -c tests/units.sqlite.xml plugins/Wiki/Test/
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit.xml
+        check_name: Test Results (Sqlite)
 
   Postgres:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
+    # container: kanboard/tests:latest
+    needs: Sqlite
     services:
       postgres:
-        image: postgres:9.4
+        image: postgres:latest
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
+          POSTGRES_DB: kanboard_unit_test
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
         - 5432:5432
         options: >-
@@ -41,6 +59,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, json, openssl, curl, zip, gd
+        tools: composer
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
       with:
@@ -52,19 +76,29 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with Postgres
-      run: ./vendor/bin/phpunit -c tests/units.postgres.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit --log-junit junit.xml -c tests/units.postgres.xml plugins/Wiki/Test/
       env:
-        DB_HOSTNAME: postgres
+        DB_HOSTNAME: localhost
         DB_PORT: ${{ job.services.postgres.ports[5432] }}
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit.xml
+        check_name: Test Results (Postgres)
  
   MariaDB:
     runs-on: ubuntu-latest
-    container: kanboard/tests:latest
+    # container: kanboard/tests:latest
+    needs: Sqlite
     services:
       mariadb:
-        image: mariadb:latest
+        image: mariadb:11.4
         env:
           MYSQL_ROOT_PASSWORD: secret
+          MARIADB_ROOT_PASSWORD: secret
+          MARIADB_USER: root
+          MARIADB_DATABASE: kanboard_unit_test
         ports:
         - 3306:3306
         options: >-
@@ -73,6 +107,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, json, openssl, curl, zip, gd
+        tools: composer
     - name: Checkout Kanboard repo
       uses: actions/checkout@v2
       with:
@@ -84,8 +124,15 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with MariaDB
-      run: ./vendor/bin/phpunit -c tests/units.mysql.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit --log-junit junit.xml -c tests/units.mysql.xml plugins/Wiki/Test/
       env:
-        DB_HOSTNAME: mariadb
+        DB_HOSTNAME: 127.0.0.1
         DB_PASSWORD: secret
+        DB_USERNAME: root
         DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit.xml
+        check_name: Test Results (MariaDB)

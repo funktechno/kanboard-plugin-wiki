@@ -1,16 +1,26 @@
 <?php if (! empty($images)): ?>
+    <?php
+        $public_token = isset($public_token) ? $public_token : '';
+        $viewer = $public_token ? 'WikiPublicFileController' : 'WikiFileViewController';
+        $viewer_params = $public_token ? array('plugin' => 'wiki', 'token' => $public_token) : array('plugin' => 'wiki');
+    ?>
     <div class="file-thumbnails">
         <?php foreach ($images as $file): ?>
             <div class="file-thumbnail">
-                <?php if (APP_VERSION < '1.2.38'): ?>
+                <?php if ($public_token): ?>
+                    <?php /* public pages do not load Kanboard's scripts, so no slideshow component */ ?>
+                    <a href="<?= $this->url->href($viewer, 'image', $viewer_params + array('file_id' => $file['id'])) ?>" target="_blank" rel="noopener">
+                        <img src="<?= $this->url->href($viewer, 'thumbnail', $viewer_params + array('file_id' => $file['id'])) ?>" alt="<?= $this->text->e($file['name']) ?>">
+                    </a>
+                <?php elseif (APP_VERSION < '1.2.38'): ?>
                     <?= $this->app->component('image-slideshow', array(
                         'images' => $images,
                         'image' => $file,
                         'regex' => 'FILE_ID',
                         'url' => array(
-                            'image'     => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
-                            'thumbnail' => $this->url->to('WikiFileViewController', 'thumbnail', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
-                            'download'  => $this->url->to('WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
+                            'image'     => $this->url->to($viewer, 'image', $viewer_params + array('file_id' => 'FILE_ID')),
+                            'thumbnail' => $this->url->to($viewer, 'thumbnail', $viewer_params + array('file_id' => 'FILE_ID')),
+                            'download'  => $this->url->to($viewer, 'download', $viewer_params + array('file_id' => 'FILE_ID')),
                         )
                     )) ?>
                 <?php else: ?>
@@ -20,9 +30,9 @@
                         'regex_file_id' => 'FILE_ID',
                         'regex_etag' => 'ETAG',
                         'url' => array(
-                            'image'     => $this->url->to('WikiFileViewController', 'image', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
-                            'thumbnail' => $this->url->to('WikiFileViewController', 'thumbnail', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
-                            'download'  => $this->url->to('WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => 'FILE_ID')),
+                            'image'     => $this->url->to($viewer, 'image', $viewer_params + array('file_id' => 'FILE_ID')),
+                            'thumbnail' => $this->url->to($viewer, 'thumbnail', $viewer_params + array('file_id' => 'FILE_ID')),
+                            'download'  => $this->url->to($viewer, 'download', $viewer_params + array('file_id' => 'FILE_ID')),
                         )
                     )) ?>
                 <?php endif ?>
@@ -33,9 +43,9 @@
                             <a href="#" class="dropdown-menu dropdown-menu-link-text" title="<?= $this->text->e($file['name']) ?>"><?= $this->text->e($file['name']) ?> <i class="fa fa-caret-down"></i></a>
                             <ul>
                                 <li>
-                                    <?= $this->url->icon('download', t('Download'), 'WikiFileViewController', 'download', array('plugin' => 'wiki', 'file_id' => $file['id'])) ?>
+                                    <?= $this->url->icon('download', t('Download'), $viewer, 'download', $viewer_params + array('file_id' => $file['id'])) ?>
                                 </li>
-                                <?php if ($this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
+                                <?php if (! $public_token && $this->user->hasProjectAccess('WikiFileController', 'remove', $wiki['project_id'])): ?>
                                     <li>
                                         <?= $this->modal->confirm('trash-o', t('Remove'), 'WikiFileController', 'confirm', array('plugin' => 'wiki', 'wiki_id' => $wiki['id'], 'project_id' => $wiki['project_id'], 'file_id' => $file['id'])) ?>
                                     </li>
@@ -43,8 +53,15 @@
                             </ul>
                         </div>
                     </div>
+                    <?php
+                        $tooltip = t('Id') . ': ' . $file['id'] . '&#013;';
+                        $tooltip .= t('Filename') . ': ' . $this->text->e($file['name']) . '&#013;';
+                        $tooltip .= t('Creator') . ': ' . $this->text->e($file['user_name'] ?: $file['username']) . '&#013;';
+                        $tooltip .= t('Date') . ': ' . $this->dt->datetime($file['date']) . '&#013;';
+                        $tooltip .= t('Size') . ': ' . $this->text->bytes($file['size']);
+                    ?>
                     <div class="file-thumbnail-description">
-                            <span class="tooltip" title='<?= t('Uploaded: %s', $this->dt->datetime($file['date'])).'&#013;'.t('Size: %s', $this->text->bytes($file['size'])) ?>'>
+                            <span class="tooltip" title='<?= $tooltip ?>'>
                                 <i class="fa fa-info-circle"></i>
                             </span>
                         <?php if (! empty($file['user_id'])): ?>

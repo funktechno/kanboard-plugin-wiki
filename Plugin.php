@@ -5,6 +5,7 @@ namespace Kanboard\Plugin\Wiki;
 use Kanboard\Core\Plugin\Base;
 use Kanboard\Core\Security\Role;
 use Kanboard\Core\Translator;
+use Kanboard\Plugin\Wiki\Api\Procedure\WikiPageProcedure;
 
 class Plugin extends Base
 {
@@ -14,8 +15,18 @@ class Plugin extends Base
         $this->projectAccessMap->add('WikiController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiAjaxController', '*', Role::PROJECT_MEMBER);
         $this->projectAccessMap->add('WikiFileController', '*', Role::PROJECT_MEMBER);
-        $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_MEMBER);
+        $this->projectAccessMap->add('WikiFileViewController', '*', Role::PROJECT_VIEWER);
+        $this->projectAccessMap->add(
+            'WikiController',
+            array('show', 'detail', 'editions', 'readonly', 'detail_readonly'),
+            Role::PROJECT_VIEWER
+        );
         $this->applicationAccessMap->add('WikiController', array('readonly','detail_readonly'), Role::APP_PUBLIC);
+        $this->applicationAccessMap->add('WikiPublicFileController', array('image', 'thumbnail', 'browser', 'download'), Role::APP_PUBLIC);
+
+        if ($this->container->offsetExists('api') && $this->container->offsetExists('apiProjectAccessMap')) {
+            $this->registerWikiApi();
+        }
 
         // page routes wiki pages
         $this->route->addRoute('/wiki/index',                                           'WikiController', 'index', 'wiki');
@@ -40,12 +51,20 @@ class Plugin extends Base
         $this->route->addRoute('/wiki/file/:file_id/thumbnail',                         'WikiFileViewController', 'thumbnail', 'wiki');
         $this->route->addRoute('/wiki/file/:file_id/browser',                           'WikiFileViewController', 'browser', 'wiki');
         $this->route->addRoute('/wiki/file/:file_id/download',                          'WikiFileViewController', 'download', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/image',               'WikiPublicFileController', 'image', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/thumbnail',           'WikiPublicFileController', 'thumbnail', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/browser',             'WikiPublicFileController', 'browser', 'wiki');
+        $this->route->addRoute('/wiki/public/:token/file/:file_id/download',            'WikiPublicFileController', 'download', 'wiki');
+
+        // page routes wiki settings
+        $this->route->addRoute('settings/wiki',                                         'ConfigController', 'show', 'wiki');
 
         // template hooks
         $this->template->hook->attach('template:config:sidebar', 'Wiki:config/sidebar');
         $this->template->hook->attach('template:project:dropdown', 'wiki:project/dropdown');
         $this->template->hook->attach('template:header:dropdown', 'wiki:header/dropdown');
         $this->template->hook->attach('template:project-header:view-switcher', 'Wiki:project_header/views');
+        $this->template->hook->attach('template:layout:head', 'wiki:layout/head');
 
         // template overrides
         $this->template->setTemplateOverride('board/view_public', 'wiki:board/view_public');
@@ -63,11 +82,52 @@ class Plugin extends Base
 
         // helpers
         $this->helper->register('wikiHelper', '\Kanboard\Plugin\Wiki\Helper\WikiHelper');
+        // markdown with wiki:<id> and wiki-file:<id> references, everywhere Kanboard renders markdown
+        $this->helper->register('text', '\Kanboard\Plugin\Wiki\Helper\WikiTextHelper');
+    }
+
+    private function registerWikiApi()
+    {
+        $readMethods = array(
+            'getWikiPages',
+            'getWikiPage',
+            'searchWikiPages',
+            'getWikiPageRevisions',
+            'getWikiPageFiles',
+            'downloadWikiPageFile',
+        );
+        $writeMethods = array(
+            'createWikiPage',
+            'updateWikiPage',
+            'archiveWikiPage',
+            'restoreWikiPage',
+            'restoreWikiPageRevision',
+            'createWikiPageFile',
+            'removeWikiPageFile',
+        );
+        $procedure = new WikiPageProcedure($this->container);
+        foreach ($readMethods as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_VIEWER);
+            $this->api->getProcedureHandler()->withClassAndMethod($method, $procedure, $method);
+        }
+        foreach ($writeMethods as $method) {
+            $this->apiProjectAccessMap->add('WikiPageProcedure', $method, Role::PROJECT_MEMBER);
+            $this->api->getProcedureHandler()->withClassAndMethod($method, $procedure, $method);
+        }
     }
 
     public function onStartup()
     {
-        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__ . '/Locale');
+        // initialize translator, default locale en_US
+        $path = __DIR__ . '/Locale';
+        $language = $this->languageModel->getCurrentLanguage();
+        $filename = implode(DIRECTORY_SEPARATOR, array($path, $language, 'translations.php'));
+
+        if (file_exists($filename)) {
+            Translator::load($language, $path);
+        } else {
+            Translator::load('en_US', $path);
+        }
     }
 
     public function getClasses()
@@ -78,7 +138,8 @@ class Plugin extends Base
             ],
             'Plugin\Wiki\Model' => array(
                 'WikiModel',
-                'WikiFileModel'
+                'WikiFileModel',
+                'WikiPageModel'
             ),
         );
     }
@@ -100,7 +161,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '0.4.1';
+        return '0.5.0';
     }
 
     public function getPluginHomepage()
@@ -110,6 +171,6 @@ class Plugin extends Base
 
     public function getCompatibleVersion()
     {
-        return '>=1.0.37';
+        return '>=1.2.46';
     }
 }
