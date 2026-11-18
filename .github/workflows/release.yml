@@ -54,10 +54,40 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
         TAG: ${{ github.ref_name }}
+        VERSION: ${{ steps.version.outputs.version }}
       run: |
         if gh release view "$TAG" > /dev/null 2>&1; then
-          gh release upload "$TAG" Wiki-*.zip --clobber
-          echo "Attached $(ls Wiki-*.zip) to release $TAG" >> "$GITHUB_STEP_SUMMARY"
+          ZIP=$(ls Wiki-*.zip)
+          gh release upload "$TAG" "$ZIP" --clobber
+          echo "Attached $ZIP to release $TAG" >> "$GITHUB_STEP_SUMMARY"
+
+          # Entry for the Kanboard plugin directory, updated by a pull request on kanboard/website
+          COMPAT=$(grep -A2 'function getCompatibleVersion' Plugin.php | tail -n1 | sed -E "s/.*'([^']*)'.*/\1/")
+          {
+            echo "### Kanboard plugin directory"
+            echo "Open a pull request on [kanboard/website](https://github.com/kanboard/website/edit/main/plugins.json) that replaces the \`\"Wiki\"\` entry in \`plugins.json\` with:"
+            echo '```json'
+            cat <<EOF
+        "Wiki": {
+            "author": "lastlink",
+            "compatible_version": "$COMPAT",
+            "description": "Wiki to document projects.",
+            "download": "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$ZIP",
+            "has_hooks": true,
+            "has_overrides": true,
+            "has_schema": true,
+            "homepage": "https://github.com/$GITHUB_REPOSITORY",
+            "is_type": "plugin",
+            "last_updated": "$(date -u +%Y-%m-%d)",
+            "license": "MIT",
+            "readme": "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/master/README.md",
+            "remote_install": true,
+            "title": "Wiki",
+            "version": "$VERSION"
+        },
+        EOF
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
         else
           echo "No release for tag $TAG, the zip is only an artifact" >> "$GITHUB_STEP_SUMMARY"
         fi
