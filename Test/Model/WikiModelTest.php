@@ -195,6 +195,27 @@ class WikiModelTest extends Base
         $this->assertEquals(json_encode($expectedResult), json_encode($result));
     }
         */
+    public function testGetSuggestions()
+    {
+        $projectModel = new ProjectModel($this->container);
+        $projectModel->create(array('name' => 'Alpha'));
+        $projectModel->create(array('name' => 'Beta'));
+        $this->wikiModel->createpage(1, 'Zeta', '');
+        $this->wikiModel->createpage(2, 'Other project', '');
+        $this->wikiModel->createpage(1, 'Archived', '');
+        $this->wikiModel->createpage(1, 'Alpha page', '');
+        $this->container['db']->table(WikiModel::WIKITABLE)->eq('id', 3)->update(array('is_active' => 0));
+
+        $this->assertMultiple(
+            // only the given projects, active pages, sorted by project then title
+            fn() => $this->assertSame(array('4', '1'), array_map('strval', array_column($this->wikiModel->getSuggestions(array(1)), 'id'))),
+            fn() => $this->assertSame('Alpha', $this->wikiModel->getSuggestions(array(1))[0]['project_name']),
+            fn() => $this->assertSame(array('1'), array_map('strval', array_column($this->wikiModel->getSuggestions(array(1, 2), '1'), 'id'))),
+            fn() => $this->assertSame(array(), $this->wikiModel->getSuggestions(array())),
+            fn() => $this->assertCount(1, $this->wikiModel->getSuggestions(array(1, 2), '', 1)),
+        );
+    }
+
     public function testCreatePageSavesCorrectly()
     {
         // $this->db

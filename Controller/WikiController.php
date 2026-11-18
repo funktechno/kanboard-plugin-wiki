@@ -97,7 +97,7 @@ class WikiController extends BaseController
         $token = $this->request->getStringParam('token');
         $project = $this->projectModel->getByToken($token);
 
-        if (empty($project)) {
+        if (empty($project) || ! $this->wikiModel->isPublicWikiEnabled()) {
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
@@ -191,7 +191,7 @@ class WikiController extends BaseController
 
         $project = $this->projectModel->getByToken($token);
 
-        if (empty($project)) {
+        if (empty($project) || ! $this->wikiModel->isPublicWikiEnabled()) {
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
@@ -207,12 +207,12 @@ class WikiController extends BaseController
         if ($wiki_id != 0) {
             $wikipage = $this->wikiModel->getWikipage($wiki_id);
 
-            if (empty($wikipage) || $wikipage['project_id'] != $project['id']) {
+            if (empty($wikipage) || $wikipage['project_id'] != $project['id'] || empty($wikipage['is_active'])) {
                 if ($this->request->getIntegerParam('wiki_id', -1) >= 0) {
                     throw new AccessForbiddenException();
                 }
 
-                $wiki_id = 0; // the cached page is from another project, show the root
+                $wiki_id = 0; // the cached page is from another project or archived, show the root
             }
         }
 
@@ -227,6 +227,7 @@ class WikiController extends BaseController
                 'wiki_id' => $result['selected']['id'],
                 'wiki' => $result['selected'],
                 'not_editable' => true,
+                'public_token' => $this->wikiModel->isPublicAttachmentsEnabled() ? $project['token'] : '',
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],

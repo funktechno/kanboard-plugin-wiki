@@ -249,7 +249,33 @@ You need **ADMIN** priveleges to access it.
 Enabling or disabling of the `Saving Editions` option **[2]** determines whether automatic saves of editions will take place when you make changes to the pages' title or content.
 Reordering pages or reorganizing the hierarchy branches does **NOT** trigger creation of  new editions.
 
+The `Public access` options control what public projects share through their public link:
+* `Show the wiki of public projects through their public link` (on by default): when off, the public wiki pages are refused and the public board hides its wiki link.
+* `Show attachments on public wiki pages` (off by default): when on, public wiki pages list their attachments. The files are served only together with the project's public token, and only for that project's pages.
+
 ![Wiki Plugin Settings](Screenshots/plugin-settings.png)
+
+<p align="right">[<a href="#user-content-readme-bottom">&#8595; Bottom</a>] [<a href="#user-content-readme-top">&#8593; Top</a>]</p>
+
+</details>
+
+<details>
+<summary><strong>Links to Wiki Pages</strong></summary>
+
+Link to wiki pages and attachments from any markdown in Kanboard (wiki pages, task descriptions, comments) by id:
+
+```markdown
+See wiki:12
+See [the release checklist](wiki:12)
+Download [the spec](wiki-file:34)
+![Architecture](wiki-file:35)
+```
+
+A plain `wiki:<id>` becomes a link titled with the page title, like `#<id>` for tasks. In the markdown editor, typing `wiki:` lists the pages you can open; type digits to narrow by page id.
+
+`[text](wiki:<id>)` links to a page, `wiki-file:<id>` links to an attachment, and `![...](wiki-file:<id>)` embeds an image attachment. They work for users who can view the project. Anyone else sees only the text (or the image's alt text), without a link. On public pages (opened through a public link), page links point to the public view if the page's project is public, and attachments use the project's public token if `Show attachments on public wiki pages` is on; otherwise they stay plain text too.
+
+The plugin provides this by replacing Kanboard's `text` helper with an extended one. Another plugin that also replaces that helper may override it, depending on load order.
 
 <p align="right">[<a href="#user-content-readme-bottom">&#8595; Bottom</a>] [<a href="#user-content-readme-top">&#8593; Top</a>]</p>
 
