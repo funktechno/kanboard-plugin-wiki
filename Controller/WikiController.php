@@ -384,6 +384,7 @@ class WikiController extends BaseController
     public function confirm()
     {
         $project = $this->getProject();
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         $this->response->html($this->template->render('wiki:wiki/remove', array(
             'project' => $project,
@@ -446,6 +447,7 @@ class WikiController extends BaseController
     public function confirm_restore()
     {
         $project = $this->getProject();
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         $this->response->html($this->template->render('wiki:wiki/confirm_restore', array(
             'project' => $project,
@@ -462,6 +464,7 @@ class WikiController extends BaseController
     public function confirm_purge()
     {
         $project = $this->getProject();
+        $this->getProjectWikipage($this->request->getIntegerParam('wiki_id'), $project['id']);
 
         $this->response->html($this->template->render('wiki:wiki/confirm_purge', array(
             'project' => $project,
