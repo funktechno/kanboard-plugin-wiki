@@ -2,12 +2,19 @@
 
 ## Unreleased
 
-* contributors: @nczz
+* contributors: @nczz, @lastlink (ideas from @GSTbyMM #118 and @arturog #115)
 
 ---
 
 ### New Features:
 * Added project-scoped Wiki page JSON-RPC procedures for page, revision, and attachment access.
+* Link to wiki pages from any markdown with `wiki:<id>` or `[text](wiki:<id>)`, and to attachments with `[text](wiki-file:<id>)` / `![alt](wiki-file:<id>)`, shown only to users who may open them.
+* `wiki:` autocomplete in the markdown editor, listing the pages the user can open.
+* Setting to turn off the wiki of public projects, and an opt-in setting to show attachments on public wiki pages (served only with the project's public token).
+
+### Security:
+* Public wiki pages render links in public mode (task links use the public token, user mentions are not linked).
+* Removed forced `display_errors` output from the wiki page template.
 
 ### Improvements:
 * Added additive database indexes for Wiki page API listing and lookup paths.

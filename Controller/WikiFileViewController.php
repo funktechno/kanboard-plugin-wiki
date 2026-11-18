@@ -12,10 +12,10 @@ class WikiFileViewController extends FileViewerController
     /**
      * Get the requested file, only if the user has access to its project
      *
-     * @access private
+     * @access protected
      * @return array
      */
-    private function getWikiFile()
+    protected function getWikiFile()
     {
         $file = $this->wikiFileModel->getById($this->request->getIntegerParam('file_id'));
 

@@ -81,6 +81,38 @@ class WikiFileModel extends FileModel
     }
 
     /**
+     * Get a file for a public wiki page, or null when it may not be shown there.
+     * The token must belong to a public project that owns the file's (active) page,
+     * and public wiki attachments must be enabled.
+     *
+     * @access public
+     * @param  integer $file_id
+     * @param  string  $token   Public project token
+     * @return array|null
+     */
+    public function getPublicFile($file_id, $token)
+    {
+        if (empty($token) || ! $this->wikiModel->isPublicAttachmentsEnabled()) {
+            return null;
+        }
+
+        $project = $this->projectModel->getByToken($token);
+        $file = $this->getById($file_id);
+
+        if (empty($project) || empty($file)) {
+            return null;
+        }
+
+        $wikipage = $this->wikiModel->getWikipage($file['wikipage_id']);
+
+        if (empty($wikipage) || empty($wikipage['is_active']) || $wikipage['project_id'] != $project['id']) {
+            return null;
+        }
+
+        return $file;
+    }
+
+    /**
      * Handle screenshot upload
      *
      * @access public
