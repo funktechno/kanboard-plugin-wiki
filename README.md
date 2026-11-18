@@ -434,6 +434,8 @@ PowerShell:
 
 The unit test workflow shows the version in its run summary. Publishing a GitHub release runs the `Release Bundle` workflow, which writes the version into `Plugin.php`, builds the zip with `make` and attaches it to the release. It can also be run by hand from any branch or tag (Actions > Release Bundle > Run workflow); the zip is then kept as an artifact for 1 day.
 
+After a release, update the `"Wiki"` entry in the [Kanboard plugin directory](https://github.com/kanboard/website/blob/main/plugins.json) with a pull request on [kanboard/website](https://github.com/kanboard/website), so Kanboard installs offer the new version. The `Release Bundle` run summary prints the updated entry, ready to paste.
+
 </details>
 
 <p align="right">[<a href="#user-content-readme-bottom">&#8595; Bottom</a>] [<a href="#user-content-readme-top">&#8593; Top</a>]</p>
