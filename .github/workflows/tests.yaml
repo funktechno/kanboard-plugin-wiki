@@ -23,6 +23,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: plugins/Wiki
+        fetch-depth: 0 # full history and tags, for the version
+    - name: Calculate version
+      run: |
+        VERSION=$(bash plugins/Wiki/scripts/version/generateVersion.sh)
+        echo "### Version \`$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with Sqlite
