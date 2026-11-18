@@ -52,7 +52,7 @@ class WikiHelper extends Base
                     $html .= '<button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-plus-square-o"></i></a></button>';
                     $wikipage_icon = 'folder-o';
                 } else {
-                    $html .= '<button class="indent actionBigger"><a><i class="fa fa-square-o"></i></a></button>';
+                    $html .= '<button class="indent actionBigger" aria-hidden="true" tabindex="-1"><a><i class="fa fa-square-o"></i></a></button>';
                     $wikipage_icon = 'file-word-o';
                 }
                 $html .= '<span class="wikibranch">';
