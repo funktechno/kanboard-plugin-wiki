@@ -453,6 +453,33 @@ docker rm -f -v kanboard-wiki
 
 </details>
 
+<details>
+<summary><strong>Versions and Releases</strong></summary>
+
+The version comes from git tags, using the same rules locally and in CI (see `scripts/version/versionRules.sh`):
+
+* a commit with a release tag such as `0.5.0` is that version
+* `dev` and `master` are the newest tag plus the number of merges since it, e.g. `0.5.3`
+* any other branch is `dev`'s version with its commits ahead of `dev` added to the patch, e.g. `0.5.3` + 2 commits is `0.5.5`
+
+Print it locally. Bash / Git Bash:
+
+```bash
+bash scripts/version/generateVersion.sh
+```
+
+PowerShell:
+
+```powershell
+./scripts/version/generateVersion.ps1
+```
+
+The unit test workflow shows the version in its run summary. Publishing a GitHub release runs the `Release Bundle` workflow, which writes the version into `Plugin.php`, builds the zip with `make` and attaches it to the release. It can also be run by hand from any branch or tag (Actions > Release Bundle > Run workflow); the zip is then kept as an artifact for 1 day.
+
+After a release, update the `"Wiki"` entry in the [Kanboard plugin directory](https://github.com/kanboard/website/blob/main/plugins.json) with a pull request on [kanboard/website](https://github.com/kanboard/website), so Kanboard installs offer the new version. The `Release Bundle` run summary prints the updated entry, ready to paste.
+
+</details>
+
 <p align="right">[<a href="#user-content-readme-bottom">&#8595; Bottom</a>] [<a href="#user-content-readme-top">&#8593; Top</a>]</p>
 
 ---
