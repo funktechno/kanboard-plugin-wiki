@@ -415,7 +415,7 @@ class WikiModel extends Base
             throw new PageNotFoundException();
         }
 
-        if ($project_id !== 0 && $project_id != $wikipage['project_id']) {
+        if ($project_id != $wikipage['project_id']) {
             throw new AccessForbiddenException();
         }
 

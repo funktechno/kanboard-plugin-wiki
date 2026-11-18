@@ -38,9 +38,6 @@ class WikiFileController extends BaseController
      */
     public function create()
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
         $wiki = $this->wikiModel->getWiki();
 
         // $this->hourlyRate->getAllByProject($records[0]['project_id']);
@@ -61,9 +58,6 @@ class WikiFileController extends BaseController
      */
     public function save()
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
 
         $wiki = $this->wikiModel->getWiki();
         

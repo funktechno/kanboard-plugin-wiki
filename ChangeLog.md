@@ -2,9 +2,14 @@
 
 ## Version 0.5.0
 
-* contributors: @imfx77
+* contributors: @imfx77, @lastlink
 
 ---
+
+### Security:
+* Wiki pages and attachments are now only reachable by users with access to the owning project
+* Text file preview escapes the file content (issue #125)
+* Restoring and purging an edition now require a CSRF token
 
 ### Improvements:
 * Explicit fixes for quite some styles in order to ensure visual consistency and adequate behavior using various KB themes (this also fixes issue #121)

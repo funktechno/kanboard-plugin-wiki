@@ -50,6 +50,16 @@ The main purpose of the Wiki Plugin is to provide an easy way to add and maintai
 * Search Wiki pages by title and content across all user accessible projects.
 * Wiki pages provide rich text content through the [GitHub Flavored Markdown](https://github.github.com/gfm/), which is implemented by the [parsedown lib](https://github.com/erusev/parsedown).
 
+## Table of Contents
+
+* [Author](#author)
+* [Installation & Compatibility](#installation--compatibility)
+* [Features and Usage (with Screenshots)](#features-and-usage-with-screenshots)
+  * [Wiki Content](#-wiki-content)
+  * [Wiki Overview](#-wiki-overview)
+  * [Search Wiki Pages](#-search-wiki-pages)
+* [Development](#development)
+
 <p align="right">[<a href="#user-content-readme-bottom">&#8595; Bottom</a>] [<a href="#user-content-readme-top">&#8593; Top</a>]</p>
 
 ## Author
@@ -339,6 +349,65 @@ A preview of each page's content **[3]** is available within collapsable section
   - Related issues: [#13](https://github.com/kanboard/kanboard/issues/13), [#12](https://github.com/kanboard/kanboard/issues/12), [#10](https://github.com/kanboard/kanboard/issues/10)
 - [ ] active, archived wikipages?
 - [x] global wiki page search
+
+</details>
+
+<details>
+<summary><strong>Testing</strong></summary>
+
+All commands run from the plugin folder and only need Docker.
+
+**Unit tests** (same as the SQLite job in `.github/workflows/tests.yaml`):
+
+Bash / Git Bash:
+
+```bash
+docker run --rm --mount "type=bind,source=${PWD},target=/plugin,readonly" composer:2 sh -c '
+  git clone -q --depth 1 -b v1.2.57 https://github.com/kanboard/kanboard /k && cd /k &&
+  mkdir -p plugins/Wiki && cp -r /plugin/. plugins/Wiki/ &&
+  composer install -q --no-progress --ignore-platform-reqs &&
+  ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/'
+```
+
+PowerShell:
+
+```powershell
+docker run --rm --mount "type=bind,source=${PWD},target=/plugin,readonly" composer:2 sh -c '
+  git clone -q --depth 1 -b v1.2.57 https://github.com/kanboard/kanboard /k && cd /k &&
+  mkdir -p plugins/Wiki && cp -r /plugin/. plugins/Wiki/ &&
+  composer install -q --no-progress --ignore-platform-reqs &&
+  ./vendor/bin/phpunit -c tests/units.sqlite.xml plugins/Wiki/Test/'
+```
+
+If it fails with `Could not resolve host: github.com`, Docker cannot use your DNS server. Add `--dns 1.1.1.1` after `docker run --rm`.
+
+**Local Kanboard with the plugin** at http://localhost:8080 (default login `admin` / `admin`):
+
+Bash / Git Bash:
+
+```bash
+docker run -d --name kanboard-wiki -p 8080:80 --mount "type=bind,source=${PWD},target=/var/www/app/plugins/Wiki" kanboard/kanboard:v1.2.57
+```
+
+PowerShell:
+
+```powershell
+docker run -d --name kanboard-wiki -p 8080:80 --mount "type=bind,source=${PWD},target=/var/www/app/plugins/Wiki" kanboard/kanboard:v1.2.57
+```
+
+Stop it and delete its data:
+
+Bash / Git Bash:
+
+```bash
+docker rm -f -v kanboard-wiki
+```
+
+PowerShell:
+
+```powershell
+docker rm -f -v kanboard-wiki
+```
 
 </details>
 
