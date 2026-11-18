@@ -1,0 +1,93 @@
+name: 'Release Bundle'
+# Builds the plugin zip with `make`.
+#   - Publishing a GitHub release runs it on the release tag and attaches the zip to the release.
+#   - Run it by hand (Actions > Release Bundle > Run workflow) from any branch or tag. From a tag
+#     that has a release, the zip is attached to that release; otherwise it is only an artifact.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write # attach the zip to the release
+
+env:
+  BUNDLE_RETENTION_DAYS: 1
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # full history and tags, for the version
+
+    - name: Calculate version
+      id: version
+      run: |
+        VERSION=$(bash scripts/version/generateVersion.sh)
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "### Version \`$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Stamp version into Plugin.php
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        sed -i -E "/function getPluginVersion/,/}/ s/return '[^']*';/return '$VERSION';/" Plugin.php
+        grep -A3 'function getPluginVersion' Plugin.php
+        # make zips the committed tree (git archive HEAD), so commit the stamp locally. It is never pushed.
+        git diff --quiet || git -c user.name=ci -c user.email=ci@localhost commit -q -am "Stamp version $VERSION"
+
+    - name: Build bundle
+      run: make
+
+    - name: Upload bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: Wiki-${{ steps.version.outputs.version }}
+        path: Wiki-*.zip
+        retention-days: ${{ env.BUNDLE_RETENTION_DAYS }}
+
+    - name: Attach to release
+      if: github.ref_type == 'tag'
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ github.ref_name }}
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        if gh release view "$TAG" > /dev/null 2>&1; then
+          ZIP=$(ls Wiki-*.zip)
+          gh release upload "$TAG" "$ZIP" --clobber
+          echo "Attached $ZIP to release $TAG" >> "$GITHUB_STEP_SUMMARY"
+
+          # Entry for the Kanboard plugin directory, updated by a pull request on kanboard/website
+          COMPAT=$(grep -A2 'function getCompatibleVersion' Plugin.php | tail -n1 | sed -E "s/.*'([^']*)'.*/\1/")
+          {
+            echo "### Kanboard plugin directory"
+            echo "Open a pull request on [kanboard/website](https://github.com/kanboard/website/edit/main/plugins.json) that replaces the \`\"Wiki\"\` entry in \`plugins.json\` with:"
+            echo '```json'
+            cat <<EOF
+        "Wiki": {
+            "author": "lastlink",
+            "compatible_version": "$COMPAT",
+            "description": "Wiki to document projects.",
+            "download": "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$ZIP",
+            "has_hooks": true,
+            "has_overrides": true,
+            "has_schema": true,
+            "homepage": "https://github.com/$GITHUB_REPOSITORY",
+            "is_type": "plugin",
+            "last_updated": "$(date -u +%Y-%m-%d)",
+            "license": "MIT",
+            "readme": "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/master/README.md",
+            "remote_install": true,
+            "title": "Wiki",
+            "version": "$VERSION"
+        },
+        EOF
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+        else
+          echo "No release for tag $TAG, the zip is only an artifact" >> "$GITHUB_STEP_SUMMARY"
+        fi

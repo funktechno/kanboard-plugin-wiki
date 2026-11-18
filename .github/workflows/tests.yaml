@@ -23,6 +23,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: plugins/Wiki
+        fetch-depth: 0 # full history and tags, for the version
+    - name: Calculate version
+      run: |
+        VERSION=$(bash plugins/Wiki/scripts/version/generateVersion.sh)
+        echo "### Version \`$VERSION\`" >> "$GITHUB_STEP_SUMMARY"
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with Sqlite
@@ -32,7 +37,7 @@ jobs:
       if: always()
       with:
         files: junit.xml
-        check_name: Frontend Test Results
+        check_name: Test Results (Sqlite)
 
   Postgres:
     runs-on: ubuntu-latest
@@ -71,10 +76,16 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with Postgres
-      run: ./vendor/bin/phpunit -c tests/units.postgres.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit --log-junit junit.xml -c tests/units.postgres.xml plugins/Wiki/Test/
       env:
         DB_HOSTNAME: localhost
         DB_PORT: ${{ job.services.postgres.ports[5432] }}
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit.xml
+        check_name: Test Results (Postgres)
  
   MariaDB:
     runs-on: ubuntu-latest
@@ -113,9 +124,15 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Unit tests with MariaDB
-      run: ./vendor/bin/phpunit -c tests/units.mysql.xml plugins/Wiki/Test/
+      run: ./vendor/bin/phpunit --log-junit junit.xml -c tests/units.mysql.xml plugins/Wiki/Test/
       env:
         DB_HOSTNAME: 127.0.0.1
         DB_PASSWORD: secret
         DB_USERNAME: root
         DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: junit.xml
+        check_name: Test Results (MariaDB)
