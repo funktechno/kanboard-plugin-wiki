@@ -93,6 +93,7 @@ class Plugin extends Base
             'getWikiPage',
             'searchWikiPages',
             'getWikiPageRevisions',
+            'getWikiPageRevisionDiff',
             'getWikiPageFiles',
             'downloadWikiPageFile',
         );
@@ -139,7 +140,8 @@ class Plugin extends Base
             'Plugin\Wiki\Model' => array(
                 'WikiModel',
                 'WikiFileModel',
-                'WikiPageModel'
+                'WikiPageModel',
+                'WikiEditionStore'
             ),
         );
     }

@@ -226,12 +226,29 @@ The global setting **Saving Editions** determines whether automatic saves of edi
 
 You can return back to the detailed view of the page **[1]** at any moment, or you can simply click on another page from the tree view.
 On the editions list itself yo can observe and compare the detailed differences **[2]** in title, content and dates of the stored versions of the page.
+Each edition shows what changed since the edition before it, with `+added −removed` line counts. The newest edition's changes are open; the others expand on click.
+* `Markdown` shows a git-style line diff of the page source, `Unified` or `Side by side`, with changed words marked and long unchanged stretches folded
+* `Rendered` shows the rendered page with removed blocks struck through and added blocks highlighted
+* the choice is remembered in the browser; the page detail has a `Last change` link straight to the newest edition's changes
+* long histories are split into pages of 20 editions; `Compare edition … with …` compares any two editions on the page
+
+Markdown, unified:
+
+![Edition changes, markdown unified](Screenshots/editions-diff-unified.png)
+
+Markdown, side by side:
+
+![Edition changes, markdown side by side](Screenshots/editions-diff-split.png)
+
+Rendered:
+
+![Edition changes, rendered](Screenshots/editions-diff-rendered.png)
 
 ![Wiki Page Editions](Screenshots/content-page-editions.png)
 
 Some of the editions may be missing if they were deleted.
 You can `Restore` or `Delete` an edition using the tool buttons **[3]** in the top right corner of each edition entry row.
-* restoring an edition makes it currently active, thus allowing to switch back and forth between different version of the page
+* restoring an edition saves its title and content as a new edition, so the history only grows and can be read top to bottom
 * you can only restore a version of the page that was previously saved as edition
 * you can only delete a version of the page that is not currently active
 * when you delete an edition it is permanently removed and can no longer be restored
@@ -248,6 +265,11 @@ You need **ADMIN** priveleges to access it.
 
 Enabling or disabling of the `Saving Editions` option **[2]** determines whether automatic saves of editions will take place when you make changes to the pages' title or content.
 Reordering pages or reorganizing the hierarchy branches does **NOT** trigger creation of  new editions.
+Turning the option off keeps the existing editions. When it is turned back on, edits made in the meantime are saved as their own edition (marked _Changes made while edition saving was off_) on the next save.
+Editions are stored as deltas from the previous edition, with a full copy every 20 editions. Editions saved by older plugin versions are full copies and are read as they are.
+Under `Edition history storage`, `Compact edition history` rewrites older editions as deltas, and `Expand edition history` rewrites every edition as a full copy.
+Each page is rewritten in one transaction and checked afterwards; a page that does not check out is left unchanged.
+**Expand the edition history before installing an older version of this plugin**: older versions would show stored deltas as page text. Expanding drops the _made while edition saving was off_ mark.
 
 The `Public access` options control what public projects share through their public link:
 * `Show the wiki of public projects through their public link` (on by default): when off, the public wiki pages are refused and the public board hides its wiki link.
@@ -354,7 +376,8 @@ Read procedures require project viewer access:
 - `getWikiPages(project_id, filters = {})`
 - `getWikiPage(page_id)`
 - `searchWikiPages(project_id, query, limit = 20, offset = 0)`
-- `getWikiPageRevisions(page_id, limit = 20, offset = 0)`
+- `getWikiPageRevisions(page_id, limit = 20, offset = 0)`: each revision has `comparedWith`, `added` and `removed` (lines changed since the previous stored revision)
+- `getWikiPageRevisionDiff(page_id, from_revision, to_revision = 0)`: `+added −removed` counts and a unified diff (like `git diff`) of the content; `to_revision` 0 compares with the current page
 - `getWikiPageFiles(page_id)`
 - `downloadWikiPageFile(file_id)`
 
