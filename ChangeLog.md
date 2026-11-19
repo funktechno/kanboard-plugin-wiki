@@ -2,7 +2,19 @@
 
 ## Unreleased
 
-* contributors: @nczz, @lastlink (ideas from @GSTbyMM #118 and @arturog #115)
+* contributors: @lastlink
+
+---
+
+### Accessibility:
+* Wiki tree, overview and editions: icon links are no longer nested in buttons and have text labels; decorative spacers are hidden from screen readers
+* Expand/collapse and tree toolbar buttons have accessible names; page details and subpages use valid lists and heading levels
+* Readable link and detail colors in light and dark themes, larger click targets, labelled search box and parent-page field
+* Fixed the public "(root)" link and the root expand button's tooltip
+
+## Version 0.5.0
+
+* contributors: @nczz, @imfx77, @lastlink (ideas from @GSTbyMM #118 and @arturog #115)
 
 ---
 
@@ -19,12 +31,6 @@
 ### Improvements:
 * Added additive database indexes for Wiki page API listing and lookup paths.
 * Declared Kanboard `>=1.2.46` compatibility to match the PHP 8.1+ runtime required by the API implementation.
-
-## Version 0.5.0
-
-* contributors: @imfx77, @lastlink
-
----
 
 ### Security:
 * Wiki pages and attachments are now only reachable by users with access to the owning project

@@ -105,6 +105,42 @@ body.dragging, body.dragging * {
 #wikitree {
     list-style-type: none;
 }
+.sidebar #wikitree a.wikilink, .sidebar #subpages a.wikilink, #wikilist a.wikilink,
+.wiki-search-list .table-list-details, .wikicontent .file-thumbnail-description {
+    color: var(--color-primary);
+}
+.wiki-search-list .table-list-details strong {
+    color: inherit;
+}
+#subpages a, #wikilist a.wikilink, .page-header.wikicontent > a, .wikicontent .file-thumbnail-title a, .wiki-summary {
+    display: inline-block;
+    min-height: 24px;
+    line-height: 24px;
+}
+.wiki-search-title {
+    font-size: 1.5em;
+    margin: 0;
+}
+.wiki-attachment-actions {
+    margin: 10px 0;
+}
+#subpages li {
+    list-style-type: none;
+}
+#subpages a {
+    text-decoration: none;
+    font-weight: 300;
+}
+.wiki-summary {
+    display: inline-block;
+    font-size: 1em;
+    font-weight: bold;
+    color: inherit;
+    margin: 0;
+}
+.wiki-details {
+    margin: 0;
+}
 #wikitree .indent, #wikitree .indent .fa, .separator {
     appearance: none;
     -webkit-appearance: none;
@@ -116,12 +152,13 @@ body.dragging, body.dragging * {
     padding-left: 1px;
     cursor: default;
 }
-#wikitree button a .fa, #wikilist button a .fa, #wikiedition button a .fa {
+#wikitree .action a .fa, #wikitree .branch .fa, #wikitree .sortable-handle .fa, #wikilist .action a .fa, .wikiedition .action a .fa,
+.gotoSelected .fa, .expandAll .fa, .collapseAll .fa, .readme .fa {
     color: var(--link-color-primary);
     padding-right: 1px;
     padding-left: 1px;
 }
-#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, #wikiedition .action, .expandAll, .collapseAll, .gotoSelected, .readme {
+#wikitree .branch, #wikitree .action, #wikitree .sortable-handle, #wikilist .action, .wikiedition .action, .expandAll, .collapseAll, .gotoSelected, .readme {
     appearance: none;
     -webkit-appearance: none;
     outline: none;

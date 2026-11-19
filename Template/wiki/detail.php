@@ -21,11 +21,11 @@
     <?php if (!$not_editable): ?>
         <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
         <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
-        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <span class="separator" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
     <?php endif ?>
     <?php if(isset($wikipage['parent_id'])): ?>
-        <button class="separator">&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <span class="separator" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <?php if (!$not_editable): ?>
             <?=$this->url->icon('level-up', t('Parent Page'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['parent_id']))?>
         <?php else: ?>
@@ -35,9 +35,9 @@
 </div>
 
 <div style="float:left">
-<ul class="panel" style="margin:0">
-<details open>
-<summary><h4 style="display:inline-block"><?=t('Details')?></h4></summary>
+<details open class="panel" style="margin:0">
+<summary><h3 class="wiki-summary"><?=t('Details')?></h3></summary>
+<ul class="wiki-details">
     <?php if ($wikipage['creator_id'] > 0): ?>
         <li><?=t('Creator')?>: <strong><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></strong></li>
     <?php endif?>
@@ -47,16 +47,16 @@
     <li><?=t('Editions')?>: <strong><?=$wikipage['editions']?></strong> <?=t('Current Edition')?>: <strong> <?=$wikipage['current_edition']?></strong></li>
     <li><?=t('Date Creation')?>: <strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
     <li><?=t('Date Modification')?>: <strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
-</details>
 </ul>
+</details>
 </div>
 
 <div style="float:left">&nbsp;</div>
 
 <div class="sidebar panel" style="float:left;margin:0;width:auto;max-width:25%;">
-<ul id="subpages">
 <details open>
-<summary><h4 style="display:inline-block"><?=t('Subpages')?></h4></summary>
+<summary><h3 class="wiki-summary"><?=t('Subpages')?></h3></summary>
+<ul id="subpages">
 <?php if (!empty($wikipage_sublist)): ?>
     <?php foreach ($wikipage_sublist as $subpage_id => $subpage_title): ?>
         <?php if (!$not_editable): ?>
@@ -74,8 +74,8 @@
         <?=t('There are no Wiki pages.')?>
     </li>
 <?php endif?>
-</details>
 </ul>
+</details>
 </div>
 
 <div class="wikicontent" style="clear:both">
@@ -93,10 +93,10 @@
 <div class="page-header">
         <h2><?=t('Attachments')?></h2>
 </div>
-<ul>
+<div class="wiki-attachment-actions">
     <?=$this->modal->medium('file', t('Attach a document'), 'WikiFileController', 'create', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id']))?>
     <?= $this->modal->medium('camera', t('Add a screenshot'), 'WikiFileController', 'screenshot', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id'], 'project_id' => $wikipage['project_id'])) ?>
-</ul>
+</div>
 
 <?php if (!empty($files) || !empty($images)): ?>
     <?= $this->hook->render('template:task:show:before-attachments', array('wiki' => $wiki, 'project' => $project)) ?>

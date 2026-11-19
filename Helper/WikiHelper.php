@@ -38,21 +38,21 @@ class WikiHelper extends Base
                 $html .= '<li class="wikipage' . $is_selected . '" data-project-id="' . $project['id'] . '" data-page-id="' . $item['id'] . '" data-page-order="' . $item['ordercolumn'] . '">';
                 if (!$not_editable) {
                     $html .= '<div style="float: right">';
-                    $html .= '<button class="handle sortable-handle" hidden><a><i class="fa fa-arrows"></i></a></button>';
-                    $html .= '<button class="action" title="' . t('Edit Page') . '">';
-                    $html .= $this->helper->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $item['id']));
-                    $html .= '</button>';
-                    $html .= '<button class="action" title="' . t('Remove Page') . '">';
-                    $html .= $this->helper->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
-                    $html .= '</button>';
+                    $html .= '<button type="button" class="handle sortable-handle" hidden title="' . t('Move Page') . '" aria-label="' . t('Move Page') . '"><i class="fa fa-arrows" aria-hidden="true"></i></button>';
+                    $html .= '<span class="action" title="' . t('Edit Page') . '">';
+                    $html .= $this->helper->modal->medium('edit', '<span class="sr-only">' . t('Edit Page') . '</span>', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $item['id']));
+                    $html .= '</span>';
+                    $html .= '<span class="action" title="' . t('Remove Page') . '">';
+                    $html .= $this->helper->modal->confirm('trash-o', '<span class="sr-only">' . t('Remove Page') . '</span>', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']));
+                    $html .= '</span>';
                     $html .= '</div>';
                 }
                 $html .= str_repeat('&nbsp;', 2 * ($indent + 1));
                 if ($has_children){
-                    $html .= '<button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-plus-square-o"></i></a></button>';
+                    $html .= '<button type="button" class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '" aria-label="' . t('Expand/Collapse Subpages') . '"><i class="fa fa-plus-square-o" aria-hidden="true"></i></button>';
                     $wikipage_icon = 'folder-o';
                 } else {
-                    $html .= '<button class="indent actionBigger" aria-hidden="true" tabindex="-1"><a><i class="fa fa-square-o"></i></a></button>';
+                    $html .= '<span class="indent actionBigger" aria-hidden="true"><i class="fa fa-square-o"></i></span>';
                     $wikipage_icon = 'file-word-o';
                 }
                 $html .= '<span class="wikibranch">';
