@@ -1,6 +1,7 @@
 <?php
 
 require_once 'tests/units/Base.php';
+require_once __DIR__ . '/../AssertMultipleTrait.php';
 
 use KanboardTests\units\Base;
 use Kanboard\Core\Plugin\Loader;
@@ -12,6 +13,8 @@ use Kanboard\Auth\DatabaseAuth;
 
 class WikiPageModelTest extends Base
 {
+    use AssertMultipleTrait;
+
     private $wikiPageModel;
     private $projectModel;
 
@@ -40,21 +43,25 @@ class WikiPageModelTest extends Base
             'content' => 'Initial content',
         ), 1);
 
-        $this->assertEquals(1, $page['id']);
-        $this->assertEquals(1, $page['projectId']);
-        $this->assertEquals('Home', $page['title']);
-        $this->assertEquals('Initial content', $page['content']);
-        $this->assertEquals(1, $page['revision']);
-        $this->assertEquals(1, $page['currentRevision']);
-        $this->assertFalse($page['archived']);
+        $this->assertMultiple(
+            fn() => $this->assertEquals(1, $page['id']),
+            fn() => $this->assertEquals(1, $page['projectId']),
+            fn() => $this->assertEquals('Home', $page['title']),
+            fn() => $this->assertEquals('Initial content', $page['content']),
+            fn() => $this->assertEquals(1, $page['revision']),
+            fn() => $this->assertEquals(1, $page['currentRevision']),
+            fn() => $this->assertFalse($page['archived']),
+        );
 
         $updated = $this->wikiPageModel->updatePage($page['id'], $page['revision'], array(
             'content' => 'Changed content',
         ), 1);
 
-        $this->assertEquals('Changed content', $updated['content']);
-        $this->assertEquals(2, $updated['revision']);
-        $this->assertEquals(2, $updated['currentRevision']);
+        $this->assertMultiple(
+            fn() => $this->assertEquals('Changed content', $updated['content']),
+            fn() => $this->assertEquals(2, $updated['revision']),
+            fn() => $this->assertEquals(2, $updated['currentRevision']),
+        );
 
         try {
             $this->wikiPageModel->updatePage($page['id'], $page['revision'], array(
@@ -62,8 +69,10 @@ class WikiPageModelTest extends Base
             ), 1);
             $this->fail('Expected stale revision to be rejected.');
         } catch (WikiPageException $exception) {
-            $this->assertEquals('revision_conflict', $exception->errorCode());
-            $this->assertEquals(2, $exception->errorDetails()['currentRevision']);
+            $this->assertMultiple(
+                fn() => $this->assertEquals('revision_conflict', $exception->errorCode()),
+                fn() => $this->assertEquals(2, $exception->errorDetails()['currentRevision']),
+            );
         }
     }
 
@@ -105,12 +114,23 @@ class WikiPageModelTest extends Base
         $second = $this->wikiPageModel->updatePage($page['id'], 1, array('content' => 'Second'), 1);
         $restored = $this->wikiPageModel->restoreRevision($page['id'], $second['revision'], 1, 1);
 
-        $this->assertEquals('First', $restored['content']);
-        $this->assertEquals(3, $restored['revision']);
-        $this->assertEquals(3, $restored['currentRevision']);
-
         $revisions = $this->wikiPageModel->revisions($page['id']);
-        $this->assertEquals(3, $revisions['pagination']['total']);
-        $this->assertEquals(3, $revisions['revisions'][0]['revision']);
+        $diff = $this->wikiPageModel->revisionDiff($page['id'], 1, 2);
+        $toCurrent = $this->wikiPageModel->revisionDiff($page['id'], 1);
+
+        $this->assertMultiple(
+            fn() => $this->assertEquals('First', $restored['content']),
+            fn() => $this->assertEquals(3, $restored['revision']),
+            fn() => $this->assertEquals(3, $restored['currentRevision']),
+            fn() => $this->assertEquals(3, $revisions['pagination']['total']),
+            fn() => $this->assertEquals(3, $revisions['revisions'][0]['revision']),
+            fn() => $this->assertEquals(2, $revisions['revisions'][0]['comparedWith']),
+            fn() => $this->assertEquals(1, $revisions['revisions'][0]['added']),
+            fn() => $this->assertNull($revisions['revisions'][2]['comparedWith']),
+            fn() => $this->assertEquals(array('added' => 1, 'removed' => 1), $diff['stats']),
+            fn() => $this->assertEquals("--- revision 1\n+++ revision 2\n@@ -1,1 +1,1 @@\n-First\n+Second\n", $diff['unified']),
+            fn() => $this->assertEquals('', $toCurrent['unified'], 'the current page equals revision 1 again'),
+            fn() => $this->assertEquals(3, $toCurrent['to']),
+        );
     }
 }

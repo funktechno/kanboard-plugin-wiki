@@ -44,4 +44,23 @@ class ConfigController extends \Kanboard\Controller\ConfigController
 
         $this->response->redirect($this->helper->url->to('ConfigController', 'show', array('plugin' => 'wiki')));
     }
+
+    /**
+     * Rewrite stored editions: compact (deltas) or expand (full copies, needed before installing an older plugin version)
+     */
+    public function editions()
+    {
+        $values = $this->request->getValues();
+        $mode = $values['mode'] ?? '';
+
+        if ($mode === 'compact' || $mode === 'expand') {
+            $result = $this->wikiEditionStore->rewriteAll($mode === 'compact');
+            $this->flash->success(t('Edition history rewritten: %d pages, %d editions.', $result['pages'], $result['rows']));
+            if (! empty($result['failed'])) {
+                $this->flash->failure(t('These pages were left unchanged because their editions could not be verified: %s', implode(', ', $result['failed'])));
+            }
+        }
+
+        $this->response->redirect($this->helper->url->to('ConfigController', 'show', array('plugin' => 'wiki')));
+    }
 }

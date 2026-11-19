@@ -144,6 +144,11 @@ jQuery(document).ready(function () {
 
             const selected = $("#wikiroot").find(".wikipage.selected");
             expandParentWikipage(selected);
+            // long trees scroll: bring the selected page into view
+            const link = selected.find("a.wikilink")[0];
+            if (link && link.scrollIntoView) {
+                link.scrollIntoView({ block: "nearest", inline: "nearest" });
+            }
 
             saveWikiTreeState();
         }
