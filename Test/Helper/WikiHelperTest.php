@@ -44,4 +44,17 @@ class WikiHelperTest extends Base
             fn() => $this->assertStringContainsString('<li class="wikipage" data-project-id="1" data-page-id="5"', $htmlResult, 'htmlResult should contain <li class="wikipage" data-project-id="1" data-page-id="5"'),
         );
     }
+
+    public function testRenderChildrenEscapesTitles(){
+        $helper = new WikiHelper($this->container);
+        $children = array(
+            array('id' => '5', 'title' => '50% done <b>x</b>', 'ordercolumn' => '0', 'children' => array()),
+        );
+
+        $htmlResult = $helper->renderChildren($children, 1, array('id' => '1'), 0, false);
+        $this->assertMultiple(
+            fn() => $this->assertStringContainsString('50% done &lt;b&gt;x&lt;/b&gt;', $htmlResult),
+            fn() => $this->assertStringNotContainsString('<b>x</b>', $htmlResult),
+        );
+    }
 }

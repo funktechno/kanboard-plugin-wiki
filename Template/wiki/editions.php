@@ -17,7 +17,7 @@
 
 <div class="sidebar-content">
 <div class="page-header">
-    <h2><?=t($wikipage['title'])?></h2>
+    <h2><?=$this->text->e($wikipage['title'])?></h2>
     <?=$this->url->icon('long-arrow-left', t('Back to details'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
     <br><br>
     <h2><?=t('Editions')?>:</h2>
@@ -70,7 +70,7 @@
 <hr style="border-top: 1px solid;border-bottom: 1px solid;">
 <div class="page-header">
     <h3>
-        <?=t('Title') . ': ' . t($edition['title'])?>
+        <?=t('Title') . ': ' . $this->text->e($edition['title'])?>
         <div style="float: right">
             <span class="action" title="<?= t('Restore Wiki page edition') ?>">
                 <?=$this->modal->confirm('history', '<span class="sr-only">' . t('Restore Wiki page edition') . '</span>', 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
@@ -81,7 +81,7 @@
         </div>
     </h3>
     <h4>
-        <?=t('Edition') . ': ' . t($edition['edition'])?>
+        <?=t('Edition') . ': ' . $this->text->e($edition['edition'])?>
     </h4>
     <?=t('Date Creation') . ': ' . (ctype_digit((string) $edition['date_creation']) ? $this->dt->datetime((int) $edition['date_creation']) : $this->dt->date($edition['date_creation']))?>
     <?php if (! empty($authors[$edition['creator_id']])): ?>

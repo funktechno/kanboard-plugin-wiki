@@ -24,6 +24,10 @@
 * Readable link and detail colors in light and dark themes, larger click targets, labelled search box and parent-page field
 * Fixed the public "(root)" link and the root expand button's tooltip
 
+### Bug fixes:
+* A page title containing `%` (e.g. `50% done`) no longer breaks the wiki pages with an error
+* Page titles are escaped in the wiki tree
+
 ## Version 0.5.0
 
 * contributors: @nczz, @imfx77, @lastlink (ideas from @GSTbyMM #118 and @arturog #115)
