@@ -11,7 +11,7 @@
     <h2><?=t('Wiki Overview')?></h2>
     <?php if (!$not_editable): ?>
         <?=$this->url->icon('book', t('Wiki').' '.t('Content'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => -1))?>
-        <button class="separator">&nbsp;&nbsp;</button>
+        <span class="separator" aria-hidden="true">&nbsp;&nbsp;</span>
         <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
         <?php if ($project['is_public'] && $this->app->config('wiki_public_access', 1) == 1): ?>
             <br>
@@ -35,7 +35,7 @@ Modified -->
 
 <table id="wikilist" class="table-stripped" style="width:100%">
     <tr style="vertical-align:top">
-        <th></th>
+        <td></td>
         <th><?=t('Title')?></th>
         <th><?=t('Id')?></th>
         <th><?=t('Parent Page')?></th>
@@ -51,12 +51,12 @@ Modified -->
     <tr class="table-list-row">
         <td style="white-space:nowrap">
         <?php if (!$not_editable): ?>
-            <button class="action" title="<?= t('Edit Page') ?>">
-            <?=$this->modal->medium('edit', '', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage_id))?>
-            </button>
-            <button class="action" title="<?= t('Remove Page') ?>">
-            <?=$this->modal->confirm('trash-o', '', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id))?>
-            </button>
+            <span class="action" title="<?= t('Edit Page') ?>">
+            <?=$this->modal->medium('edit', '<span class="sr-only">' . t('Edit Page') . '</span>', 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage_id))?>
+            </span>
+            <span class="action" title="<?= t('Remove Page') ?>">
+            <?=$this->modal->confirm('trash-o', '<span class="sr-only">' . t('Remove Page') . '</span>', 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id))?>
+            </span>
         <?php endif ?>
         </td>
         <td class="sidebar" style="padding:0">

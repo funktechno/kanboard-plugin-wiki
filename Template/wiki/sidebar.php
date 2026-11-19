@@ -33,16 +33,16 @@ $is_selected = ($wiki_id == 0) ? ' selected' : '';
     </div>
     &nbsp;
     <div style="float: right">
-        <button class="gotoSelected actionBigger" title="<?= t('Go to Selected Wiki Page') ?>"><a><i class="fa fa-share-square"></i></a></button>
-        <button class="expandAll actionBigger" title="<?= t('Expand All Wiki Subpages') ?>"><a><i class="fa fa-plus-square"></i></a></button>
-        <button class="collapseAll actionBigger" title="<?= t('Collapse All Wiki Subpages') ?>"><a><i class="fa fa-minus-square"></i></a></button>
-        <button class="readme actionBigger" title="README ⇗"><a><i class="fa fa-question-circle"></i></a></button>
+        <button type="button" class="gotoSelected actionBigger" title="<?= t('Go to Selected Wiki Page') ?>" aria-label="<?= t('Go to Selected Wiki Page') ?>"><i class="fa fa-share-square" aria-hidden="true"></i></button>
+        <button type="button" class="expandAll actionBigger" title="<?= t('Expand All Wiki Subpages') ?>" aria-label="<?= t('Expand All Wiki Subpages') ?>"><i class="fa fa-plus-square" aria-hidden="true"></i></button>
+        <button type="button" class="collapseAll actionBigger" title="<?= t('Collapse All Wiki Subpages') ?>" aria-label="<?= t('Collapse All Wiki Subpages') ?>"><i class="fa fa-minus-square" aria-hidden="true"></i></button>
+        <button type="button" class="readme actionBigger" title="README ⇗" aria-label="README ⇗"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
     </div>
 
     <div style="clear: both">
 <?php if (!$not_editable): ?>
     <?= $this->url->icon('book', t('Wiki Overview'), 'WikiController', 'show', array('plugin' => 'wiki', 'project_id' => $project['id'])) ?>
-    <button class="separator">&nbsp;&nbsp;</button>
+    <span class="separator" aria-hidden="true">&nbsp;&nbsp;</span>
     <?=$this->modal->medium('plus', t('New Wiki page'), 'WikiController', 'create', array('plugin' => 'wiki', 'project_id' => $project['id']))?>
 <?php else: ?>
     <?= $this->url->icon('book', t('Wiki Overview'), 'WikiController', 'readonly', array('plugin' => 'wiki', 'token' => $project['token'])) ?>
@@ -53,11 +53,11 @@ $is_selected = ($wiki_id == 0) ? ' selected' : '';
 <?php if (!empty($wikipages)): ?>
     <ul id="wikitree" data-selected-wiki-id="<?=$wiki_id?>" <?php if (!$not_editable): ?>data-reorder-url="<?= $this->url->href('WikiAjaxController', 'reorder_by_index', array('plugin' => 'wiki', 'project_id' => $project['id'], 'csrf_token' => $this->app->getToken()->getReusableCSRFToken())) ?>"<?php endif ?>>
     <li class="wikipage<?=$is_selected?>" data-project-id="<?= $project['id'] ?>" data-page-id="0" data-page-order="0">
-    <button class="branch actionBigger" title="' . t('Expand/Collapse Subpages') . '"><a><i class="fa fa-plus-square-o"></i></a></button>
+    <button type="button" class="branch actionBigger" title="<?= t('Expand/Collapse Subpages') ?>" aria-label="<?= t('Expand/Collapse Subpages') ?>"><i class="fa fa-plus-square-o" aria-hidden="true"></i></button>
     <?php if (!$not_editable): ?>
         <?=$this->helper->url->icon('home', t('(root)'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => 0), false, 'wikilink'.$is_selected)?>
     <?php else: ?>
-        <?=$this->helper->url->icon('home', t('(root)'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => 0), false, 'wikilink'.$is_selected)?>
+        <?=$this->helper->url->icon('home', t('(root)'), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => 0), false, 'wikilink'.$is_selected)?>
     <?php endif?>
     <?=$this->wikiHelper->renderChildren($wikipages, 0, $project, $wiki_id, $not_editable)?>
     </li>

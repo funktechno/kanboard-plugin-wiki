@@ -40,7 +40,7 @@ jQuery(document).ready(function () {
     $("#wikilist").find(".action a").each(function () {
         $(this).attr('title', $(this).parent().attr('title'));
     });
-    $("#wikiedition").find(".action a").each(function () {
+    $(".wikiedition").find(".action a").each(function () {
         $(this).attr('title', $(this).parent().attr('title'));
     });
 
@@ -86,7 +86,7 @@ jQuery(document).ready(function () {
         function expandAllWikipagesBranches() {
             const buttons = $("#wikitree").find(".branch");
             buttons.each(function () {
-                const button = $(this).find("a i")[0];
+                const button = $(this).find("i")[0];
                 const branch = $(this).parent().find("ul")[0];
                 const wiki_id = parseInt($(branch).attr('data-parent-id'));
                 $(button).removeClass('fa-plus-square-o');
@@ -100,7 +100,7 @@ jQuery(document).ready(function () {
         function collapseAllWikipagesBranches() {
             const buttons = $("#wikitree").find(".branch");
             buttons.each(function () {
-                const button = $(this).find("a i")[0];
+                const button = $(this).find("i")[0];
                 const branch = $(this).parent().find("ul")[0];
                 const wiki_id = parseInt($(branch).attr('data-parent-id'));
                 $(button).removeClass('fa-minus-square-o');
@@ -114,7 +114,7 @@ jQuery(document).ready(function () {
         function restoreExpandedWikiBranches() {
             $(".wikipage").each(function() {
                 const branch_id = parseInt($(this).attr('data-page-id'));
-                const button = $(this).find(".branch a i")[0];
+                const button = $(this).find(".branch i")[0];
                 const branch = $(this).find("ul")[0];
                 if (expandedWikiBranches.has(branch_id)) {
                     $(button).removeClass('fa-plus-square-o');
@@ -130,7 +130,7 @@ jQuery(document).ready(function () {
                 const parentId = parentUl.attr("id");
 
                 const parentWikipage = parentUl.parent();
-                const button = parentWikipage.find(".branch a i")[0];
+                const button = parentWikipage.find(".branch i")[0];
                 const branch = parentWikipage.find("ul")[0];
                 const wiki_id = parseInt($(branch).attr('data-parent-id'));
                 $(button).removeClass('fa-plus-square-o');
@@ -149,7 +149,7 @@ jQuery(document).ready(function () {
         }
 
         $('#wikitree .branch').click(function () {
-            const button = $(this).find("a i")[0];
+            const button = $(this).find("i")[0];
             const branch = $(this).parent().find("ul")[0];
             const wiki_id = parseInt($(branch).attr('data-parent-id'));
 
