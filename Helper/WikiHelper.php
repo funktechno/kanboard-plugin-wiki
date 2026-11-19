@@ -58,11 +58,11 @@ class WikiHelper extends Base
                 $html .= '<span class="wikibranch">';
                 if (!$not_editable) {
                     $html .= $this->helper->url->icon(
-                        $wikipage_icon, $item['title'], 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_selected
+                        $wikipage_icon, $this->helper->text->e($item['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_selected
                     );
                 } else {
                     $html .= $this->helper->url->icon(
-                        $wikipage_icon, $item['title'], 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_selected
+                        $wikipage_icon, $this->helper->text->e($item['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $item['id']), false, 'wikilink' . $is_selected
                     );
                 }
                 $html .= '</span>';
