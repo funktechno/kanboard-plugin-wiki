@@ -71,6 +71,16 @@ class WikiEditionStore extends Base
         return array_reverse(array_values($this->rebuild($pageId)));
     }
 
+    /**
+     * Number for the next edition: above both the page's counter and every stored row, which older data can leave out of step.
+     */
+    public function nextEdition(int $pageId, int $counter): int
+    {
+        $stored = (int) $this->db->table(self::TABLE)->eq('wikipage_id', $pageId)->desc('edition')->findOneColumn('edition');
+
+        return max($counter, $stored) + 1;
+    }
+
     public function latest(int $pageId): ?array
     {
         $rows = $this->rebuild($pageId);
