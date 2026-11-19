@@ -6,9 +6,9 @@
 
 ---
 
-### Accessibility:
-* Wiki tree, overview and editions: icon links are no longer nested in buttons and have text labels; decorative spacers are hidden from screen readers
-* Expand/collapse and tree toolbar buttons have accessible names; page details and subpages use valid lists and heading levels
+### UI:
+* Wiki tree, overview and editions: icon links are no longer nested in buttons and have text labels; decorative spacers are plain spans
+* Expand/collapse and tree toolbar buttons are labelled; page details and subpages use valid lists and heading levels
 * Readable link and detail colors in light and dark themes, larger click targets, labelled search box and parent-page field
 * Fixed the public "(root)" link and the root expand button's tooltip
 
