@@ -10,10 +10,10 @@
     <?= $this->form->hidden('order', $values) ?>
 
     <?= $this->form->label(t('Title'), 'title') ?>
-    <?= $this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus', 'tabindex="1"')) ?>
+    <?= $this->form->text('title', $values, $errors, array('required', 'maxlength="255"', 'autofocus')) ?>
     <br>
 
-    <?= $this->form->label(t('Parent Page'), 'Parent Page') ?>
+    <?= $this->form->label(t('Parent Page'), 'parent_id') ?>
     <?= $this->form->select('parent_id', $wiki_list, $values, $errors) ?>
 
     <br><br>
