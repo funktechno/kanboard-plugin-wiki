@@ -62,11 +62,11 @@ Modified -->
         <td class="sidebar" style="padding:0">
         <?php if (!$not_editable): ?>
             <ul><li class="wikipage">
-            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id), false, 'wikilink')?>
+            <?=$this->url->link($this->text->e($wikipage['title']), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage_id), false, 'wikilink')?>
             </li></ul>
         <?php else: ?>
             <ul><li class="wikipage">
-            <?=$this->url->link(t($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage_id), false, 'wikilink')?>
+            <?=$this->url->link($this->text->e($wikipage['title']), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $wikipage_id), false, 'wikilink')?>
             </li></ul>
         <?php endif ?>
         </td>

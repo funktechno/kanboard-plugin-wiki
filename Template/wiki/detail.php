@@ -17,7 +17,7 @@
 
 <div class="sidebar-content" style="margin:0">
 <div class="page-header" style="margin:0">
-    <h2><?=t($wikipage['title'])?></h2>
+    <h2><?=$this->text->e($wikipage['title'])?></h2>
     <?php if (!$not_editable): ?>
         <?=$this->modal->medium('edit', t('Edit page'), 'WikiController', 'edit', array('plugin' => 'wiki', 'wiki_id' => $wikipage['id']))?>
         <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
@@ -61,11 +61,11 @@
     <?php foreach ($wikipage_sublist as $subpage_id => $subpage_title): ?>
         <?php if (!$not_editable): ?>
             <li class="wikilink">&nbsp;
-            <?=$this->url->link(t($subpage_title), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
+            <?=$this->url->link($this->text->e($subpage_title), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
             </li>
         <?php else: ?>
             <li class="wikilink">&nbsp;
-            <?=$this->url->link(t($subpage_title), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
+            <?=$this->url->link($this->text->e($subpage_title), 'WikiController', 'detail_readonly', array('plugin' => 'wiki', 'token' => $project['token'], 'wiki_id' => $subpage_id), false, 'wikilink')?>
             </li>
         <?php endif ?>
     <?php endforeach ?>
