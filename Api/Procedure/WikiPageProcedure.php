@@ -152,6 +152,20 @@ final class WikiPageProcedure extends BaseProcedure
         }
     }
 
+    public function getWikiPageRevisionDiff($page_id, $from_revision, $to_revision = 0): array
+    {
+        $page = $this->authorizedPage((int) $page_id, __FUNCTION__);
+        if ($page === null) {
+            return $this->failure('not_found', 'wiki page not found.');
+        }
+
+        try {
+            return $this->success($this->wikiPageModel->revisionDiff((int) $page_id, (int) $from_revision, (int) $to_revision));
+        } catch (WikiPageException $exception) {
+            return $this->failure($exception->errorCode(), $exception->getMessage(), $exception->errorDetails());
+        }
+    }
+
     public function restoreWikiPageRevision($page_id, $expected_revision, $revision): array
     {
         $page = $this->authorizedPage((int) $page_id, __FUNCTION__);

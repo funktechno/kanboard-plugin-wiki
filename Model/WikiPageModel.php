@@ -270,7 +270,7 @@ final class WikiPageModel extends Base
         $statement->bindValue(':parent_id', $parentId, $parentId === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
         $statement->execute();
         $pageId = $returning === '' ? (int) $pdo->lastInsertId() : (int) $statement->fetchColumn();
-        $this->persistRevision($pageId, 1, $title, $content, $actorId, $date);
+        $this->persistRevision($pageId, 1, $title, $content, $actorId);
 
         return $pageId;
     }
@@ -303,7 +303,7 @@ final class WikiPageModel extends Base
             );
         }
         if ($change['contentChanged']) {
-            $this->persistRevision($pageId, $revision, $change['title'], $change['content'], $actorId, $date);
+            $this->persistRevision($pageId, $revision, $change['title'], $change['content'], $actorId, $current);
         }
 
         return $pageId;
@@ -429,7 +429,7 @@ final class WikiPageModel extends Base
         $revision = $expectedRevision + 1;
         $date = date('Y-m-d');
         $this->writeRevisionRestore($pageId, $expectedRevision, $revision, $target, $actorId, $date);
-        $this->persistRevision($pageId, $revision, $target['title'], $target['content'], $actorId, $date);
+        $this->persistRevision($pageId, $revision, $target['title'], $target['content'], $actorId, $current);
 
         return $pageId;
     }
@@ -594,32 +594,55 @@ final class WikiPageModel extends Base
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
         $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
+        $changes = array_column($this->wikiEditionStore->all($pageId), null, 'edition');
 
         return array(
-            'revisions' => array_map(static function (array $row): array {
+            'revisions' => array_map(static function (array $row) use ($changes): array {
+                $change = $changes[(int) $row['edition']] ?? array();
                 return array(
                     'revision' => (int) $row['edition'],
                     'title' => (string) $row['title'],
+                    // what this revision changed, compared with the previous stored revision (null for the first)
+                    'comparedWith' => $change['base'] ?? null,
+                    'added' => $change['added'] ?? null,
+                    'removed' => $change['removed'] ?? null,
                     'createdBy' => (int) $row['creator_id'],
-                    'createdAt' => $row['date_creation'],
+                    'createdAt' => ctype_digit((string) $row['date_creation'])
+                        ? date('Y-m-d', (int) $row['date_creation'])
+                        : $row['date_creation'],
                 );
             }, $statement->fetchAll(PDO::FETCH_ASSOC)),
             'pagination' => array('limit' => $limit, 'offset' => $offset, 'total' => (int) $count->fetchColumn()),
         );
     }
 
+    /**
+     * Unified diff between a revision and a later one, or the current page when $toRevision is 0.
+     */
+    public function revisionDiff(int $pageId, int $fromRevision, int $toRevision = 0): array
+    {
+        $from = $this->revision($pageId, $fromRevision);
+        $to = $toRevision === 0 ? $this->getPageDetail($pageId) : $this->revision($pageId, $toRevision);
+        if ($from === null || $to === null) {
+            throw new WikiPageException('not_found', 'wiki page revision not found.');
+        }
+        $toLabel = $toRevision === 0 ? 'current' : 'revision '.$toRevision;
+        $edits = WikiDiff::edits($from['content'], $to['content']);
+        $added = count(array_filter($edits, static fn ($edit) => $edit[0] === '+'));
+        $removed = count(array_filter($edits, static fn ($edit) => $edit[0] === '-'));
+
+        return array(
+            'from' => $fromRevision,
+            'to' => $toRevision === 0 ? (int) $to['revision'] : $toRevision,
+            'titleChanged' => $from['title'] !== $to['title'],
+            'stats' => array('added' => $added, 'removed' => $removed),
+            'unified' => WikiDiff::unified($from['content'], $to['content'], 'revision '.$fromRevision, $toLabel),
+        );
+    }
+
     private function revision(int $pageId, int $revision): ?array
     {
-        $statement = $this->connection()->prepare(
-            'SELECT edition, title, content, creator_id, date_creation '.
-            'FROM '.self::REVISION_TABLE.' WHERE wikipage_id = :page_id AND edition = :revision'
-        );
-        $statement->bindValue(':page_id', $pageId, PDO::PARAM_INT);
-        $statement->bindValue(':revision', $revision, PDO::PARAM_INT);
-        $statement->execute();
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
-
-        return is_array($row) ? $row : null;
+        return $this->wikiEditionStore->get($pageId, $revision);
     }
 
     private function normalizeLimit(mixed $value): int
@@ -820,29 +843,18 @@ final class WikiPageModel extends Base
         $statement->execute();
     }
 
-    private function persistRevision(
-        int $pageId,
-        int $revision,
-        string $title,
-        string $content,
-        int $actorId,
-        string $date
-    ): void {
-        if ((string) $this->configModel->get('persistEditions') !== '1') {
-            return;
-        }
-        $statement = $this->connection()->prepare(
-            'INSERT INTO '.self::REVISION_TABLE.' '.
-            '(edition, title, content, creator_id, date_creation, wikipage_id) '.
-            'VALUES (:revision, :title, :content, :creator_id, :created_at, :page_id)'
+    /**
+     * $before is the page before this change (summary + content), so edits made while edition saving was off are kept.
+     */
+    private function persistRevision(int $pageId, int $revision, string $title, string $content, int $actorId, ?array $before = null): void
+    {
+        $previous = $before === null ? null : array(
+            'title' => $before['title'],
+            'content' => $before['content'],
+            'modifier_id' => $before['updatedBy'],
+            'date_modification' => $before['updatedAt'],
         );
-        $statement->bindValue(':revision', $revision, PDO::PARAM_INT);
-        $statement->bindValue(':title', $title, PDO::PARAM_STR);
-        $statement->bindValue(':content', $content, PDO::PARAM_STR);
-        $statement->bindValue(':creator_id', $actorId, PDO::PARAM_INT);
-        $statement->bindValue(':created_at', $date, PDO::PARAM_STR);
-        $statement->bindValue(':page_id', $pageId, PDO::PARAM_INT);
-        $statement->execute();
+        $this->wikiEditionStore->record($pageId, $revision, $title, $content, $actorId, $previous, false);
     }
 
     private function positiveInteger(mixed $value, string $field): int

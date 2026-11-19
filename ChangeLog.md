@@ -6,6 +6,18 @@
 
 ---
 
+### Editions:
+* The editions page shows what changed in each edition, compared with the one before it: markdown (unified or side by side, changed words marked) or rendered view
+* The page detail links to its last change
+* Editions are shown 20 per page, and any two editions on a page can be compared
+* The JSON-RPC API has `getWikiPageRevisionDiff` (unified diff and line counts), and `getWikiPageRevisions` lists each revision's added/removed lines
+* Long wiki trees scroll inside the sidebar, keeping the selected page in view
+* Editions are stored as deltas from the previous edition, with a full copy every 20 editions; existing editions are read as they are
+* Settings > Wiki settings can compact older editions into deltas, or expand all editions back to full copies (do this before installing an older plugin version)
+* Edits made while edition saving was off are kept as their own edition when saving is turned back on
+* Restoring an edition from the web page records a new edition, like the API
+* Editions record the time of the change, not just the date
+
 ### UI:
 * Wiki tree, overview and editions: icon links are no longer nested in buttons and have text labels; decorative spacers are plain spans
 * Expand/collapse and tree toolbar buttons are labelled; page details and subpages use valid lists and heading levels

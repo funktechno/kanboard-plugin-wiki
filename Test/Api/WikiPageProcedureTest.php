@@ -1,6 +1,7 @@
 <?php
 
 require_once 'tests/units/Base.php';
+require_once __DIR__ . '/../AssertMultipleTrait.php';
 
 use KanboardTests\units\Base;
 use Kanboard\Auth\DatabaseAuth;
@@ -11,6 +12,8 @@ use Kanboard\Plugin\Wiki\Api\Procedure\WikiPageProcedure;
 
 class WikiPageProcedureTest extends Base
 {
+    use AssertMultipleTrait;
+
     private $procedure;
     private $projectModel;
 
@@ -39,26 +42,34 @@ class WikiPageProcedureTest extends Base
             'content' => 'Initial',
         ));
 
-        $this->assertTrue($created['ok']);
-        $this->assertEquals('Runbook', $created['data']['title']);
-        $this->assertEquals(1, $created['data']['revision']);
+        $this->assertMultiple(
+            fn() => $this->assertTrue($created['ok']),
+            fn() => $this->assertEquals('Runbook', $created['data']['title']),
+            fn() => $this->assertEquals(1, $created['data']['revision']),
+        );
 
         $read = $this->procedure->getWikiPage($created['data']['id']);
-        $this->assertTrue($read['ok']);
-        $this->assertEquals('Initial', $read['data']['content']);
+        $this->assertMultiple(
+            fn() => $this->assertTrue($read['ok']),
+            fn() => $this->assertEquals('Initial', $read['data']['content']),
+        );
 
         $updated = $this->procedure->updateWikiPage($created['data']['id'], 1, array(
             'content' => 'Updated',
         ));
-        $this->assertTrue($updated['ok']);
-        $this->assertEquals(2, $updated['data']['revision']);
+        $this->assertMultiple(
+            fn() => $this->assertTrue($updated['ok']),
+            fn() => $this->assertEquals(2, $updated['data']['revision']),
+        );
 
         $conflict = $this->procedure->updateWikiPage($created['data']['id'], 1, array(
             'content' => 'Stale',
         ));
-        $this->assertFalse($conflict['ok']);
-        $this->assertEquals('revision_conflict', $conflict['error']['code']);
-        $this->assertEquals(2, $conflict['error']['details']['currentRevision']);
+        $this->assertMultiple(
+            fn() => $this->assertFalse($conflict['ok']),
+            fn() => $this->assertEquals('revision_conflict', $conflict['error']['code']),
+            fn() => $this->assertEquals(2, $conflict['error']['details']['currentRevision']),
+        );
     }
 
     public function testListSearchAndRevisionResponses()
@@ -71,16 +82,16 @@ class WikiPageProcedureTest extends Base
         $this->assertTrue($created['ok']);
 
         $listed = $this->procedure->getWikiPages(1);
-        $this->assertTrue($listed['ok']);
-        $this->assertEquals(1, $listed['data']['pagination']['total']);
-
         $search = $this->procedure->searchWikiPages(1, 'green');
-        $this->assertTrue($search['ok']);
-        $this->assertEquals('Deployment Notes', $search['data']['pages'][0]['title']);
-
         $revisions = $this->procedure->getWikiPageRevisions($created['data']['id']);
-        $this->assertTrue($revisions['ok']);
-        $this->assertEquals(1, $revisions['data']['pagination']['total']);
+        $this->assertMultiple(
+            fn() => $this->assertTrue($listed['ok']),
+            fn() => $this->assertEquals(1, $listed['data']['pagination']['total']),
+            fn() => $this->assertTrue($search['ok']),
+            fn() => $this->assertEquals('Deployment Notes', $search['data']['pages'][0]['title']),
+            fn() => $this->assertTrue($revisions['ok']),
+            fn() => $this->assertEquals(1, $revisions['data']['pagination']['total']),
+        );
     }
 
     public function testJsonRpcRegistrationExposesOnlyPublicWikiProcedures()

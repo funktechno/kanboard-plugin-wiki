@@ -23,6 +23,12 @@
         <?=$this->helper->modal->confirm('trash-o', t('Remove page'), 'WikiController', 'confirm', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
         <span class="separator" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <?=$this->url->icon('window-restore', t('View Editions'), 'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']))?>
+        <?php if (! empty($last_edition) && $last_edition['added'] !== null): ?>
+            <?=$this->url->link(
+                t('Last change').' <span class="wiki-diff-stats"><span class="wiki-diff-added">+'.(int) $last_edition['added'].'</span> <span class="wiki-diff-removed">&minus;'.(int) $last_edition['removed'].'</span></span>',
+                'WikiController', 'editions', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wikipage['id']), false, '', '', false, 'edition-'.(int) $last_edition['edition']
+            )?>
+        <?php endif ?>
     <?php endif ?>
     <?php if(isset($wikipage['parent_id'])): ?>
         <span class="separator" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>

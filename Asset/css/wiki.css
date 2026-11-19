@@ -105,6 +105,12 @@ body.dragging, body.dragging * {
 #wikitree {
     list-style-type: none;
 }
+/* long trees scroll inside the sidebar instead of stretching the page */
+.wikisidebar #wikitree {
+    max-height: calc(100vh - 170px);
+    overflow: auto;
+    padding-right: 4px;
+}
 .sidebar #wikitree a.wikilink, .sidebar #subpages a.wikilink, #wikilist a.wikilink,
 .wiki-search-list .table-list-details, .wikicontent .file-thumbnail-description {
     color: var(--color-primary);
@@ -197,3 +203,37 @@ body.dragging, body.dragging * {
     padding: 0;
     border: 0;
 }
+
+/* edition diffs: translucent tints read on light and dark themes */
+.wiki-diff-options { margin: 10px 0; }
+.wiki-diff-compare { margin: 10px 0; }
+.wiki-diff-compare label { display: inline-block; margin: 0 .5em 0 0; font-weight: normal; }
+.wiki-diff-compare select { display: inline-block; width: auto; margin: 0 0 0 .3em; }
+.wiki-diff-options fieldset { display: inline-block; border: 0; margin: 0 1em 0 0; padding: 0; }
+.wiki-diff-options .btn[aria-pressed="true"] { font-weight: bold; box-shadow: inset 0 -2px 0 currentColor; }
+.wiki-diff-stats { margin-left: .5em; font-family: monospace; }
+.wiki-diff-added, .wiki-diff-removed { padding: 0 4px; border-radius: 3px; }
+.wiki-diff-added { background: rgba(46, 160, 67, .25); }
+.wiki-diff-removed { background: rgba(248, 81, 73, .25); }
+.wiki-diff { margin: 8px 0; overflow-x: auto; }
+.wiki-diff-table { width: 100%; border-collapse: collapse; font-family: monospace; font-size: 1em; table-layout: fixed; }
+.wiki-diff-table td { border: 0; padding: 0 6px; vertical-align: top; }
+.wiki-diff-col-ln { width: 3.5em; }
+.wiki-diff-col-sign { width: 1.5em; }
+.wiki-diff-table .wiki-diff-ln { text-align: right; opacity: .7; user-select: none; }
+.wiki-diff-table .wiki-diff-sign { user-select: none; }
+.wiki-diff-table .wiki-diff-code { text-align: left; white-space: pre-wrap; overflow-wrap: anywhere; }
+.wiki-diff-ins, td.wiki-diff-ins, .wiki-diff-block-ins { background: rgba(46, 160, 67, .18); }
+.wiki-diff-del, td.wiki-diff-del, .wiki-diff-block-del { background: rgba(248, 81, 73, .18); }
+.wiki-diff-table ins { background: rgba(46, 160, 67, .35); color: inherit; text-decoration: none; }
+.wiki-diff-table del { background: rgba(248, 81, 73, .35); color: inherit; text-decoration: none; }
+.wiki-diff-table .wiki-diff-empty { background: rgba(127, 127, 127, .08); }
+.wiki-diff-fold { text-align: center; padding: 2px 0; }
+.wiki-diff-block-ins, .wiki-diff-block-del { border-left: 3px solid; padding-left: 6px; margin: 4px 0; }
+.wiki-diff-block-ins { border-color: #2da44e; }
+.wiki-diff-block-del { border-color: #cf222e; text-decoration: line-through; }
+.wiki-editions-pagination { margin: 12px 0; display: flex; gap: 1.5em; align-items: center; }
+.wiki-editions-pagination a { display: inline-block; min-height: 24px; line-height: 24px; }
+/* core shows .page-header list items inline; edition content sits inside one */
+.wikiedition .markdown li, .wiki-diff-rendered li { display: list-item; padding-right: 0; }
+.wikiedition .markdown ol, .wikiedition .markdown ul, .wiki-diff-rendered ol, .wiki-diff-rendered ul { padding-left: 2em; }

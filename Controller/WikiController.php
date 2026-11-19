@@ -149,6 +149,26 @@ class WikiController extends BaseController
         $this->getProjectWikipage($wiki_id, $project['id']);
         $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages, $wiki_id);
+        $all = $this->wikiModel->getEditions($wiki_id);
+
+        // one page of editions; the editions they are compared with come along (hidden) when they are on another page
+        $per_page = 20;
+        $pages = max(1, (int) ceil(count($all) / $per_page));
+        $page = min(max(1, $this->request->getIntegerParam('page', 1)), $pages);
+        $editions = array_slice($all, ($page - 1) * $per_page, $per_page);
+        $shown = array_column($editions, 'edition');
+        $bases = array();
+        foreach ($all as $edition) {
+            if (in_array($edition['edition'], array_column($editions, 'base'), true) && ! in_array($edition['edition'], $shown, true)) {
+                $bases[] = $edition;
+            }
+        }
+
+        $authors = array();
+        foreach (array_unique(array_column($editions, 'creator_id')) as $user_id) {
+            $user = $user_id > 0 ? $this->userModel->getById($user_id) : null;
+            $authors[$user_id] = $user ? ($user['name'] ?: $user['username']) : '';
+        }
 
         $this->response->html($this->helper->layout->app('wiki:wiki/editions', array(
             'project' => $project,
@@ -157,7 +177,11 @@ class WikiController extends BaseController
             'wiki_id'=> $result['selected']['id'],
             'wikipage' => $result['selected'],
             'wikipages' => $result['tree'],
-            'editions' => $this->wikiModel->getEditions($wiki_id),
+            'editions' => $editions,
+            'base_editions' => $bases,
+            'titles' => array_column($all, 'title', 'edition'),
+            'pagination' => array('page' => $page, 'pages' => $pages, 'total' => count($all)),
+            'authors' => $authors,
         )));
 
     }
@@ -284,6 +308,7 @@ class WikiController extends BaseController
                 'description' => $this->helper->projectHeader->getDescription($project),
                 'wiki_id' => $result['selected']['id'],
                 'wiki' => $result['selected'],
+                'last_edition' => $this->wikiModel->getLatestEdition($wiki_id),
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
@@ -537,13 +562,13 @@ class WikiController extends BaseController
         if ($valid) {
 
             $newDate = date('Y-m-d');
-            $editions = $values['editions'] + 1;
+            $editions = $this->wikiEditionStore->nextEdition((int) $wikipage['id'], (int) $wikipage['editions']);
 
             $wiki_id = $this->wikiModel->updatepage($values, $editions, $newDate);
             if ($wiki_id > 0) {
 
-                // check config if admin wants editions saved
-                $this->wikiModel->createEdition($values, $wiki_id, $editions, $newDate);
+                // check config if admin wants editions saved; $wikipage is the page before this save
+                $this->wikiModel->createEdition($values, $wiki_id, $editions, $newDate, $wikipage);
                 // don't really care if editions was successful, begin transaction not really needed
 
                 $this->flash->success(t('The wikipage has been updated successfully.'));
