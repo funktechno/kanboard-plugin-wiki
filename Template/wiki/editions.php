@@ -27,18 +27,18 @@
 <?php if (!empty($editions)): ?>
 
 <?php foreach ($editions as $edition): ?>
-<div id="wikiedition">
+<div class="wikiedition">
 <hr style="border-top: 1px solid;border-bottom: 1px solid;">
 <div class="page-header">
     <h3>
         <?=t('Title') . ': ' . t($edition['title'])?>
         <div style="float: right">
-            <button class="action" title="<?= t('Restore Wiki page edition') ?>">
-                <?=$this->modal->confirm('history', '', 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
-            </button>
-            <button class="action" title="<?= t('Delete Wiki page edition') ?>">
-                <?=$this->modal->confirm('trash', '', 'WikiController', 'confirm_purge', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
-            </button>
+            <span class="action" title="<?= t('Restore Wiki page edition') ?>">
+                <?=$this->modal->confirm('history', '<span class="sr-only">' . t('Restore Wiki page edition') . '</span>', 'WikiController', 'confirm_restore', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
+            </span>
+            <span class="action" title="<?= t('Delete Wiki page edition') ?>">
+                <?=$this->modal->confirm('trash', '<span class="sr-only">' . t('Delete Wiki page edition') . '</span>', 'WikiController', 'confirm_purge', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id, 'edition' => $edition['edition']))?>
+            </span>
         </div>
     </h3>
     <h4>

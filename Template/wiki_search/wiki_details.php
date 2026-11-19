@@ -18,7 +18,7 @@
         <?php if ($wiki['content']): ?>
             <li>
                 <details>
-                <summary><h4 style="display:inline-block"><?=t('Content')?></h4></summary>
+                <summary><h4 class="wiki-summary"><?=t('Content')?></h4></summary>
                     <article class="markdown">
                         <?=$this->text->markdown($wiki['content'])?>
                     </article>
