@@ -717,8 +717,12 @@ class WikiModel extends Base
             return false;
         }
 
+        if ($target['title'] === $wikipage['title'] && $target['content'] === $wikipage['content']) {
+            return true; // already the current text
+        }
+
         // like a git revert: the restored text becomes a new edition
-        $newEdition = (int) $wikipage['editions'] + 1;
+        $newEdition = $this->wikiEditionStore->nextEdition((int) $wiki_id, (int) $wikipage['editions']);
         $values = [
             'title' => $target['title'],
             'content' => $target['content'],

@@ -562,7 +562,7 @@ class WikiController extends BaseController
         if ($valid) {
 
             $newDate = date('Y-m-d');
-            $editions = $wikipage['editions'] + 1;
+            $editions = $this->wikiEditionStore->nextEdition((int) $wikipage['id'], (int) $wikipage['editions']);
 
             $wiki_id = $this->wikiModel->updatepage($values, $editions, $newDate);
             if ($wiki_id > 0) {

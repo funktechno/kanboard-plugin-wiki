@@ -180,6 +180,69 @@ class WikiEditionStoreTest extends Base
         );
     }
 
+    private function legacyPage(array $contents, int $counter): int
+    {
+        $db = $this->container['db'];
+        $db->table(WikiPageModel::PAGE_TABLE)->insert(array(
+            'project_id' => 1, 'title' => 'Old', 'content' => end($contents), 'is_active' => 1, 'creator_id' => 1,
+            'date_creation' => '2020-01-01', 'editions' => $counter, 'current_edition' => $counter, 'ordercolumn' => 1,
+        ));
+        $id = (int) $db->getLastId();
+        foreach ($contents as $i => $content) {
+            $db->table(WikiEditionStore::TABLE)->insert(array(
+                'edition' => $i + 1, 'title' => 'Old', 'content' => $content, 'creator_id' => 1, 'date_creation' => '2020-01-01', 'wikipage_id' => $id,
+            ));
+        }
+
+        return $id;
+    }
+
+    public function testRestoreOldEditions()
+    {
+        $wikiModel = new WikiModel($this->container);
+        $legacy = $this->legacyPage(array('legacy one', 'legacy two', 'legacy three'), 3);
+        $legacyRestored = $wikiModel->restoreEdition($legacy, 1);
+
+        $page = $this->page($this->text(0));
+        for ($i = 1; $i <= 24; $i++) {
+            $page = $this->update($page, $this->text($i));
+        }
+        $contents = array();
+        foreach (array(2, 23, 21) as $target) {
+            $wikiModel->restoreEdition($page['id'], $target);
+            $contents[] = $wikiModel->getWikipage($page['id'])['content'];
+        }
+
+        $this->assertMultiple(
+            fn() => $this->assertTrue($legacyRestored),
+            fn() => $this->assertSame('legacy one', $wikiModel->getWikipage($legacy)['content']),
+            fn() => $this->assertSame(array(4, 3, 2, 1), array_column($this->store->all($legacy), 'edition')),
+            fn() => $this->assertSame('legacy one', $this->store->get($legacy, 4)['content']),
+            fn() => $this->assertSame(array($this->text(1), $this->text(22), $this->text(20)), $contents, 'before and after the keyframe'),
+            fn() => $this->assertSame(range(28, 1), array_column($this->store->all($page['id']), 'edition')),
+            fn() => $this->assertSame($this->text(20), $this->store->latest($page['id'])['content']),
+        );
+    }
+
+    public function testRestoreWithCounterBehindRowsAndRestoreOfCurrentText()
+    {
+        $wikiModel = new WikiModel($this->container);
+        $behind = $this->legacyPage(array('legacy one', 'legacy two', 'legacy three'), 2);
+        $current = $this->legacyPage(array('legacy one', 'legacy two'), 2);
+        $restoredBehind = $wikiModel->restoreEdition($behind, 1);
+        $restoredCurrent = $wikiModel->restoreEdition($current, 2);
+
+        $this->assertMultiple(
+            fn() => $this->assertTrue($restoredBehind),
+            fn() => $this->assertEquals(4, $wikiModel->getWikipage($behind)['editions'], 'numbered after the stored rows'),
+            fn() => $this->assertSame('legacy one', $this->store->latest($behind)['content']),
+            fn() => $this->assertSame('legacy three', $this->store->get($behind, 3)['content']),
+            fn() => $this->assertTrue($restoredCurrent),
+            fn() => $this->assertEquals(2, $wikiModel->getWikipage($current)['current_edition'], 'restoring the current text changes nothing'),
+            fn() => $this->assertSame(array(2, 1), array_column($this->store->all($current), 'edition')),
+        );
+    }
+
     public function testWebRestoreRecordsANewEdition()
     {
         $page = $this->page('First');
