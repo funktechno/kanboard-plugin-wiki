@@ -50,7 +50,7 @@
     <?php if ($wikipage['modifier_id'] > 0): ?>
         <li><?=t('Modifier')?>: <strong><?=$this->text->e($wikipage['modifier_name'] ?: $wikipage['modifier_username'])?></strong></li>
     <?php endif?>
-    <li><?=t('Editions')?>: <strong><?=(int) $wikipage['edition_count']?></strong> <?=t('Current Edition')?>: <strong> <?=$wikipage['current_edition']?></strong></li>
+    <li><?=t('Current Edition')?>: <strong><?=$wikipage['current_edition']?></strong></li>
     <li><?=t('Date Creation')?>: <strong><?=$this->dt->date($wikipage['date_creation'])?></strong></li>
     <li><?=t('Date Modification')?>: <strong><?=$this->dt->date($wikipage['date_modification'])?></strong></li>
 </ul>

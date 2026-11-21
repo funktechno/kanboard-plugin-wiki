@@ -9,7 +9,7 @@
             <li><?=t('Last modifier')?>: <strong><?=$this->text->e($wiki['modifier_name'] ?: $wiki['modifier_username'])?></strong></li>
         <?php endif?>
 
-        <li><?=t('Editions')?>: <strong><?=(int) $wiki['edition_count']?></strong> <?=t('Current Edition')?>: <strong> <?=$wiki['current_edition']?></strong></li>
+        <li><?=t('Current Edition')?>: <strong><?=$wiki['current_edition']?></strong></li>
 
         <li><?=t('Date Created')?>: <strong><?=$this->dt->date($wiki['date_creation'])?></strong></li>
 

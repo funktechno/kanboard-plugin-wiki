@@ -57,11 +57,6 @@ class WikiModel extends Base
     const WIKITABLE = 'wikipage';
 
     /**
-     * Number of stored editions of a page. `editions` is the last edition number, which deleted editions leave higher.
-     */
-    const EDITION_COUNT_SQL = 'SELECT COUNT(*) FROM '.self::WIKI_EDITION_TABLE.' WHERE wikipage_id='.self::WIKITABLE.'.id';
-
-    /**
      * Public projects show their wiki through the public link (default on, the behavior before the setting existed)
      *
      * @return bool
@@ -195,12 +190,11 @@ class WikiModel extends Base
      *
      * @access public
      * @param  integer   $project_id
-     * @param  boolean   $withEditionCount add edition_count; only for screens that show it, as it costs a lookup per page
      * @return array
      */
-    public function getWikipages($project_id, $withEditionCount = false)
+    public function getWikipages($project_id)
     {
-        $query = $this->db->
+        return $this->db->
             table(self::WIKITABLE)
             ->columns(
                 'c.name as creator_name',
@@ -231,13 +225,8 @@ class WikiModel extends Base
             ->eq('project_id', $project_id)
             ->eq(self::WIKITABLE . '.is_active', 1)
             ->asc('parent_id')
-            ->asc('ordercolumn');
-
-        if ($withEditionCount) {
-            $query->subquery(self::EDITION_COUNT_SQL, 'edition_count');
-        }
-
-        return $query->findAll();
+            ->asc('ordercolumn')
+            ->findAll();
 
         // return $this->db->table(self::TABLE)
         // ->columns(self::TABLE.'.*', UserModel::TABLE.'.username AS owner_username', UserModel::TABLE.'.name AS owner_name')
@@ -439,7 +428,6 @@ class WikiModel extends Base
                 self::WIKITABLE . '.modifier_id'
             )
             ->left(UserModel::TABLE, 'c', 'id', self::WIKITABLE, 'creator_id')
-            ->subquery(self::EDITION_COUNT_SQL, 'edition_count')
             ->left(UserModel::TABLE, 'mod', 'id', self::WIKITABLE, 'modifier_id')
             ->in(self::WIKITABLE.'.project_id', $projectIds)
             ->eq(self::WIKITABLE.'.is_active', 1);

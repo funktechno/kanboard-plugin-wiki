@@ -39,7 +39,6 @@ Modified -->
         <th><?=t('Title')?></th>
         <th><?=t('Id')?></th>
         <th><?=t('Parent Page')?></th>
-        <th><?=t('Editions')?></th>
         <th><?=t('Current Edition')?></th>
         <th><?=t('Creator')?></th>
         <th><?=t('Created')?></th>
@@ -84,7 +83,6 @@ Modified -->
                 <?=t('(root)')?>
             <?php endif ?>
         </td>
-        <td><?=(int) $wikipage['edition_count']?></td>
         <td><?=$wikipage['current_edition']?></td>
         <td><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></td>
         <td><?=$this->dt->date($wikipage['date_creation'])?></td>

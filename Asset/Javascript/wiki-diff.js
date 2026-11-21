@@ -291,15 +291,21 @@
         var compare = document.querySelector('.wiki-diff-compare');
         if (compare) {
             compare.hidden = false;
-            compare.addEventListener('submit', function (event) {
-                event.preventDefault();
-                var from = compare.querySelector('[data-wiki-diff-from]').value, to = compare.querySelector('[data-wiki-diff-to]').value;
+            var runCompare = function () {
+                var from = Number(compare.querySelector('[data-wiki-diff-from]').value), to = Number(compare.querySelector('[data-wiki-diff-to]').value);
+                // the texts of editions on other pages are not here yet: submit, and the server sends them along
+                if (texts[from] === undefined || texts[to] === undefined || !article(from) || !article(to)) { return false; }
                 var container = compare.querySelector('.wiki-diff');
                 container.setAttribute('data-old', Math.min(from, to));
                 container.setAttribute('data-new', Math.max(from, to));
                 container.hidden = false;
                 render(container);
+                return true;
+            };
+            compare.addEventListener('submit', function (event) {
+                if (runCompare()) { event.preventDefault(); }
             });
+            if (compare.hasAttribute('data-wiki-diff-auto') && runCompare()) { compare.scrollIntoView({ block: 'start' }); }
         }
 
         var target = /^#edition-\d+$/.test(window.location.hash) ? document.querySelector(window.location.hash + ' details') : null;

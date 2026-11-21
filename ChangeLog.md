@@ -1,14 +1,12 @@
 # Changelog
 
-## Unreleased
-
-* contributors: @lastlink (review by @imfx77)
+* contributors: @lastlink
 
 ---
 
 ### Editions:
-* The page details, wiki list and search results show how many editions are stored; deleted editions no longer count
-* The editions page shows the number of editions in its heading
+* "Compare edition … with …" lists every edition, not only those on the current page; editions from other pages are loaded with the page
+* The page details, wiki list and search results show only the current edition; the last edition number shown as "Editions" was misleading once editions were deleted
 * A title change is shown on its own highlighted line, old title struck through
 * The "Last change" link has an icon
 

@@ -81,14 +81,6 @@ class WikiEditionStore extends Base
         return max($counter, $stored) + 1;
     }
 
-    /**
-     * Number of stored editions of a page (deleted editions are not counted).
-     */
-    public function count(int $pageId): int
-    {
-        return $this->db->table(self::TABLE)->eq('wikipage_id', $pageId)->count();
-    }
-
     public function latest(int $pageId): ?array
     {
         $rows = $this->rebuild($pageId);

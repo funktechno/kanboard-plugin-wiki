@@ -101,7 +101,7 @@ class WikiController extends BaseController
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
-        $wikipages = $this->wikiModel->getWikipages($project['id'], true);
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages);
         $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
 
@@ -125,7 +125,7 @@ class WikiController extends BaseController
 
         $project = $this->getProject();
 
-        $wikipages = $this->wikiModel->getWikipages($project['id'], true);
+        $wikipages = $this->wikiModel->getWikipages($project['id']);
         $result = $this->prepareWikipagesTree($wikipages);
         $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
 
@@ -157,9 +157,16 @@ class WikiController extends BaseController
         $page = min(max(1, $this->request->getIntegerParam('page', 1)), $pages);
         $editions = array_slice($all, ($page - 1) * $per_page, $per_page);
         $shown = array_column($editions, 'edition');
+        $numbers = array_column($all, 'edition');
+
+        // "compare edition X with Y" lists every edition; picking ones from other pages reloads with their texts
+        $compare = array($this->request->getIntegerParam('compare_from'), $this->request->getIntegerParam('compare_to'));
+        $compare = in_array($compare[0], $numbers, true) && in_array($compare[1], $numbers, true) ? $compare : array();
+
+        $needed = array_merge(array_column($editions, 'base'), $compare);
         $bases = array();
         foreach ($all as $edition) {
-            if (in_array($edition['edition'], array_column($editions, 'base'), true) && ! in_array($edition['edition'], $shown, true)) {
+            if (in_array($edition['edition'], $needed, true) && ! in_array($edition['edition'], $shown, true)) {
                 $bases[] = $edition;
             }
         }
@@ -180,6 +187,7 @@ class WikiController extends BaseController
             'editions' => $editions,
             'base_editions' => $bases,
             'titles' => array_column($all, 'title', 'edition'),
+            'compare' => $compare,
             'pagination' => array('page' => $page, 'pages' => $pages, 'total' => count($all)),
             'authors' => $authors,
         )));
@@ -255,7 +263,7 @@ class WikiController extends BaseController
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
-                'wikipage' => $result['selected'] + array('edition_count' => $this->wikiEditionStore->count((int) $wiki_id)),
+                'wikipage' => $result['selected'],
                 'wikipage_sublist' => $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1, true),
             )));
         } else {
@@ -312,7 +320,7 @@ class WikiController extends BaseController
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
-                'wikipage' => $result['selected'] + array('edition_count' => $this->wikiEditionStore->count((int) $wiki_id)),
+                'wikipage' => $result['selected'],
                 'wikipage_sublist' => $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1, true),
             )));
         } else {
