@@ -40,7 +40,16 @@ jobs:
         git diff --quiet || git -c user.name=ci -c user.email=ci@localhost commit -q -am "Stamp version $VERSION"
 
     - name: Build bundle
-      run: make
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        make
+        # the repository holds the 0.1.0 placeholder; fail rather than ship a zip without the real version
+        ZIP="Wiki-$VERSION.zip"
+        test -f "$ZIP" || { echo "::error::$ZIP was not built"; ls Wiki-*.zip; exit 1; }
+        unzip -p "$ZIP" Wiki/Plugin.php | grep -q "return '$VERSION';" \
+          || { echo "::error::Wiki/Plugin.php in $ZIP does not return '$VERSION'"; exit 1; }
+        echo "Checked: $ZIP reports version $VERSION" >> "$GITHUB_STEP_SUMMARY"
 
     - name: Upload bundle
       uses: actions/upload-artifact@v4

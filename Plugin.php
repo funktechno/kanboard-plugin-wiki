@@ -161,9 +161,14 @@ class Plugin extends Base
         return 'lastlink';
     }
 
+    /**
+     * Auto-generated. The Release Bundle workflow (.github/workflows/release.yml) writes the release version here
+     * when it builds the zip, and never commits it: release zips carry the real version, while the repository keeps
+     * the placeholder 0.1.0.
+     */
     public function getPluginVersion()
     {
-        return '0.5.0';
+        return '0.1.0';
     }
 
     public function getPluginHomepage()

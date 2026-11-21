@@ -43,19 +43,30 @@
         <button type="button" class="btn" data-wiki-diff-layout="split" aria-pressed="false"><?= t('Side by side') ?></button>
     </fieldset>
 </div>
-<?php if (count($editions) > 2): ?>
-<form class="wiki-diff-compare" hidden>
+<?php $numbers = array_keys($titles) ?>
+<?php if (count($numbers) > 2): ?>
+<?php
+    $compare_from = $compare ? $compare[0] : ($editions[1]['edition'] ?? $numbers[1]);
+    $compare_to = $compare ? $compare[1] : $editions[0]['edition'];
+?>
+<form class="wiki-diff-compare" method="get" hidden<?= $compare ? ' data-wiki-diff-auto' : '' ?>>
+    <input type="hidden" name="controller" value="WikiController">
+    <input type="hidden" name="action" value="editions">
+    <input type="hidden" name="plugin" value="wiki">
+    <input type="hidden" name="project_id" value="<?= (int) $project['id'] ?>">
+    <input type="hidden" name="wiki_id" value="<?= (int) $wiki_id ?>">
+    <input type="hidden" name="page" value="<?= (int) $pagination['page'] ?>">
     <label><?= t('Compare edition') ?>
-        <select data-wiki-diff-from>
-            <?php foreach ($editions as $index => $option): ?>
-                <option value="<?= (int) $option['edition'] ?>"<?= $index === 1 ? ' selected' : '' ?>><?= (int) $option['edition'] ?></option>
+        <select name="compare_from" data-wiki-diff-from>
+            <?php foreach ($numbers as $number): ?>
+                <option value="<?= (int) $number ?>"<?= $number === $compare_from ? ' selected' : '' ?>><?= (int) $number ?></option>
             <?php endforeach ?>
         </select>
     </label>
     <label><?= t('with') ?>
-        <select data-wiki-diff-to>
-            <?php foreach ($editions as $index => $option): ?>
-                <option value="<?= (int) $option['edition'] ?>"<?= $index === 0 ? ' selected' : '' ?>><?= (int) $option['edition'] ?></option>
+        <select name="compare_to" data-wiki-diff-to>
+            <?php foreach ($numbers as $number): ?>
+                <option value="<?= (int) $number ?>"<?= $number === $compare_to ? ' selected' : '' ?>><?= (int) $number ?></option>
             <?php endforeach ?>
         </select>
     </label>
@@ -91,7 +102,11 @@
         &middot; <em><?= t('Changes made while edition saving was off') ?></em>
     <?php endif ?>
     <?php if ($edition['base'] !== null && isset($titles[$edition['base']]) && $titles[$edition['base']] !== $edition['title']): ?>
-        <br><?= t('Title changed from "%s"', $titles[$edition['base']]) ?>
+        <div class="wiki-title-change">
+            <?= t('Title changed') ?>:
+            <del class="wiki-diff-removed"><?= $this->text->e($titles[$edition['base']]) ?></del>
+            &rarr; <ins class="wiki-diff-added"><?= $this->text->e($edition['title']) ?></ins>
+        </div>
     <?php endif ?>
 </div>
 <div class="page-header">

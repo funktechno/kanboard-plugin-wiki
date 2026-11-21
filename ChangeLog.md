@@ -1,6 +1,22 @@
 # Changelog
 
-## Unreleased
+* contributors: @lastlink
+
+---
+
+### Editions:
+* "Compare edition … with …" lists every edition, not only those on the current page; editions from other pages are loaded with the page
+* The page details, wiki list and search results show only the current edition; the last edition number shown as "Editions" was misleading once editions were deleted
+* A title change is shown on its own highlighted line, old title struck through
+* The "Last change" link has an icon
+
+### Releases:
+* `getPluginVersion()` in the repository is a `0.1.0` placeholder; the release workflow writes the real version into the zip and fails if the zip does not report it
+
+### Translations:
+* Traditional Chinese (zh_TW) and German (de_DE, de_DE_du) cover the edition history, diff and public access settings; German also fills older missing strings and no longer calls wiki pages "Wikilinie"
+
+## Version 0.5.1
 
 * contributors: @lastlink
 
