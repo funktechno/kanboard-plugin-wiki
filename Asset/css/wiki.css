@@ -232,6 +232,9 @@ body.dragging, body.dragging * {
 .wiki-diff-block-ins, .wiki-diff-block-del { border-left: 3px solid; padding-left: 6px; margin: 4px 0; }
 .wiki-diff-block-ins { border-color: #2da44e; }
 .wiki-diff-block-del { border-color: #cf222e; text-decoration: line-through; }
+.wiki-title-change { margin: 6px 0; padding: 4px 8px; border-left: 3px solid #bf8700; background: rgba(191, 135, 0, .12); }
+.wiki-title-change del { text-decoration: line-through; }
+.wiki-title-change ins { text-decoration: none; }
 .wiki-editions-pagination { margin: 12px 0; display: flex; gap: 1.5em; align-items: center; }
 .wiki-editions-pagination a { display: inline-block; min-height: 24px; line-height: 24px; }
 /* core shows .page-header list items inline; edition content sits inside one */

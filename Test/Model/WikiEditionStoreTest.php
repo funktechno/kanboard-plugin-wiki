@@ -108,8 +108,14 @@ class WikiEditionStoreTest extends Base
         );
 
         $all = $this->store->all($page['id']);
+        $wikiModel = new WikiModel($this->container);
+        $listed = $wikiModel->getWikipages(1, true)[0];
         $this->assertMultiple(
             fn() => $this->assertSame(array(true, true, false), $purged, 'purging an edition twice fails the second time'),
+            fn() => $this->assertEquals(3, $listed['edition_count'], 'the count is of stored editions'),
+            fn() => $this->assertSame(3, $this->store->count($page['id'])),
+            fn() => $this->assertArrayNotHasKey('edition_count', $wikiModel->getWikipages(1)[0], 'the tree query skips the count'),
+            fn() => $this->assertEquals(5, $listed['editions'], 'editions stays the last edition number'),
             fn() => $this->assertSame(array(5, 4, 2), array_column($all, 'edition')),
             fn() => $this->assertSame(array($this->text(4), $this->text(3), $this->text(1)), array_column($all, 'content')),
             fn() => $this->assertSame(2, $all[1]['base'], 'edition 4 now compares with edition 2'),

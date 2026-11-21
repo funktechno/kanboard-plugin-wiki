@@ -101,7 +101,7 @@ class WikiController extends BaseController
             throw AccessForbiddenException::getInstance()->withoutLayout();
         }
 
-        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $wikipages = $this->wikiModel->getWikipages($project['id'], true);
         $result = $this->prepareWikipagesTree($wikipages);
         $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
 
@@ -125,7 +125,7 @@ class WikiController extends BaseController
 
         $project = $this->getProject();
 
-        $wikipages = $this->wikiModel->getWikipages($project['id']);
+        $wikipages = $this->wikiModel->getWikipages($project['id'], true);
         $result = $this->prepareWikipagesTree($wikipages);
         $wiki_list = $this->helper->wikiHelper->generateIndentedChildren($result['tree'], true, 0, 0, -1);
 
@@ -255,7 +255,7 @@ class WikiController extends BaseController
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
-                'wikipage' => $result['selected'],
+                'wikipage' => $result['selected'] + array('edition_count' => $this->wikiEditionStore->count((int) $wiki_id)),
                 'wikipage_sublist' => $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1, true),
             )));
         } else {
@@ -312,7 +312,7 @@ class WikiController extends BaseController
                 'files' => $this->wikiFileModel->getAllDocuments($wiki_id),
                 'images' => $this->wikiFileModel->getAllImages($wiki_id),
                 'wikipages' => $result['tree'],
-                'wikipage' => $result['selected'],
+                'wikipage' => $result['selected'] + array('edition_count' => $this->wikiEditionStore->count((int) $wiki_id)),
                 'wikipage_sublist' => $this->helper->wikiHelper->generateIndentedChildren($result['tree'], false, $wiki_id, 0, -1, true),
             )));
         } else {

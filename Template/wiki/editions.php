@@ -20,7 +20,7 @@
     <h2><?=$this->text->e($wikipage['title'])?></h2>
     <?=$this->url->icon('long-arrow-left', t('Back to details'), 'WikiController', 'detail', array('plugin' => 'wiki', 'project_id' => $project['id'], 'wiki_id' => $wiki_id))?>
     <br><br>
-    <h2><?=t('Editions')?>:</h2>
+    <h2><?=t('Editions')?>: <?= (int) $pagination['total'] ?></h2>
     <?=t('Current Edition')?>: <strong> <?=$wikipage['current_edition']?></strong>
 </div>
 
@@ -91,7 +91,11 @@
         &middot; <em><?= t('Changes made while edition saving was off') ?></em>
     <?php endif ?>
     <?php if ($edition['base'] !== null && isset($titles[$edition['base']]) && $titles[$edition['base']] !== $edition['title']): ?>
-        <br><?= t('Title changed from "%s"', $titles[$edition['base']]) ?>
+        <div class="wiki-title-change">
+            <?= t('Title changed') ?>:
+            <del class="wiki-diff-removed"><?= $this->text->e($titles[$edition['base']]) ?></del>
+            &rarr; <ins class="wiki-diff-added"><?= $this->text->e($edition['title']) ?></ins>
+        </div>
     <?php endif ?>
 </div>
 <div class="page-header">

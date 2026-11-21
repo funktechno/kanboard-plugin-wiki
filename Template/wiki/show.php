@@ -84,7 +84,7 @@ Modified -->
                 <?=t('(root)')?>
             <?php endif ?>
         </td>
-        <td><?=$wikipage['editions']?></td>
+        <td><?=(int) $wikipage['edition_count']?></td>
         <td><?=$wikipage['current_edition']?></td>
         <td><?=$this->text->e($wikipage['creator_name'] ?: $wikipage['creator_username'])?></td>
         <td><?=$this->dt->date($wikipage['date_creation'])?></td>
